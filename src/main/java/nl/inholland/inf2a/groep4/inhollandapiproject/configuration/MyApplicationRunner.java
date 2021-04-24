@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyApplicationRunner implements ApplicationRunner {
 
-    private UserService userService;
+    private final UserService userService;
 
     public MyApplicationRunner(UserService userService) {
         this.userService = userService;

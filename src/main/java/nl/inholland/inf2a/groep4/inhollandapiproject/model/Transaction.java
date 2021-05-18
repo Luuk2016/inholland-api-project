@@ -2,23 +2,29 @@ package nl.inholland.inf2a.groep4.inhollandapiproject.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "transaction_table")
 public class Transaction {
 
     @Id
     @GeneratedValue
     private int id;
     private LocalDate timestamp;
-    private String creator;
+    private int creator;
     private String from;
     private String to;
     private double amount;
 
-    public Transaction(int id)
-    {
+    public Transaction(int id, LocalDate timestamp, int creator, String from, String to, double amount) {
         this.id = id;
+        this.timestamp = timestamp;
+        this.creator = creator;
+        this.from = from;
+        this.to = to;
+        this.amount = amount;
     }
 
     public Transaction() {
@@ -34,11 +40,11 @@ public class Transaction {
 
     public void setTimestamp(LocalDate timestamp) {this.timestamp = timestamp;}
 
-    public String getCreator() {
+    public int getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
+    public void setCreator(int creator) {
         this.creator = creator;
     }
 

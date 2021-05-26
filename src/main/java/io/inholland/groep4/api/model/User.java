@@ -8,6 +8,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -20,6 +25,8 @@ import javax.validation.constraints.*;
 
 public class User   {
   @JsonProperty("id")
+  @Id
+  @GeneratedValue
   private Long id = null;
 
   @JsonProperty("firstName")
@@ -39,6 +46,9 @@ public class User   {
 
   @JsonProperty("birthdate")
   private String birthdate = null;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<Role> roles;
 
   /**
    * Gets or Sets accessLevel
@@ -300,6 +310,13 @@ public class User   {
     this.status = status;
   }
 
+  public List<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<Role> roles) {
+    this.roles = roles;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

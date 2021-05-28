@@ -5,8 +5,8 @@
  */
 package io.inholland.groep4.api;
 
-import io.inholland.groep4.api.model.AuthenticateUserItem;
-import io.inholland.groep4.api.model.Authentication;
+import io.inholland.groep4.api.model.DTO.LoginResponseDTO;
+import io.inholland.groep4.api.model.DTO.LoginDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -28,7 +28,7 @@ public interface AuthenticateApi {
 
     @Operation(summary = "Authenticate", description = "Receive an Bearer Token", tags={ "Auth", "Customers", "Employees" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "authentication successful", content = @Content(schema = @Schema(implementation = AuthenticateUserItem.class))),
+        @ApiResponse(responseCode = "200", description = "authentication successful", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
         
         @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
         
@@ -37,7 +37,7 @@ public interface AuthenticateApi {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<AuthenticateUserItem> authenticate(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Authentication body);
+    ResponseEntity<LoginResponseDTO> authenticate(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody LoginDTO body);
 
 }
 

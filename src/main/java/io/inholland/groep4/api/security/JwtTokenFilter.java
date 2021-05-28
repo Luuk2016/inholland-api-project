@@ -31,7 +31,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         } catch (ResponseStatusException exception) {
             SecurityContextHolder.clearContext();
-//            httpServletResponse.sendError(exception.getRawStatusCode(), exception.getMessage());
+            httpServletResponse.sendError(exception.getRawStatusCode(), exception.getMessage());
             return;
         }
 

@@ -1,10 +1,13 @@
-package io.inholland.groep4.api.model;
+package io.inholland.groep4.api.model.DTO;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -14,12 +17,11 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 
-
-public class AuthenticateUserItem   {
+public class LoginResponseDTO {
   @JsonProperty("token")
-  private UUID token = null;
+  private String token = null;
 
-  public AuthenticateUserItem token(UUID token) {
+  public LoginResponseDTO token(String token) {
     this.token = token;
     return this;
   }
@@ -32,11 +34,11 @@ public class AuthenticateUserItem   {
       @NotNull
 
     @Valid
-    public UUID getToken() {
+    public String getToken() {
     return token;
   }
 
-  public void setToken(UUID token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
@@ -49,7 +51,7 @@ public class AuthenticateUserItem   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AuthenticateUserItem authenticateUserItem = (AuthenticateUserItem) o;
+    LoginResponseDTO authenticateUserItem = (LoginResponseDTO) o;
     return Objects.equals(this.token, authenticateUserItem.token);
   }
 

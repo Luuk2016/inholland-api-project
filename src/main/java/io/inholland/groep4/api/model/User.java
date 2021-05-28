@@ -1,20 +1,18 @@
 package io.inholland.groep4.api.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * User
@@ -22,7 +20,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 
-
+@Entity
 public class User   {
   @JsonProperty("id")
   @Id
@@ -82,6 +80,8 @@ public class User   {
   }
   @JsonProperty("accessLevel")
   @Valid
+  @Column
+  @ElementCollection(targetClass=AccessLevelEnum.class)
   private List<AccessLevelEnum> accessLevel = new ArrayList<AccessLevelEnum>();
 
   /**
@@ -116,6 +116,8 @@ public class User   {
   }
   @JsonProperty("status")
   @Valid
+  @Column
+  @ElementCollection(targetClass=StatusEnum.class)
   private List<StatusEnum> status = null;
 
   public User id(Long id) {

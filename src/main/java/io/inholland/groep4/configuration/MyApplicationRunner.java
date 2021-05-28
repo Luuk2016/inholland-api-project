@@ -19,9 +19,13 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         User user = new User();
-        user.setUsername("test");
+        user.setUsername("john");
         user.setPassword("test");
-        user.setRoles(Arrays.asList(Role.ROLE_USER));
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail("johndoe@example.com");
+        user.setBirthdate("01/01/1970");
+        user.setRoles(Arrays.asList(Role.ROLE_USER, Role.ROLE_ADMIN));
         userService.add(user);
     }
 }

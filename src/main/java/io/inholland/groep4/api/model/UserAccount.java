@@ -10,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.*;
 
 /**
@@ -244,16 +243,5 @@ public class UserAccount   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
-  }
-
-  @ManyToOne(optional = false)
-  private User owner;
-
-  public User getOwner() {
-    return owner;
-  }
-
-  public void setOwner(User owner) {
-    this.owner = owner;
   }
 }

@@ -120,6 +120,11 @@ public class User   {
   @ElementCollection(targetClass=StatusEnum.class)
   private List<StatusEnum> status = null;
 
+  @JsonProperty("userAccount")
+  @Valid
+  @OneToMany(mappedBy= "owner")
+  private List<UserAccount> userAccount = null;
+
   public User id(Long id) {
     this.id = id;
     return this;

@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 
 /**
@@ -15,7 +18,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 
-
+@Entity
 public class UserAccount   {
   /**
    * Gets or Sets accountType
@@ -51,6 +54,8 @@ public class UserAccount   {
   private AccountTypeEnum accountType = null;
 
   @JsonProperty("IBAN")
+  @GeneratedValue
+  @Id
   private String IBAN = null;
 
   @JsonProperty("accountBalance")

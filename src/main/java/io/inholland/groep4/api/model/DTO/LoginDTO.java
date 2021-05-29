@@ -1,4 +1,4 @@
-package io.inholland.groep4.api.model;
+package io.inholland.groep4.api.model.DTO;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,15 +13,14 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 
-
-public class Authentication   {
+public class LoginDTO {
   @JsonProperty("username")
   private String username = null;
 
   @JsonProperty("password")
   private String password = null;
 
-  public Authentication username(String username) {
+  public LoginDTO username(String username) {
     this.username = username;
     return this;
   }
@@ -41,7 +40,7 @@ public class Authentication   {
     this.username = username;
   }
 
-  public Authentication password(String password) {
+  public LoginDTO password(String password) {
     this.password = password;
     return this;
   }
@@ -70,7 +69,7 @@ public class Authentication   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Authentication authentication = (Authentication) o;
+    LoginDTO authentication = (LoginDTO) o;
     return Objects.equals(this.username, authentication.username) &&
         Objects.equals(this.password, authentication.password);
   }

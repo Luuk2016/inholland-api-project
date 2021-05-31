@@ -52,6 +52,10 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<UserAccount> accounts;
 
+    @JsonProperty("transactions")
+    @OneToMany(mappedBy = "owner")
+    private List<Transaction> transactions;
+
     public User(Long id, String firstName, String lastName, String email, String username, String password, String birthdate, List<Role> roles, List<UserAccount> accounts, List<AccessLevelEnum> accessLevel, List<StatusEnum> status) {
         this.id = id;
         this.firstName = firstName;

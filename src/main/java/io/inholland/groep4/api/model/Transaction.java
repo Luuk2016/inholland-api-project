@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -29,17 +30,34 @@ public class Transaction {
     @JsonProperty("dateTime")
     private OffsetDateTime dateTime = null;
 
+    @JsonProperty("owner")
+    @ManyToOne
+    private User owner;
+
     @JsonProperty("sender")
     private String sender = null;
 
-    @JsonProperty("reciever")
-    private String reciever = null;
+    @JsonProperty("receiver")
+    private String receiver = null;
 
     @JsonProperty("amount")
     private Double amount = null;
 
     @JsonProperty("description")
     private String description = null;
+
+    public Transaction(Long id, OffsetDateTime dateTime, User owner, String sender, String receiver, Double amount, String description) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.owner = owner;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.amount = amount;
+        this.description = description;
+    }
+
+    public Transaction() {
+    }
 
     public Transaction id(Long id) {
         this.id = id;
@@ -89,6 +107,14 @@ public class Transaction {
         return this;
     }
 
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     /**
      * Get sender
      *
@@ -105,25 +131,25 @@ public class Transaction {
         this.sender = sender;
     }
 
-    public Transaction reciever(String reciever) {
-        this.reciever = reciever;
+    public Transaction receiver(String receiver) {
+        this.receiver = receiver;
         return this;
     }
 
     /**
-     * Get reciever
+     * Get receiver
      *
-     * @return reciever
+     * @return receiver
      **/
     @Schema(example = "NL91 ABNA 0417 1643 00", required = true, description = "")
     @NotNull
 
-    public String getReciever() {
-        return reciever;
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setReciever(String reciever) {
-        this.reciever = reciever;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
     public Transaction amount(Double amount) {
@@ -185,14 +211,14 @@ public class Transaction {
         return Objects.equals(this.id, transaction.id) &&
                 Objects.equals(this.dateTime, transaction.dateTime) &&
                 Objects.equals(this.sender, transaction.sender) &&
-                Objects.equals(this.reciever, transaction.reciever) &&
+                Objects.equals(this.receiver, transaction.receiver) &&
                 Objects.equals(this.amount, transaction.amount) &&
                 Objects.equals(this.description, transaction.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dateTime, sender, reciever, amount, description);
+        return Objects.hash(id, dateTime, sender, receiver, amount, description);
     }
 
     @Override
@@ -203,7 +229,7 @@ public class Transaction {
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    dateTime: ").append(toIndentedString(dateTime)).append("\n");
         sb.append("    sender: ").append(toIndentedString(sender)).append("\n");
-        sb.append("    reciever: ").append(toIndentedString(reciever)).append("\n");
+        sb.append("    reciever: ").append(toIndentedString(receiver)).append("\n");
         sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
         sb.append("}");

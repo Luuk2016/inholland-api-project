@@ -2,6 +2,9 @@ package io.inholland.groep4.configuration;
 
 import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.User;
+import io.inholland.groep4.api.model.UserAccount;
+import io.inholland.groep4.api.service.TransactionService;
+import io.inholland.groep4.api.service.UserAccountService;
 import io.inholland.groep4.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -16,8 +19,15 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserAccountService userAccountService;
+
+    @Autowired
+    TransactionService transactionService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        // Create a new user
         User user = new User();
         user.setUsername("john");
         user.setPassword("test");
@@ -27,5 +37,15 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setBirthdate("01/01/1970");
         user.setRoles(Arrays.asList(Role.ROLE_USER, Role.ROLE_ADMIN));
         userService.add(user);
+
+        // Create a new userAccount
+        UserAccount userAccount = new UserAccount();
+        userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount.setIBAN("NL ABNA 420 69");
+        userAccount.setOwner(user);
+        userAccount.setAccountBalance(420.69);
+        userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccount.setLowerLimit(100.00);
+        userAccountService.add(userAccount);
     }
 }

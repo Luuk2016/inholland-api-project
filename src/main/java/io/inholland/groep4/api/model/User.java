@@ -21,356 +21,386 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 
 @Entity
-public class User   {
-  @JsonProperty("id")
-  @Id
-  @GeneratedValue
-  private Long id = null;
+public class User {
+    @JsonProperty("id")
+    @Id
+    @GeneratedValue
+    private Long id = null;
 
-  @JsonProperty("firstName")
-  private String firstName = null;
+    @JsonProperty("firstName")
+    private String firstName = null;
 
-  @JsonProperty("lastName")
-  private String lastName = null;
+    @JsonProperty("lastName")
+    private String lastName = null;
 
-  @JsonProperty("email")
-  private String email = null;
+    @JsonProperty("email")
+    private String email = null;
 
-  @JsonProperty("username")
-  private String username = null;
+    @JsonProperty("username")
+    private String username = null;
 
-  @JsonProperty("password")
-  private String password = null;
+    @JsonProperty("password")
+    private String password = null;
 
-  @JsonProperty("birthdate")
-  private String birthdate = null;
+    @JsonProperty("birthdate")
+    private String birthdate = null;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  private List<Role> roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
-  /**
-   * Gets or Sets accessLevel
-   */
-  public enum AccessLevelEnum {
-    CUSTOMER("Customer"),
-    
-    EMPLOYEE("Employee");
+    @JsonProperty("accounts")
+    @OneToMany(mappedBy = "owner")
+    private List<UserAccount> accounts;
 
-    private String value;
-
-    AccessLevelEnum(String value) {
-      this.value = value;
+    public User(Long id, String firstName, String lastName, String email, String username, String password, String birthdate, List<Role> roles, List<UserAccount> accounts, List<AccessLevelEnum> accessLevel, List<StatusEnum> status) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.birthdate = birthdate;
+        this.roles = roles;
     }
 
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
+    public User() {
     }
 
-    @JsonCreator
-    public static AccessLevelEnum fromValue(String text) {
-      for (AccessLevelEnum b : AccessLevelEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+    /**
+     * Gets or Sets accessLevel
+     */
+    public enum AccessLevelEnum {
+        CUSTOMER("Customer"),
+
+        EMPLOYEE("Employee");
+
+        private String value;
+
+        AccessLevelEnum(String value) {
+            this.value = value;
         }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("accessLevel")
-  @Valid
-  @Column
-  @ElementCollection(targetClass=AccessLevelEnum.class)
-  private List<AccessLevelEnum> accessLevel = new ArrayList<AccessLevelEnum>();
 
-  /**
-   * Gets or Sets status
-   */
-  public enum StatusEnum {
-    ACTIVE("Active"),
-    
-    INACTIVE("Inactive");
-
-    private String value;
-
-    StatusEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static StatusEnum fromValue(String text) {
-      for (StatusEnum b : StatusEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
         }
-      }
-      return null;
+
+        @JsonCreator
+        public static AccessLevelEnum fromValue(String text) {
+            for (AccessLevelEnum b : AccessLevelEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
-  }
-  @JsonProperty("status")
-  @Valid
-  @Column
-  @ElementCollection(targetClass=StatusEnum.class)
-  private List<StatusEnum> status = null;
 
-  public User id(Long id) {
-    this.id = id;
-    return this;
-  }
+    @JsonProperty("accessLevel")
+    @Valid
+    @Column
+    @ElementCollection(targetClass = AccessLevelEnum.class)
+    private List<AccessLevelEnum> accessLevel = new ArrayList<AccessLevelEnum>();
 
-  /**
-   * Get id
-   * minimum: 1
-   * @return id
-   **/
-  @Schema(example = "9999", required = true, description = "")
-      @NotNull
+    /**
+     * Gets or Sets status
+     */
+    public enum StatusEnum {
+        ACTIVE("Active"),
 
-  @Min(1L)  public Long getId() {
-    return id;
-  }
+        INACTIVE("Inactive");
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+        private String value;
 
-  public User firstName(String firstName) {
-    this.firstName = firstName;
-    return this;
-  }
+        StatusEnum(String value) {
+            this.value = value;
+        }
 
-  /**
-   * Get firstName
-   * @return firstName
-   **/
-  @Schema(example = "John", required = true, description = "")
-      @NotNull
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static StatusEnum fromValue(String text) {
+            for (StatusEnum b : StatusEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+
+    @JsonProperty("status")
+    @Valid
+    @Column
+    @ElementCollection(targetClass = StatusEnum.class)
+    private List<StatusEnum> status = null;
+
+    public User id(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get id
+     * minimum: 1
+     *
+     * @return id
+     **/
+    @Schema(example = "9999", required = true, description = "")
+    @NotNull
+
+    @Min(1L)
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User firstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return firstName
+     **/
+    @Schema(example = "John", required = true, description = "")
+    @NotNull
 
     public String getFirstName() {
-    return firstName;
-  }
+        return firstName;
+    }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-  public User lastName(String lastName) {
-    this.lastName = lastName;
-    return this;
-  }
+    public User lastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
 
-  /**
-   * Get lastName
-   * @return lastName
-   **/
-  @Schema(example = "Doe", required = true, description = "")
-      @NotNull
+    /**
+     * Get lastName
+     *
+     * @return lastName
+     **/
+    @Schema(example = "Doe", required = true, description = "")
+    @NotNull
 
     public String getLastName() {
-    return lastName;
-  }
+        return lastName;
+    }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-  public User email(String email) {
-    this.email = email;
-    return this;
-  }
+    public User email(String email) {
+        this.email = email;
+        return this;
+    }
 
-  /**
-   * Get email
-   * @return email
-   **/
-  @Schema(example = "johndoe@groep4API.com", required = true, description = "")
-      @NotNull
+    /**
+     * Get email
+     *
+     * @return email
+     **/
+    @Schema(example = "johndoe@groep4API.com", required = true, description = "")
+    @NotNull
 
     public String getEmail() {
-    return email;
-  }
+        return email;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public User username(String username) {
-    this.username = username;
-    return this;
-  }
+    public User username(String username) {
+        this.username = username;
+        return this;
+    }
 
-  /**
-   * Get username
-   * @return username
-   **/
-  @Schema(example = "johndoe", required = true, description = "")
-      @NotNull
+    /**
+     * Get username
+     *
+     * @return username
+     **/
+    @Schema(example = "johndoe", required = true, description = "")
+    @NotNull
 
     public String getUsername() {
-    return username;
-  }
+        return username;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public User password(String password) {
-    this.password = password;
-    return this;
-  }
+    public User password(String password) {
+        this.password = password;
+        return this;
+    }
 
-  /**
-   * Get password
-   * @return password
-   **/
-  @Schema(example = "testPassword", required = true, description = "")
-      @NotNull
+    /**
+     * Get password
+     *
+     * @return password
+     **/
+    @Schema(example = "testPassword", required = true, description = "")
+    @NotNull
 
     public String getPassword() {
-    return password;
-  }
+        return password;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public User birthdate(String birthdate) {
-    this.birthdate = birthdate;
-    return this;
-  }
+    public User birthdate(String birthdate) {
+        this.birthdate = birthdate;
+        return this;
+    }
 
-  /**
-   * Get birthdate
-   * @return birthdate
-   **/
-  @Schema(example = "1969-04-20", description = "")
-  
+    /**
+     * Get birthdate
+     *
+     * @return birthdate
+     **/
+    @Schema(example = "1969-04-20", description = "")
+
     public String getBirthdate() {
-    return birthdate;
-  }
+        return birthdate;
+    }
 
-  public void setBirthdate(String birthdate) {
-    this.birthdate = birthdate;
-  }
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
 
-  public User accessLevel(List<AccessLevelEnum> accessLevel) {
-    this.accessLevel = accessLevel;
-    return this;
-  }
+    public User accessLevel(List<AccessLevelEnum> accessLevel) {
+        this.accessLevel = accessLevel;
+        return this;
+    }
 
-  public User addAccessLevelItem(AccessLevelEnum accessLevelItem) {
-    this.accessLevel.add(accessLevelItem);
-    return this;
-  }
+    public User addAccessLevelItem(AccessLevelEnum accessLevelItem) {
+        this.accessLevel.add(accessLevelItem);
+        return this;
+    }
 
-  /**
-   * Get accessLevel
-   * @return accessLevel
-   **/
-  @Schema(example = "Employee", required = true, description = "")
-      @NotNull
+    /**
+     * Get accessLevel
+     *
+     * @return accessLevel
+     **/
+    @Schema(example = "Employee", required = true, description = "")
+    @NotNull
 
     public List<AccessLevelEnum> getAccessLevel() {
-    return accessLevel;
-  }
-
-  public void setAccessLevel(List<AccessLevelEnum> accessLevel) {
-    this.accessLevel = accessLevel;
-  }
-
-  public User status(List<StatusEnum> status) {
-    this.status = status;
-    return this;
-  }
-
-  public User addStatusItem(StatusEnum statusItem) {
-    if (this.status == null) {
-      this.status = new ArrayList<StatusEnum>();
+        return accessLevel;
     }
-    this.status.add(statusItem);
-    return this;
-  }
 
-  /**
-   * Get status
-   * @return status
-   **/
-  @Schema(example = "Active", description = "")
-  
+    public void setAccessLevel(List<AccessLevelEnum> accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public User status(List<StatusEnum> status) {
+        this.status = status;
+        return this;
+    }
+
+    public User addStatusItem(StatusEnum statusItem) {
+        if (this.status == null) {
+            this.status = new ArrayList<StatusEnum>();
+        }
+        this.status.add(statusItem);
+        return this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return status
+     **/
+    @Schema(example = "Active", description = "")
+
     public List<StatusEnum> getStatus() {
-    return status;
-  }
-
-  public void setStatus(List<StatusEnum> status) {
-    this.status = status;
-  }
-
-  public List<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<Role> roles) {
-    this.roles = roles;
-  }
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return status;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public void setStatus(List<StatusEnum> status) {
+        this.status = status;
     }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.firstName, user.firstName) &&
-        Objects.equals(this.lastName, user.lastName) &&
-        Objects.equals(this.email, user.email) &&
-        Objects.equals(this.username, user.username) &&
-        Objects.equals(this.password, user.password) &&
-        Objects.equals(this.birthdate, user.birthdate) &&
-        Objects.equals(this.accessLevel, user.accessLevel) &&
-        Objects.equals(this.status, user.status);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, firstName, lastName, email, username, password, birthdate, accessLevel, status);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
-    sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
-    sb.append("    birthdate: ").append(toIndentedString(birthdate)).append("\n");
-    sb.append("    accessLevel: ").append(toIndentedString(accessLevel)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public List<Role> getRoles() {
+        return roles;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(this.id, user.id) &&
+                Objects.equals(this.firstName, user.firstName) &&
+                Objects.equals(this.lastName, user.lastName) &&
+                Objects.equals(this.email, user.email) &&
+                Objects.equals(this.username, user.username) &&
+                Objects.equals(this.password, user.password) &&
+                Objects.equals(this.birthdate, user.birthdate) &&
+                Objects.equals(this.accessLevel, user.accessLevel) &&
+                Objects.equals(this.status, user.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, username, password, birthdate, accessLevel, status);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class User {\n");
+
+        sb.append("    id: ").append(toIndentedString(id)).append("\n");
+        sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
+        sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
+        sb.append("    email: ").append(toIndentedString(email)).append("\n");
+        sb.append("    username: ").append(toIndentedString(username)).append("\n");
+        sb.append("    password: ").append(toIndentedString(password)).append("\n");
+        sb.append("    birthdate: ").append(toIndentedString(birthdate)).append("\n");
+        sb.append("    accessLevel: ").append(toIndentedString(accessLevel)).append("\n");
+        sb.append("    status: ").append(toIndentedString(status)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

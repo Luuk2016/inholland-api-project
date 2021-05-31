@@ -10,7 +10,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
 @EnableOpenApi
-@ComponentScan(basePackages = {"io.inholland.groep4", "io.inholland.groep4.controller", "io.inholland.groep4.configuration"})
+@ComponentScan(basePackages = {"io.inholland.groep4", "io.inholland.groep4.api.controller", "io.inholland.groep4.configuration"})
 public class Application implements CommandLineRunner {
 
     @Override

@@ -1,15 +1,18 @@
 package io.inholland.groep4.api.model;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.*;
 
 /**
@@ -19,229 +22,265 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 
 @Entity
-public class UserAccount   {
-  /**
-   * Gets or Sets accountType
-   */
-  public enum AccountTypeEnum {
-    CURRENT("Current"),
-    
-    SAVINGS("Savings");
+public class UserAccount {
+    /**
+     * Gets or Sets accountType
+     */
+    public enum AccountTypeEnum {
+        CURRENT("Current"),
 
-    private String value;
+        SAVINGS("Savings");
 
-    AccountTypeEnum(String value) {
-      this.value = value;
-    }
+        private String value;
 
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static AccountTypeEnum fromValue(String text) {
-      for (AccountTypeEnum b : AccountTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+        AccountTypeEnum(String value) {
+            this.value = value;
         }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("accountType")
-  private AccountTypeEnum accountType = null;
 
-  @JsonProperty("IBAN")
-  @GeneratedValue
-  @Id
-  private String IBAN = null;
-
-  @JsonProperty("accountBalance")
-  private Double accountBalance = null;
-
-  @JsonProperty("lowerLimit")
-  private Double lowerLimit = null;
-
-  /**
-   * Gets or Sets accountStatus
-   */
-  public enum AccountStatusEnum {
-    ACTIVE("Active"),
-    
-    INACTIVE("Inactive");
-
-    private String value;
-
-    AccountStatusEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static AccountStatusEnum fromValue(String text) {
-      for (AccountStatusEnum b : AccountStatusEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
         }
-      }
-      return null;
+
+        @JsonCreator
+        public static AccountTypeEnum fromValue(String text) {
+            for (AccountTypeEnum b : AccountTypeEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
-  }
-  @JsonProperty("accountStatus")
-  private AccountStatusEnum accountStatus = null;
 
-  public UserAccount accountType(AccountTypeEnum accountType) {
-    this.accountType = accountType;
-    return this;
-  }
+    @JsonProperty("id")
+    @Id
+    @GeneratedValue
+    private Long id = null;
 
-  /**
-   * Get accountType
-   * @return accountType
-   **/
-  @Schema(example = "Current", required = true, description = "")
-      @NotNull
+    @JsonProperty("accountType")
+    private AccountTypeEnum accountType = null;
+
+    @JsonProperty("IBAN")
+    private String IBAN = null;
+
+    @JsonProperty("owner")
+    @ManyToOne
+    private User owner;
+
+    @JsonProperty("accountBalance")
+    private Double accountBalance = null;
+
+    @JsonProperty("lowerLimit")
+    private Double lowerLimit = null;
+
+    public UserAccount(AccountTypeEnum accountType, String IBAN, User owner, Double accountBalance, Double lowerLimit, AccountStatusEnum accountStatus) {
+        this.accountType = accountType;
+        this.IBAN = IBAN;
+        this.owner = owner;
+        this.accountBalance = accountBalance;
+        this.lowerLimit = lowerLimit;
+        this.accountStatus = accountStatus;
+    }
+
+    public UserAccount() {
+    }
+
+    /**
+     * Gets or Sets accountStatus
+     */
+    public enum AccountStatusEnum {
+        ACTIVE("Active"),
+
+        INACTIVE("Inactive");
+
+        private String value;
+
+        AccountStatusEnum(String value) {
+            this.value = value;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static AccountStatusEnum fromValue(String text) {
+            for (AccountStatusEnum b : AccountStatusEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+
+    @JsonProperty("accountStatus")
+    private AccountStatusEnum accountStatus = null;
+
+    public UserAccount accountType(AccountTypeEnum accountType) {
+        this.accountType = accountType;
+        return this;
+    }
+
+    /**
+     * Get accountType
+     *
+     * @return accountType
+     **/
+    @Schema(example = "Current", required = true, description = "")
+    @NotNull
 
     public AccountTypeEnum getAccountType() {
-    return accountType;
-  }
+        return accountType;
+    }
 
-  public void setAccountType(AccountTypeEnum accountType) {
-    this.accountType = accountType;
-  }
+    public void setAccountType(AccountTypeEnum accountType) {
+        this.accountType = accountType;
+    }
 
-  public UserAccount IBAN(String IBAN) {
-    this.IBAN = IBAN;
-    return this;
-  }
+    public UserAccount IBAN(String IBAN) {
+        this.IBAN = IBAN;
+        return this;
+    }
 
-  /**
-   * Get IBAN
-   * @return IBAN
-   **/
-  @Schema(example = "NL91 ABNA 0417 1643 00", required = true, description = "")
-      @NotNull
+    /**
+     * Get IBAN
+     *
+     * @return IBAN
+     **/
+    @Schema(example = "NL91 ABNA 0417 1643 00", required = true, description = "")
+    @NotNull
 
     public String getIBAN() {
-    return IBAN;
-  }
+        return IBAN;
+    }
 
-  public void setIBAN(String IBAN) {
-    this.IBAN = IBAN;
-  }
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
+    }
 
-  public UserAccount accountBalance(Double accountBalance) {
-    this.accountBalance = accountBalance;
-    return this;
-  }
+    public UserAccount accountBalance(Double accountBalance) {
+        this.accountBalance = accountBalance;
+        return this;
+    }
 
-  /**
-   * Get accountBalance
-   * minimum: -999
-   * @return accountBalance
-   **/
-  @Schema(example = "1271.56", required = true, description = "")
-      @NotNull
+    public User getOwner() {
+        return owner;
+    }
 
-  @DecimalMin("-999")  public Double getAccountBalance() {
-    return accountBalance;
-  }
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
-  public void setAccountBalance(Double accountBalance) {
-    this.accountBalance = accountBalance;
-  }
+    /**
+     * Get accountBalance
+     * minimum: -999
+     *
+     * @return accountBalance
+     **/
+    @Schema(example = "1271.56", required = true, description = "")
+    @NotNull
 
-  public UserAccount lowerLimit(Double lowerLimit) {
-    this.lowerLimit = lowerLimit;
-    return this;
-  }
+    @DecimalMin("-999")
+    public Double getAccountBalance() {
+        return accountBalance;
+    }
 
-  /**
-   * Get lowerLimit
-   * minimum: -1000
-   * @return lowerLimit
-   **/
-  @Schema(example = "0", required = true, description = "")
-      @NotNull
+    public void setAccountBalance(Double accountBalance) {
+        this.accountBalance = accountBalance;
+    }
 
-  @DecimalMin("-1000")  public Double getLowerLimit() {
-    return lowerLimit;
-  }
+    public UserAccount lowerLimit(Double lowerLimit) {
+        this.lowerLimit = lowerLimit;
+        return this;
+    }
 
-  public void setLowerLimit(Double lowerLimit) {
-    this.lowerLimit = lowerLimit;
-  }
+    /**
+     * Get lowerLimit
+     * minimum: -1000
+     *
+     * @return lowerLimit
+     **/
+    @Schema(example = "0", required = true, description = "")
+    @NotNull
 
-  public UserAccount accountStatus(AccountStatusEnum accountStatus) {
-    this.accountStatus = accountStatus;
-    return this;
-  }
+    @DecimalMin("-1000")
+    public Double getLowerLimit() {
+        return lowerLimit;
+    }
 
-  /**
-   * Get accountStatus
-   * @return accountStatus
-   **/
-  @Schema(example = "Active", description = "")
-  
+    public void setLowerLimit(Double lowerLimit) {
+        this.lowerLimit = lowerLimit;
+    }
+
+    public UserAccount accountStatus(AccountStatusEnum accountStatus) {
+        this.accountStatus = accountStatus;
+        return this;
+    }
+
+    /**
+     * Get accountStatus
+     *
+     * @return accountStatus
+     **/
+    @Schema(example = "Active", description = "")
+
     public AccountStatusEnum getAccountStatus() {
-    return accountStatus;
-  }
-
-  public void setAccountStatus(AccountStatusEnum accountStatus) {
-    this.accountStatus = accountStatus;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return accountStatus;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public void setAccountStatus(AccountStatusEnum accountStatus) {
+        this.accountStatus = accountStatus;
     }
-    UserAccount userAccount = (UserAccount) o;
-    return Objects.equals(this.accountType, userAccount.accountType) &&
-        Objects.equals(this.IBAN, userAccount.IBAN) &&
-        Objects.equals(this.accountBalance, userAccount.accountBalance) &&
-        Objects.equals(this.lowerLimit, userAccount.lowerLimit) &&
-        Objects.equals(this.accountStatus, userAccount.accountStatus);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(accountType, IBAN, accountBalance, lowerLimit, accountStatus);
-  }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class UserAccount {\n");
-    
-    sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
-    sb.append("    IBAN: ").append(toIndentedString(IBAN)).append("\n");
-    sb.append("    accountBalance: ").append(toIndentedString(accountBalance)).append("\n");
-    sb.append("    lowerLimit: ").append(toIndentedString(lowerLimit)).append("\n");
-    sb.append("    accountStatus: ").append(toIndentedString(accountStatus)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserAccount userAccount = (UserAccount) o;
+        return Objects.equals(this.accountType, userAccount.accountType) &&
+                Objects.equals(this.IBAN, userAccount.IBAN) &&
+                Objects.equals(this.accountBalance, userAccount.accountBalance) &&
+                Objects.equals(this.lowerLimit, userAccount.lowerLimit) &&
+                Objects.equals(this.accountStatus, userAccount.accountStatus);
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountType, IBAN, accountBalance, lowerLimit, accountStatus);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class UserAccount {\n");
+
+        sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
+        sb.append("    IBAN: ").append(toIndentedString(IBAN)).append("\n");
+        sb.append("    accountBalance: ").append(toIndentedString(accountBalance)).append("\n");
+        sb.append("    lowerLimit: ").append(toIndentedString(lowerLimit)).append("\n");
+        sb.append("    accountStatus: ").append(toIndentedString(accountStatus)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

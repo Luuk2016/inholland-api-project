@@ -61,7 +61,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<User> getUsers(@Parameter(in = ParameterIn.HEADER, description = "" ,required=true,schema=@Schema()) @RequestHeader(value="Bearer Token", required=true) String bearerToken);
+    ResponseEntity<User> getUsers();
 
 
     @Operation(summary = "Create new user", description = "Create new user", security = {

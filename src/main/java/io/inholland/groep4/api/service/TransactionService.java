@@ -3,7 +3,10 @@ package io.inholland.groep4.api.service;
 import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.TransactionRepository;
+import io.inholland.groep4.api.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +17,27 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private UserAccountRepository userAccountRepository;
+
     public Transaction add(Transaction transaction) {
         // @TODO: Check if transaction doesn't already exist :)
-        transactionRepository.save(transaction);
+        if (!transactionRepository.existsById(transaction.getId())) {
+            UserAccount sender = userAccountRepository.findByIBAN(transaction.getSender());
+            UserAccount receiver = userAccountRepository.findByIBAN(transaction.getReceiver());
 
-        return transaction;
+            //if the sender isn't attempting an illegal transaction and doesn't have insufficient funds to complete the transaction
+            if (!(transaction.getAmount() <= 0.00)) {
+                if (!((sender.getAccountBalance() - transaction.getAmount()) < sender.getLowerLimit())) {
+                    sender.setAccountBalance(sender.getAccountBalance() - transaction.getAmount());
+                    receiver.setAccountBalance(receiver.getAccountBalance() + transaction.getAmount());
+
+                    transactionRepository.save(transaction);
+                }
+                return transaction;
+            }
+        }
+        return null;
     }
 
     public List<Transaction> getAllTransactions() {

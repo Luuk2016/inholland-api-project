@@ -10,6 +10,8 @@ import io.inholland.groep4.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.threeten.bp.OffsetDateTime;
 
@@ -42,22 +44,31 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));
         userService.add(user);
 
-        // Create a new userAccount
-        UserAccount userAccount = new UserAccount();
-        userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount.setIBAN("NL ABNA 420 69");
-        userAccount.setOwner(user);
-        userAccount.setAccountBalance(420.69);
-        userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccount.setLowerLimit(100.00);
-        userAccountService.add(userAccount);
+        // Create new userAccounts
+        UserAccount userAccountJohnCurrent = new UserAccount();
+        userAccountJohnCurrent.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccountJohnCurrent.setIBAN("NL ABNA 420 69");
+        userAccountJohnCurrent.setOwner(user);
+        userAccountJohnCurrent.setAccountBalance(420.69);
+        userAccountJohnCurrent.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccountJohnCurrent.setLowerLimit(100.00);
+        userAccountService.add(userAccountJohnCurrent);
+
+        UserAccount userAccountJohnSavings = new UserAccount();
+        userAccountJohnSavings.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        userAccountJohnSavings.setIBAN("NL ABNA 420 70");
+        userAccountJohnSavings.setOwner(user);
+        userAccountJohnSavings.accountBalance(1337.00);
+        userAccountJohnSavings.accountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccountJohnSavings.setLowerLimit(100.00);
+        userAccountService.add(userAccountJohnSavings);
 
         // Create a new transaction
         Transaction transaction = new Transaction();
         transaction.setDateTime(OffsetDateTime.now());
         transaction.setOwner(user);
         transaction.setSender("NL ABNA 420 69");
-        transaction.setReceiver("NL ABNA 69 666");
+        transaction.setReceiver("NL ABNA 69 70");
         transaction.setAmount(25.00);
         transaction.setDescription("Here's your money");
         transactionService.add(transaction);

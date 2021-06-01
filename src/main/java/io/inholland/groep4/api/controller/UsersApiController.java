@@ -34,10 +34,16 @@ public class UsersApiController implements UsersApi {
     @Autowired
     private UserService userService;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public UsersApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.status(200).body(users);
     }
 
     public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id) {
@@ -52,12 +58,6 @@ public class UsersApiController implements UsersApi {
         }
 
         return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.status(200).body(users);
     }
 
     public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
@@ -87,5 +87,4 @@ public class UsersApiController implements UsersApi {
 
         return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
     }
-
 }

@@ -38,7 +38,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setLastName("Doe");
         user.setEmail("johndoe@example.com");
         user.setBirthdate("01/01/1970");
-        user.setRoles(Arrays.asList(Role.ROLE_USER, Role.ROLE_ADMIN));
+        user.setRoles(Arrays.asList(Role.ROLE_USER, Role.ROLE_EMPLOYEE));
         user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));
         userService.add(user);
 

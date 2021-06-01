@@ -29,7 +29,7 @@ public class LoginDTO {
    * Get username
    * @return username
    **/
-  @Schema(example = "LordSwagtron", required = true, description = "")
+  @Schema(example = "john", required = true, description = "")
       @NotNull
 
     public String getUsername() {
@@ -49,7 +49,7 @@ public class LoginDTO {
    * Get password
    * @return password
    **/
-  @Schema(example = "myfirstpassword1", required = true, description = "")
+  @Schema(example = "test", required = true, description = "")
       @NotNull
 
     public String getPassword() {

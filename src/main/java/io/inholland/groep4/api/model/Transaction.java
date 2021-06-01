@@ -2,6 +2,7 @@ package io.inholland.groep4.api.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.OffsetDateTime;
@@ -32,6 +33,7 @@ public class Transaction {
 
     @JsonProperty("owner")
     @ManyToOne
+    @JsonBackReference
     private User owner;
 
     @JsonProperty("sender")

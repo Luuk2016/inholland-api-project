@@ -1,8 +1,6 @@
 package io.inholland.groep4.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
@@ -49,6 +47,7 @@ public class User {
     private List<Role> roles;
 
     @JsonProperty("accounts")
+    @JsonManagedReference
     @OneToMany(mappedBy = "owner")
     private List<UserAccount> accounts;
 

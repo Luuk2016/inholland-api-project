@@ -2,6 +2,7 @@ package io.inholland.groep4.api.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -67,6 +68,7 @@ public class UserAccount {
 
     @JsonProperty("owner")
     @ManyToOne
+    @JsonBackReference
     private User owner;
 
     @JsonProperty("accountBalance")

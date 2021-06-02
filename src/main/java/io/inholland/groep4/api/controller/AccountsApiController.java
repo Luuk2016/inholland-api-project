@@ -7,8 +7,6 @@ import io.inholland.groep4.api.service.UserAccountService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.iban4j.CountryCode;
-import org.iban4j.Iban;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
@@ -58,22 +55,11 @@ public class AccountsApiController implements AccountsApi {
 
     public ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body) {
         try {
-
-            // Generate a new IBAN
-            Iban generatedIBAN = new Iban.Builder().countryCode(CountryCode.NL).bankCode("INHO").buildRandom();
-
-            // Check if not already in use
-            // If in use, get a new one until it's unique
-            while (userAccountService.existByIBAN(generatedIBAN.toString())) {
-                generatedIBAN = new Iban.Builder().countryCode(CountryCode.NL).bankCode("INHO").buildRandom();
-            }
-
-            body.setIBAN(generatedIBAN.toString());
             body.setAccountBalance(0.00);
             body.setLowerLimit(100.00);
             body.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
 
-            UserAccount userAccount = userAccountService.add(body);
+            UserAccount userAccount = userAccountService.add(body, true);
 
             return ResponseEntity.status(HttpStatus.OK).body(userAccount);
         } catch (IllegalArgumentException iae) {

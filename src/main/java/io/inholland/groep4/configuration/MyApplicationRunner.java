@@ -31,12 +31,11 @@ public class MyApplicationRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         // Create the default BANK account
         UserAccount account = new UserAccount();
-        account.setIBAN("NL01 INHO 0000 0000 01");
+        account.setIBAN("NL01INHO0000000001");
         account.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        account.setAccountBalance(420.69);
+        account.setAccountBalance(500.00);
         account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        account.setLowerLimit(100.00);
-        userAccountService.add(account);
+        userAccountService.add(account, false);
 
         // Create a new user
         User user = new User();
@@ -50,24 +49,13 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));
         userService.add(user);
 
-        // Create a new userAccount
+        // Create a new account
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount.setIBAN("NL01 INHO 0420 6969 00");
         userAccount.setOwner(user);
-        userAccount.setAccountBalance(420.69);
+        userAccount.setAccountBalance(500.00);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
-        userAccountService.add(userAccount);
-
-        // Create a new transaction
-        Transaction transaction = new Transaction();
-        transaction.setDateTime(OffsetDateTime.now());
-        transaction.setOwner(user);
-        transaction.setSender("NL01 INHO 0420 6969 00");
-        transaction.setReceiver("NL01 INHO 0420 6969 11");
-        transaction.setAmount(25.00);
-        transaction.setDescription("Here's your money");
-        transactionService.add(transaction);
+        userAccountService.add(userAccount, true);
     }
 }

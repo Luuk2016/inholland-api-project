@@ -14,13 +14,13 @@ public class UserAccountService {
     private UserAccountRepository userAccountRepository;
 
     public UserAccount add(UserAccount userAccount) {
-        // @TODO: Check if account doesn't already exist :)
         userAccountRepository.save(userAccount);
-
         return userAccount;
     }
 
     public List<UserAccount> getAllAccounts() {
         return userAccountRepository.findAll();
     }
+
+    public boolean existByIBAN(String iban) { return userAccountRepository.existsByIBAN(iban); }
 }

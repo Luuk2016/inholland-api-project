@@ -13,7 +13,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.threeten.bp.OffsetDateTime;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Component
@@ -30,6 +29,15 @@ public class MyApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        // Create the default BANK account
+        UserAccount account = new UserAccount();
+        account.setIBAN("NL01 INHO 0000 0000 01");
+        account.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        account.setAccountBalance(420.69);
+        account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        account.setLowerLimit(100.00);
+        userAccountService.add(account);
+
         // Create a new user
         User user = new User();
         user.setUsername("john");
@@ -45,7 +53,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         // Create a new userAccount
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount.setIBAN("NL ABNA 420 69");
+        userAccount.setIBAN("NL01 INHO 0420 6969 00");
         userAccount.setOwner(user);
         userAccount.setAccountBalance(420.69);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
@@ -56,8 +64,8 @@ public class MyApplicationRunner implements ApplicationRunner {
         Transaction transaction = new Transaction();
         transaction.setDateTime(OffsetDateTime.now());
         transaction.setOwner(user);
-        transaction.setSender("NL ABNA 420 69");
-        transaction.setReceiver("NL ABNA 69 666");
+        transaction.setSender("NL01 INHO 0420 6969 00");
+        transaction.setReceiver("NL01 INHO 0420 6969 11");
         transaction.setAmount(25.00);
         transaction.setDescription("Here's your money");
         transactionService.add(transaction);

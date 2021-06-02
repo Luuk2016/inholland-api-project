@@ -133,7 +133,7 @@ public class UserAccount {
      *
      * @return accountType
      **/
-    @Schema(example = "Current", required = true, description = "")
+    @Schema(example = "current", required = true, description = "")
     @NotNull
 
     public AccountTypeEnum getAccountType() {
@@ -229,7 +229,7 @@ public class UserAccount {
      *
      * @return accountStatus
      **/
-    @Schema(example = "Active", description = "")
+    @Schema(example = "active", description = "")
 
     public AccountStatusEnum getAccountStatus() {
         return accountStatus;

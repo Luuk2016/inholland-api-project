@@ -28,9 +28,9 @@ public class UserAccount {
      * Gets or Sets accountType
      */
     public enum AccountTypeEnum {
-        CURRENT("Current"),
+        CURRENT("current"),
 
-        SAVINGS("Savings");
+        SAVINGS("savings");
 
         private String value;
 
@@ -93,9 +93,9 @@ public class UserAccount {
      * Gets or Sets accountStatus
      */
     public enum AccountStatusEnum {
-        ACTIVE("Active"),
+        ACTIVE("active"),
 
-        INACTIVE("Inactive");
+        INACTIVE("inactive");
 
         private String value;
 
@@ -133,7 +133,7 @@ public class UserAccount {
      *
      * @return accountType
      **/
-    @Schema(example = "Current", required = true, description = "")
+    @Schema(example = "current", required = true, description = "")
     @NotNull
 
     public AccountTypeEnum getAccountType() {
@@ -229,7 +229,7 @@ public class UserAccount {
      *
      * @return accountStatus
      **/
-    @Schema(example = "Active", description = "")
+    @Schema(example = "active", description = "")
 
     public AccountStatusEnum getAccountStatus() {
         return accountStatus;

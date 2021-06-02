@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
 @Validated
@@ -42,7 +43,7 @@ public interface AccountsApi {
     @RequestMapping(value = "/accounts",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<UserAccount> getAccounts();
+    ResponseEntity<List<UserAccount>> getAccounts();
 
 
     @Operation(summary = "Get specific account", description = "Get specific account", security = {
@@ -60,7 +61,7 @@ public interface AccountsApi {
     @RequestMapping(value = "/accounts/{id}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id);
+    ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "Create account", description = "Create account", security = {

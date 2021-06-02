@@ -1,6 +1,5 @@
 package io.inholland.groep4.configuration;
 
-import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.threeten.bp.OffsetDateTime;
-
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Component
@@ -32,6 +29,14 @@ public class MyApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        // Create the default BANK account
+        UserAccount account = new UserAccount();
+        account.setIBAN("NL01INHO0000000001");
+        account.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        account.setAccountBalance(500.00);
+        account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccountService.add(account, false);
+
         // Create a new user
         User user = new User();
         user.setUsername("john");
@@ -40,37 +45,16 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setLastName("Doe");
         user.setEmail("johndoe@example.com");
         user.setBirthdate("01/01/1970");
-        user.setRoles(Arrays.asList(Role.ROLE_USER, Role.ROLE_EMPLOYEE));
-        user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));
-        userService.add(user);
+        userService.add(user, true);
 
-        // Create new userAccounts
-        UserAccount userAccountJohnCurrent = new UserAccount();
-        userAccountJohnCurrent.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccountJohnCurrent.setIBAN("NL ABNA 420 69");
-        userAccountJohnCurrent.setOwner(user);
-        userAccountJohnCurrent.setAccountBalance(420.69);
-        userAccountJohnCurrent.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccountJohnCurrent.setLowerLimit(100.00);
-        userAccountService.add(userAccountJohnCurrent);
 
-        UserAccount userAccountJohnSavings = new UserAccount();
-        userAccountJohnSavings.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
-        userAccountJohnSavings.setIBAN("NL ABNA 420 70");
-        userAccountJohnSavings.setOwner(user);
-        userAccountJohnSavings.accountBalance(1337.00);
-        userAccountJohnSavings.accountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccountJohnSavings.setLowerLimit(100.00);
-        userAccountService.add(userAccountJohnSavings);
-
-        // Create a new transaction
-        Transaction transaction = new Transaction();
-        transaction.setDateTime(OffsetDateTime.now());
-        transaction.setOwner(user);
-        transaction.setSender("NL ABNA 420 69");
-        transaction.setReceiver("NL ABNA 420 70");
-        transaction.setAmount(25.00);
-        transaction.setDescription("Here's your money");
-        transactionService.add(transaction);
+        // Create a new account
+        UserAccount userAccount = new UserAccount();
+        userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount.setOwner(user);
+        userAccount.setAccountBalance(500.00);
+        userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccount.setLowerLimit(100.00);
+        userAccountService.add(userAccount, true);
     }
 }

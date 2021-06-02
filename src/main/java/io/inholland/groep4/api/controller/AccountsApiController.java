@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
 @RestController
@@ -41,32 +42,18 @@ public class AccountsApiController implements AccountsApi {
         this.request = request;
     }
 
-    public ResponseEntity<UserAccount> getAccounts() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<UserAccount>(objectMapper.readValue("{\n  \"owner\" : \"johndoe\",\n  \"accountStatus\" : \"Active\",\n  \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n  \"accountType\" : \"Current\",\n  \"lowerLimit\" : 0,\n  \"accountBalance\" : 1271.56\n}", UserAccount.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<UserAccount>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<UserAccount>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<List<UserAccount>> getAccounts() {
+        List<UserAccount> accounts = userAccountService.getAllAccounts();
+        return ResponseEntity.status(200).body(accounts);
     }
 
-    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<UserAccount>(objectMapper.readValue("{\n  \"owner\" : \"johndoe\",\n  \"accountStatus\" : \"Active\",\n  \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n  \"accountType\" : \"Current\",\n  \"lowerLimit\" : 0,\n  \"accountBalance\" : 1271.56\n}", UserAccount.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<UserAccount>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        try {
+            UserAccount userAccount = userAccountService.getSpecificAccount(id);
+            return ResponseEntity.status(200).body(userAccount);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        return new ResponseEntity<UserAccount>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body) {

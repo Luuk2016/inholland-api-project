@@ -18,9 +18,9 @@ public class UserAccountService {
         return userAccount;
     }
 
-    public List<UserAccount> getAllAccounts() {
-        return userAccountRepository.findAll();
-    }
+    public List<UserAccount> getAllAccounts() { return userAccountRepository.findAll(); }
 
     public boolean existByIBAN(String iban) { return userAccountRepository.existsByIBAN(iban); }
+  
+    public UserAccount getSpecificAccount(Long id) { return userAccountRepository.getUserAccountById(id); }
 }

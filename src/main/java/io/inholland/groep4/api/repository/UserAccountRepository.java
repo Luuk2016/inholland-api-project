@@ -7,4 +7,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
     UserAccount findByIBAN (String IBAN);
 
     boolean existsByIBAN(String IBAN);
+  
+    UserAccount getUserAccountById(Long id);
 }

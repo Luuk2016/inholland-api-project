@@ -1,5 +1,6 @@
 package io.inholland.groep4.api.service;
 
+import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.repository.UserRepository;
 import io.inholland.groep4.api.security.JwtTokenProvider;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -40,10 +42,22 @@ public class UserService {
         }
     }
 
-    public User add(User user) {
+    public User add(User user, boolean employee) {
         // Check if the user doesn't already exist
         if (userRepository.findByUsername(user.getUsername()) == null) {
+
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            if (employee) {
+                user.setRoles(Arrays.asList(Role.ROLE_EMPLOYEE, Role.ROLE_USER));
+                user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.EMPLOYEE, User.AccessLevelEnum.CUSTOMER));
+            } else
+            {
+                user.setRoles(Arrays.asList(Role.ROLE_EMPLOYEE));
+                user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.EMPLOYEE));
+            }
+
+            user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));
+
             userRepository.save(user);
             return user;
         } else {

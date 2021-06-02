@@ -1,6 +1,5 @@
 package io.inholland.groep4.configuration;
 
-import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
@@ -12,7 +11,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.threeten.bp.OffsetDateTime;
-
 import java.util.Arrays;
 
 @Component
@@ -45,9 +43,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setLastName("Doe");
         user.setEmail("johndoe@example.com");
         user.setBirthdate("01/01/1970");
-        user.setRoles(Arrays.asList(Role.ROLE_USER, Role.ROLE_EMPLOYEE));
-        user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));
-        userService.add(user);
+        userService.add(user, true);
 
         // Create a new account
         UserAccount userAccount = new UserAccount();

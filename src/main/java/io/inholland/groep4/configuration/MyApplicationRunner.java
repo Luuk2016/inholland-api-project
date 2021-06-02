@@ -9,6 +9,8 @@ import io.inholland.groep4.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.threeten.bp.OffsetDateTime;
 import java.util.Arrays;
@@ -44,6 +46,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setEmail("johndoe@example.com");
         user.setBirthdate("01/01/1970");
         userService.add(user, true);
+
 
         // Create a new account
         UserAccount userAccount = new UserAccount();

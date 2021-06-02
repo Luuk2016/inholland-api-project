@@ -23,4 +23,8 @@ public class UserAccountService {
     public List<UserAccount> getAllAccounts() {
         return userAccountRepository.findAll();
     }
+
+    public UserAccount getSpecificAccount(Long id) {
+        return userAccountRepository.getUserAccountById(id);
+    }
 }

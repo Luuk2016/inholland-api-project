@@ -19,22 +19,19 @@ public class TransactionService {
     private UserAccountRepository userAccountRepository;
 
     public Transaction add(Transaction transaction) {
-//        UserAccount sender = userAccountRepository.findByIBAN(transaction.getSender());
-//        UserAccount receiver = userAccountRepository.findByIBAN(transaction.getReceiver());
-//
-//        //if the sender isn't attempting an illegal transaction and doesn't have insufficient funds to complete the transaction
-//        if (!(transaction.getAmount() <= 0.00)) {
-//            if (!((sender.getAccountBalance() - transaction.getAmount()) < sender.getLowerLimit())) {
-//                sender.setAccountBalance(sender.getAccountBalance() - transaction.getAmount());
-//                receiver.setAccountBalance(receiver.getAccountBalance() + transaction.getAmount());
-//
-//                transactionRepository.save(transaction);
-//            }
-//            return transaction;
-//        }
+        UserAccount sender = userAccountRepository.findByIBAN(transaction.getSender());
+        UserAccount receiver = userAccountRepository.findByIBAN(transaction.getReceiver());
 
-        // TEMPORARY CODE BELOW
-        transactionRepository.save(transaction);
+        //if the sender isn't attempting an illegal transaction and doesn't have insufficient funds to complete the transaction
+        if (!(transaction.getAmount() <= 0.00)) {
+            if (!((sender.getAccountBalance() - transaction.getAmount()) < sender.getLowerLimit())) {
+                sender.setAccountBalance(sender.getAccountBalance() - transaction.getAmount());
+                receiver.setAccountBalance(receiver.getAccountBalance() + transaction.getAmount());
+
+                transactionRepository.save(transaction);
+            }
+            return transaction;
+        }
 
         return null;
     }

@@ -68,7 +68,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         transaction.setDateTime(OffsetDateTime.now());
         transaction.setOwner(user);
         transaction.setSender("NL ABNA 420 69");
-        transaction.setReceiver("NL ABNA 69 70");
+        transaction.setReceiver("NL ABNA 420 70");
         transaction.setAmount(25.00);
         transaction.setDescription("Here's your money");
         transactionService.add(transaction);

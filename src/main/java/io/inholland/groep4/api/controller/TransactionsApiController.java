@@ -2,8 +2,8 @@ package io.inholland.groep4.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.TransactionsApi;
+import io.inholland.groep4.api.model.DTO.TransactionDTO;
 import io.inholland.groep4.api.model.Transaction;
-import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.service.TransactionService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
 @RestController
@@ -59,7 +58,7 @@ public class TransactionsApiController implements TransactionsApi {
         }
     }
 
-    public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Transaction body) {
+    public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {

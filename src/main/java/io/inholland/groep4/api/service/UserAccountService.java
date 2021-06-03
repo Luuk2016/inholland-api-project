@@ -1,5 +1,6 @@
 package io.inholland.groep4.api.service;
 
+import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.UserAccountRepository;
 import org.iban4j.CountryCode;
@@ -41,6 +42,9 @@ public class UserAccountService {
 
     public boolean existByIBAN(String iban) { return userAccountRepository.existsByIBAN(iban); }
   
-    public UserAccount getSpecificAccount(Long id) { return userAccountRepository.getUserAccountById(id); }
+    public UserAccount getAccountById(Long id) { return userAccountRepository.getUserAccountById(id); }
 
+    public List<UserAccount> getAccountsByUser(User user) { return userAccountRepository.getUserAccountByUser(user); }
+
+    public boolean checkIfAccountBelongsToOwner(User user, Long id) { return userAccountRepository.existsByOwnerAndId(user, id); }
 }

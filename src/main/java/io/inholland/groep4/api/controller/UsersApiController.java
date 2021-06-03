@@ -3,6 +3,7 @@ package io.inholland.groep4.api.controller;
 import io.inholland.groep4.api.UsersApi;
 import io.inholland.groep4.api.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -46,18 +47,13 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.status(200).body(users);
     }
 
-    public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<User>(objectMapper.readValue("{\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Doe\",\n  \"password\" : \"testPassword\",\n  \"birthdate\" : \"1969-04-20\",\n  \"accessLevel\" : \"Employee\",\n  \"userAccounts\" : [ {\n    \"owner\" : \"johndoe\",\n    \"accountStatus\" : \"Active\",\n    \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n    \"accountType\" : \"Current\",\n    \"lowerLimit\" : 0,\n    \"accountBalance\" : 1271.56\n  }, {\n    \"owner\" : \"johndoe\",\n    \"accountStatus\" : \"Active\",\n    \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n    \"accountType\" : \"Current\",\n    \"lowerLimit\" : 0,\n    \"accountBalance\" : 1271.56\n  } ],\n  \"id\" : 9999,\n  \"email\" : \"johndoe@groep4API.com\",\n  \"username\" : \"johndoe\",\n  \"status\" : \"Active\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        try {
+            User user = userService.getSpecificAccount(id);
+            return ResponseEntity.status(200).body(user);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {

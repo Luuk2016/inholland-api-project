@@ -43,7 +43,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users/{id}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id);
+    ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "Get users", description = "Get users", security = {

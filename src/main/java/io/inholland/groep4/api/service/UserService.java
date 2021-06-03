@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.service;
 
 import io.inholland.groep4.api.model.User;
+import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.UserRepository;
 import io.inholland.groep4.api.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,7 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    public User getSpecificAccount(Long id) { return userRepository.getUserById(id);
     }
 }

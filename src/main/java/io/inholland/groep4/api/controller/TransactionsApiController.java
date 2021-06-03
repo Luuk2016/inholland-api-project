@@ -72,7 +72,7 @@ public class TransactionsApiController implements TransactionsApi {
         if (transactions != null) {
             return ResponseEntity.status(HttpStatus.OK).body(transactions);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(transactions);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -86,7 +86,7 @@ public class TransactionsApiController implements TransactionsApi {
             Transaction transaction = transactionService.getTransactionById(id);
 
             if (transaction != null) {
-                return ResponseEntity.status(200).body(transaction);
+                return ResponseEntity.status(HttpStatus.OK).body(transaction);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }

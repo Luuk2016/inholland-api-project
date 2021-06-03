@@ -44,7 +44,7 @@ public class UserAccountService {
   
     public UserAccount getAccountById(Long id) { return userAccountRepository.getUserAccountById(id); }
 
-    public List<UserAccount> getAccountsByUser(User user) { return userAccountRepository.getUserAccountByUser(user); }
+    public List<UserAccount> getAccountsByUser(User user) { return userAccountRepository.getUserAccountByOwner(user); }
 
     public boolean checkIfAccountBelongsToOwner(User user, Long id) { return userAccountRepository.existsByOwnerAndId(user, id); }
 }

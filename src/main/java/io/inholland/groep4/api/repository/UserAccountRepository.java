@@ -13,7 +13,7 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
 
     boolean existsByIBAN(String IBAN);
 
-    List<UserAccount> getUserAccountByUser(User user);
+    List<UserAccount> getUserAccountByOwner(User user);
 
     boolean existsByOwnerAndId(User owner, Long id);
 }

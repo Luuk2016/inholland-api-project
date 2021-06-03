@@ -38,22 +38,41 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccountService.add(account, false);
 
         // Create a new user
-        User user = new User();
-        user.setUsername("john");
-        user.setPassword("test");
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setEmail("johndoe@example.com");
-        user.setBirthdate("01/01/1970");
-        userService.add(user, true);
+        User user1 = new User();
+        user1.setUsername("john");
+        user1.setPassword("test");
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setEmail("johndoe@example.com");
+        user1.setBirthdate("01/01/1970");
+        userService.add(user1, true);
 
         // Create a new account
-        UserAccount userAccount = new UserAccount();
-        userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount.setOwner(user);
-        userAccount.setAccountBalance(500.00);
-        userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccount.setLowerLimit(100.00);
-        userAccountService.add(userAccount, true);
+        UserAccount account1 = new UserAccount();
+        account1.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        account1.setOwner(user1);
+        account1.setAccountBalance(500.00);
+        account1.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        account1.setLowerLimit(100.00);
+        userAccountService.add(account1, true);
+
+        // Create a second user
+        User user2 = new User();
+        user2.setUsername("jane");
+        user2.setPassword("test");
+        user2.setFirstName("Jane");
+        user2.setLastName("Roe");
+        user2.setEmail("janeroe@example.com");
+        user2.setBirthdate("01/01/1970");
+        userService.add(user2, false);
+
+        // Create a second account
+        UserAccount account2 = new UserAccount();
+        account2.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        account2.setOwner(user2);
+        account2.setAccountBalance(500.00);
+        account2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        account2.setLowerLimit(100.00);
+        userAccountService.add(account2, true);
     }
 }

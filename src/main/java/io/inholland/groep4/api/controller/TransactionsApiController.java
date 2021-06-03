@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.TransactionsApi;
 import io.inholland.groep4.api.model.DTO.TransactionDTO;
 import io.inholland.groep4.api.model.Transaction;
+import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.service.TransactionService;
+import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
@@ -36,25 +41,57 @@ public class TransactionsApiController implements TransactionsApi {
     private TransactionService transactionService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public TransactionsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<List<Transaction>> getTransactions() {
-        // @TODO Get all transactions if the user is an employee, otherwise only the user created transactions
-        List<Transaction> transactions = transactionService.getAllTransactions();
-        return ResponseEntity.status(200).body(transactions);
+        // Create a empty list for transactions
+        List<Transaction> transactions = new ArrayList<>();
+
+        // Check the role of the user
+        if (request.isUserInRole("ROLE_EMPLOYEE")) {
+            // User is an employee, getting all transactions
+            transactions = transactionService.getAllTransactions();
+        } else {
+            // Get the security information
+            Principal principal = request.getUserPrincipal();
+
+            // Get the current user
+            User user = userService.findByUsername(principal.getName());
+
+            // Get the user transactions
+            transactions = transactionService.getAllUserTransactions(user);
+        }
+
+        if (transactions != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(transactions);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<Transaction> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        // @TODO Only allow getting transactions if owned, or if employee, get all
-        try {
+        Principal principal = request.getUserPrincipal();
+        User user = userService.findByUsername(principal.getName());
+
+        // Check if the user is an employee or transaction owner
+        if (request.isUserInRole("ROLE_EMPLOYEE") || transactionService.checkIfTransactionBelongsToOwner(user, id)) {
             Transaction transaction = transactionService.getTransactionById(id);
-            return ResponseEntity.status(200).body(transaction);
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+            if (transaction != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(transaction);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 

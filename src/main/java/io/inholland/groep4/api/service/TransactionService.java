@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.service;
 
 import io.inholland.groep4.api.model.Transaction;
+import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.TransactionRepository;
 import io.inholland.groep4.api.repository.UserAccountRepository;
@@ -36,9 +37,11 @@ public class TransactionService {
         return null;
     }
 
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
-    }
+    public List<Transaction> getAllTransactions() { return transactionRepository.findAll(); }
 
     public Transaction getTransactionById(Long id) { return transactionRepository.getTransactionById(id); }
+
+    public List<Transaction> getAllUserTransactions(User user) { return transactionRepository.getTransactionByOwner(user); }
+
+    public boolean checkIfTransactionBelongsToOwner(User user, Long id) { return transactionRepository.existsByOwnerAndId(user, id); }
 }

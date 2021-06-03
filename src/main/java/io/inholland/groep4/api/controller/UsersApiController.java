@@ -41,14 +41,20 @@ public class UsersApiController implements UsersApi {
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<User>> getUsers() {
+        // @TODO Show error message if no users found
         List<User> users = userService.getAllUsers();
         return ResponseEntity.status(200).body(users);
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id) {
-        // @TODO: Get specific user
-        return null;
+    public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        // @TODO Show error message if no user found
+        try {
+            User user = userService.getSpecificAccount(id);
+            return ResponseEntity.status(200).body(user);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")

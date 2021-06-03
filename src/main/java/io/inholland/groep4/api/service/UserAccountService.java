@@ -42,4 +42,5 @@ public class UserAccountService {
     public boolean existByIBAN(String iban) { return userAccountRepository.existsByIBAN(iban); }
   
     public UserAccount getSpecificAccount(Long id) { return userAccountRepository.getUserAccountById(id); }
+
 }

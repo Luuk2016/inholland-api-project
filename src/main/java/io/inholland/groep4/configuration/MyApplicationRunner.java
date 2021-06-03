@@ -47,7 +47,6 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setBirthdate("01/01/1970");
         userService.add(user, true);
 
-
         // Create a new account
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);

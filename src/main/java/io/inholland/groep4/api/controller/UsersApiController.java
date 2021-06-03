@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
@@ -60,31 +59,17 @@ public class UsersApiController implements UsersApi {
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<User>(objectMapper.readValue("{\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Doe\",\n  \"password\" : \"testPassword\",\n  \"birthdate\" : \"1969-04-20\",\n  \"accessLevel\" : \"Employee\",\n  \"userAccounts\" : [ {\n    \"owner\" : \"johndoe\",\n    \"accountStatus\" : \"Active\",\n    \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n    \"accountType\" : \"Current\",\n    \"lowerLimit\" : 0,\n    \"accountBalance\" : 1271.56\n  }, {\n    \"owner\" : \"johndoe\",\n    \"accountStatus\" : \"Active\",\n    \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n    \"accountType\" : \"Current\",\n    \"lowerLimit\" : 0,\n    \"accountBalance\" : 1271.56\n  } ],\n  \"id\" : 9999,\n  \"email\" : \"johndoe@groep4API.com\",\n  \"username\" : \"johndoe\",\n  \"status\" : \"Active\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        try {
+            User result = userService.add(body, false);
+            return ResponseEntity.status(200).body(result);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<User>(objectMapper.readValue("{\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Doe\",\n  \"password\" : \"testPassword\",\n  \"birthdate\" : \"1969-04-20\",\n  \"accessLevel\" : \"Employee\",\n  \"userAccounts\" : [ {\n    \"owner\" : \"johndoe\",\n    \"accountStatus\" : \"Active\",\n    \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n    \"accountType\" : \"Current\",\n    \"lowerLimit\" : 0,\n    \"accountBalance\" : 1271.56\n  }, {\n    \"owner\" : \"johndoe\",\n    \"accountStatus\" : \"Active\",\n    \"IBAN\" : \"NL91 ABNA 0417 1643 00\",\n    \"accountType\" : \"Current\",\n    \"lowerLimit\" : 0,\n    \"accountBalance\" : 1271.56\n  } ],\n  \"id\" : 9999,\n  \"email\" : \"johndoe@groep4API.com\",\n  \"username\" : \"johndoe\",\n  \"status\" : \"Active\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
+        // @TODO: Update specific user
+        return null;
     }
 }

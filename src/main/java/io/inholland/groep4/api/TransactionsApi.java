@@ -44,7 +44,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions/{id}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<Transaction> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required=true, schema=@Schema()) @PathVariable("id") Integer id);
+    ResponseEntity<Transaction> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "Get transactions", description = "Get transactions", security = {

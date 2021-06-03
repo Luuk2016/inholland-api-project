@@ -49,7 +49,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             if (employee) {
                 user.setRoles(Arrays.asList(Role.ROLE_EMPLOYEE, Role.ROLE_USER));
-                user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.EMPLOYEE, User.AccessLevelEnum.CUSTOMER));
+                user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.EMPLOYEE, User.AccessLevelEnum.USER));
             } else
             {
                 user.setRoles(Arrays.asList(Role.ROLE_EMPLOYEE));

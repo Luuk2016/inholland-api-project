@@ -1,27 +1,25 @@
 package io.inholland.groep4.api.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
+import javax.validation.*;
+import javax.validation.constraints.*;
 
 /**
  * User
  */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
-
 @Entity
-public class User {
-    @JsonProperty("id")
-    @Id
+public class User   {
     @GeneratedValue
+    @Id
+    @JsonProperty("id")
     private Long id = null;
 
     @JsonProperty("firstName")
@@ -51,10 +49,14 @@ public class User {
     private List<UserAccount> accounts;
 
     @JsonProperty("transactions")
+    @JsonManagedReference
     @OneToMany(mappedBy = "owner")
     private List<Transaction> transactions;
 
-    public User(Long id, String firstName, String lastName, String email, String username, String password, String birthdate, List<Role> roles, List<UserAccount> accounts, List<AccessLevelEnum> accessLevel, List<StatusEnum> status) {
+    public User() {
+    }
+
+    public User(Long id, String firstName, String lastName, String email, String username, String password, String birthdate, List<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -65,16 +67,13 @@ public class User {
         this.roles = roles;
     }
 
-    public User() {
-    }
-
     /**
      * Gets or Sets accessLevel
      */
     public enum AccessLevelEnum {
-        CUSTOMER("Customer"),
+        USER("user"),
 
-        EMPLOYEE("Employee");
+        EMPLOYEE("employee");
 
         private String value;
 
@@ -98,20 +97,19 @@ public class User {
             return null;
         }
     }
-
     @JsonProperty("accessLevel")
-    @Valid
     @Column
     @ElementCollection(targetClass = AccessLevelEnum.class)
+    @Valid
     private List<AccessLevelEnum> accessLevel = new ArrayList<AccessLevelEnum>();
 
     /**
      * Gets or Sets status
      */
     public enum StatusEnum {
-        ACTIVE("Active"),
+        ACTIVE("active"),
 
-        INACTIVE("Inactive");
+        INACTIVE("inactive");
 
         private String value;
 
@@ -135,12 +133,13 @@ public class User {
             return null;
         }
     }
-
     @JsonProperty("status")
-    @Valid
     @Column
     @ElementCollection(targetClass = StatusEnum.class)
+    @Valid
     private List<StatusEnum> status = null;
+
+
 
     public User id(Long id) {
         this.id = id;
@@ -150,14 +149,12 @@ public class User {
     /**
      * Get id
      * minimum: 1
-     *
      * @return id
      **/
     @Schema(example = "9999", required = true, description = "")
     @NotNull
 
-    @Min(1L)
-    public Long getId() {
+    @Min(1L)  public Long getId() {
         return id;
     }
 
@@ -172,7 +169,6 @@ public class User {
 
     /**
      * Get firstName
-     *
      * @return firstName
      **/
     @Schema(example = "John", required = true, description = "")
@@ -193,7 +189,6 @@ public class User {
 
     /**
      * Get lastName
-     *
      * @return lastName
      **/
     @Schema(example = "Doe", required = true, description = "")
@@ -214,7 +209,6 @@ public class User {
 
     /**
      * Get email
-     *
      * @return email
      **/
     @Schema(example = "johndoe@groep4API.com", required = true, description = "")
@@ -235,7 +229,6 @@ public class User {
 
     /**
      * Get username
-     *
      * @return username
      **/
     @Schema(example = "johndoe", required = true, description = "")
@@ -256,7 +249,6 @@ public class User {
 
     /**
      * Get password
-     *
      * @return password
      **/
     @Schema(example = "testPassword", required = true, description = "")
@@ -277,7 +269,6 @@ public class User {
 
     /**
      * Get birthdate
-     *
      * @return birthdate
      **/
     @Schema(example = "1969-04-20", description = "")
@@ -302,10 +293,9 @@ public class User {
 
     /**
      * Get accessLevel
-     *
      * @return accessLevel
      **/
-    @Schema(example = "Employee", required = true, description = "")
+    @Schema(example = "employee", required = true, description = "")
     @NotNull
 
     public List<AccessLevelEnum> getAccessLevel() {
@@ -331,10 +321,9 @@ public class User {
 
     /**
      * Get status
-     *
      * @return status
      **/
-    @Schema(example = "Active", description = "")
+    @Schema(example = "active", description = "")
 
     public List<StatusEnum> getStatus() {
         return status;
@@ -350,6 +339,22 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<UserAccount> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<UserAccount> accounts) {
+        this.accounts = accounts;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override

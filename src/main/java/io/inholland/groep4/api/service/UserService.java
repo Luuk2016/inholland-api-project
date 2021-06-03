@@ -69,6 +69,8 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    public User getSpecificAccount(Long id) { return userRepository.getUserById(id);
-    }
+
+    public User findByUsername(String name) { return userRepository.findByUsername(name); }
+
+    public User getSpecificAccount(Long id) { return userRepository.getUserById(id); }
 }

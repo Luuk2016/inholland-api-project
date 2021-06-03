@@ -47,13 +47,13 @@ public class UserService {
         if (userRepository.findByUsername(user.getUsername()) == null) {
 
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+
             if (employee) {
                 user.setRoles(Arrays.asList(Role.ROLE_EMPLOYEE, Role.ROLE_USER));
                 user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.EMPLOYEE, User.AccessLevelEnum.USER));
-            } else
-            {
-                user.setRoles(Arrays.asList(Role.ROLE_EMPLOYEE));
-                user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.EMPLOYEE));
+            } else {
+                user.setRoles(Arrays.asList(Role.ROLE_USER));
+                user.setAccessLevel(Arrays.asList(User.AccessLevelEnum.USER));
             }
 
             user.setStatus(Arrays.asList(User.StatusEnum.ACTIVE));

@@ -1,5 +1,6 @@
 package io.inholland.groep4.api;
 
+import io.inholland.groep4.api.model.DTO.UserAccountDTO;
 import io.inholland.groep4.api.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -62,8 +63,6 @@ public interface UsersApi {
     @Operation(summary = "Create new user", description = "Create new user", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "creating new user successful", content = @Content(schema = @Schema(implementation = User.class))),
-
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
 
             @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
@@ -75,7 +74,7 @@ public interface UsersApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
-    ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body);
+    ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
 
 
     @Operation(summary = "Updates an User by Id", description = "", security = {

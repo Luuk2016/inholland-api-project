@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.UsersApi;
+import io.inholland.groep4.api.model.DTO.UserAccountDTO;
 import io.inholland.groep4.api.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserService;
@@ -52,9 +53,17 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
+    public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
         try {
-            User result = userService.add(body, false);
+            User user = new User();
+            user.setUsername(body.getUsername());
+            user.setPassword(body.getPassword());
+            user.setFirstName(body.getFirstName());
+            user.setLastName(body.getLastName());
+            user.setEmail(body.getEmail());
+            user.setBirthdate(body.getBirthdate());
+
+            User result = userService.add(user, false);
             return ResponseEntity.status(200).body(result);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

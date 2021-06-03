@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.*;

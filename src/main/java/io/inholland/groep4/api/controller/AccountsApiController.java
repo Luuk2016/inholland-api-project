@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.AccountsApi;
+import io.inholland.groep4.api.model.DTO.UserAccountDTO;
 import io.inholland.groep4.api.model.UserAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserAccountService;
@@ -53,15 +54,21 @@ public class AccountsApiController implements AccountsApi {
         }
     }
 
-    public ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body) {
+    public ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
         try {
-            body.setAccountBalance(0.00);
-            body.setLowerLimit(100.00);
-            body.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+            // Create a new account
+            UserAccount userAccount = new UserAccount();
 
-            UserAccount userAccount = userAccountService.add(body, true);
+            // Set the properties
+            userAccount.setAccountType(body.getAccountType());
+            userAccount.setOwner(body.getOwner());
+            userAccount.setLowerLimit(body.getLowerLimit());
+            userAccount.setAccountStatus(body.getAccountStatusEnum());
+            userAccount.setAccountBalance(0.00);
 
-            return ResponseEntity.status(HttpStatus.OK).body(userAccount);
+            UserAccount result = userAccountService.add(userAccount, true);
+
+            return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

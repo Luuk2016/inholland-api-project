@@ -1,7 +1,7 @@
 package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.UsersApi;
-import io.inholland.groep4.api.model.DTO.UserAccountDTO;
+import io.inholland.groep4.api.model.DTO.UserDTO;
 import io.inholland.groep4.api.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserService;
@@ -53,7 +53,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
+    public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body) {
         try {
             User user = new User();
             user.setUsername(body.getUsername());

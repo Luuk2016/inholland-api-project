@@ -1,80 +1,58 @@
 package io.inholland.groep4.api.model.DTO;
 
+import io.inholland.groep4.api.model.User;
+import io.inholland.groep4.api.model.UserAccount;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
 
 public class UserAccountDTO {
 
-    @Schema(example = "johndoe", required = true, description = "")
+    @Schema(example = "current", required = true, description = "")
     @NotNull
-    private String username;
+    private UserAccount.AccountTypeEnum accountType;
 
-    @Schema(example = "helloworld", required = true, description = "")
+    @Schema(example = "1", required = true, description = "")
     @NotNull
-    private String password;
+    private User owner;
 
-    @Schema(example = "john", required = true, description = "")
+    @Schema(example = "100", required = true, description = "")
     @NotNull
-    private String firstName;
+    private Double lowerLimit;
 
-    @Schema(example = "doe", required = true, description = "")
+    @Schema(example = "active", required = true, description = "")
     @NotNull
-    private String lastName;
+    private UserAccount.AccountStatusEnum accountStatusEnum;
 
-    @Schema(example = "johndoe@email.com", required = true, description = "")
-    @NotNull
-    private String email;
-
-    @Schema(example = "01/01/1990", required = true, description = "")
-    @NotNull
-    private String birthdate;
-
-    public String getUsername() {
-        return username;
+    public UserAccount.AccountTypeEnum getAccountType() {
+        return accountType;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccountType(UserAccount.AccountTypeEnum accountType) {
+        this.accountType = accountType;
     }
 
-    public String getPassword() {
-        return password;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Double getLowerLimit() {
+        return lowerLimit;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLowerLimit(Double lowerLimit) {
+        this.lowerLimit = lowerLimit;
     }
 
-    public String getLastName() {
-        return lastName;
+    public UserAccount.AccountStatusEnum getAccountStatusEnum() {
+        return accountStatusEnum;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setAccountStatusEnum(UserAccount.AccountStatusEnum accountStatusEnum) {
+        this.accountStatusEnum = accountStatusEnum;
     }
 }

@@ -5,6 +5,7 @@
  */
 package io.inholland.groep4.api;
 
+import io.inholland.groep4.api.model.DTO.UserAccountDTO;
 import io.inholland.groep4.api.model.UserAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,7 +66,7 @@ public interface AccountsApi {
 
 
     @Operation(summary = "Create account", description = "Create account", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees", "Customers" })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Creating account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
 
@@ -80,6 +81,6 @@ public interface AccountsApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
-    ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body);
+    ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
 
 }

@@ -95,6 +95,7 @@ public class TransactionsApiController implements TransactionsApi {
         }
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'USER')")
     public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {

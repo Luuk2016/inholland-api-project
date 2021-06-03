@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.service;
 
 import io.inholland.groep4.api.model.Transaction;
+import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.TransactionRepository;
 import io.inholland.groep4.api.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;

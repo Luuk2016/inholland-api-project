@@ -22,7 +22,7 @@ public class UserAccountDTO {
 
     @Schema(example = "active", required = true, description = "")
     @NotNull
-    private UserAccount.AccountStatusEnum accountStatusEnum;
+    private UserAccount.AccountStatusEnum accountStatus;
 
     public UserAccount.AccountTypeEnum getAccountType() {
         return accountType;
@@ -48,11 +48,11 @@ public class UserAccountDTO {
         this.lowerLimit = lowerLimit;
     }
 
-    public UserAccount.AccountStatusEnum getAccountStatusEnum() {
-        return accountStatusEnum;
+    public UserAccount.AccountStatusEnum getAccountStatus() {
+        return accountStatus;
     }
 
-    public void setAccountStatusEnum(UserAccount.AccountStatusEnum accountStatusEnum) {
-        this.accountStatusEnum = accountStatusEnum;
+    public void setAccountStatus(UserAccount.AccountStatusEnum accountStatus) {
+        this.accountStatus = accountStatus;
     }
 }

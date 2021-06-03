@@ -68,8 +68,6 @@ public interface AccountsApi {
     @Operation(summary = "Create account", description = "Create account", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Creating account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
-
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
 
             @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),

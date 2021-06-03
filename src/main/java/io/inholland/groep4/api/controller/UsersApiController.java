@@ -3,7 +3,6 @@ package io.inholland.groep4.api.controller;
 import io.inholland.groep4.api.UsersApi;
 import io.inholland.groep4.api.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -43,11 +42,14 @@ public class UsersApiController implements UsersApi {
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<User>> getUsers() {
+        // @TODO Show error message if no users found
         List<User> users = userService.getAllUsers();
         return ResponseEntity.status(200).body(users);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        // @TODO Show error message if no user found
         try {
             User user = userService.getSpecificAccount(id);
             return ResponseEntity.status(200).body(user);
@@ -56,6 +58,7 @@ public class UsersApiController implements UsersApi {
         }
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
@@ -70,6 +73,7 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {

@@ -2,9 +2,12 @@ package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.AccountsApi;
 import io.inholland.groep4.api.model.DTO.UserAccountDTO;
+import io.inholland.groep4.api.model.Transaction;
+import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserAccountService;
+import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
@@ -36,25 +42,61 @@ public class AccountsApiController implements AccountsApi {
     private UserAccountService userAccountService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public AccountsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<List<UserAccount>> getAccounts() {
-        List<UserAccount> accounts = userAccountService.getAllAccounts();
-        return ResponseEntity.status(200).body(accounts);
-    }
+        // Create a empty list for accounts
+        List<UserAccount> accounts = new ArrayList<>();
 
-    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        try {
-            UserAccount userAccount = userAccountService.getSpecificAccount(id);
-            return ResponseEntity.status(200).body(userAccount);
-        } catch (IllegalArgumentException iae) {
+        // Check the role of the user
+        if (request.isUserInRole("ROLE_EMPLOYEE")) {
+            // User is an employee, getting all accounts
+            accounts = userAccountService.getAllAccounts();
+        } else {
+            // Get the security information
+            Principal principal = request.getUserPrincipal();
+
+            // Get the current user
+            User user = userService.findByUsername(principal.getName());
+
+            // Get the user accounts
+            accounts = userAccountService.getAccountsByUser(user);
+        }
+
+        if (accounts != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(accounts);
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
+    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        Principal principal = request.getUserPrincipal();
+        User user = userService.findByUsername(principal.getName());
+
+        // Check if the user is an employee or account owner
+        if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
+            UserAccount account = userAccountService.getAccountById(id);
+
+            if (account != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(account);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
         try {
             // Create a new account

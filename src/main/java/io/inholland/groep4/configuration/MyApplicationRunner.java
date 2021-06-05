@@ -83,7 +83,8 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount2.setAccountBalance(500.00);
         userAccount2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount2.setLowerLimit(100.00);
-        userAccountService.add(userAccount2, true);
+        userAccount2.setIBAN("bruh");
+        userAccountService.add(userAccount2, false);
 
         // Create a new account
         UserAccount userAccount3 = new UserAccount();
@@ -92,16 +93,18 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount3.setAccountBalance(500.00);
         userAccount3.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount3.setLowerLimit(100.00);
-        userAccountService.add(userAccount3, true);
+        userAccount3.setIBAN("yeet");
+        userAccountService.add(userAccount3, false);
 
         // Create a new account
         UserAccount userAccount4 = new UserAccount();
-        userAccount4.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount4.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
         userAccount4.setOwner(user3);
         userAccount4.setAccountBalance(500.00);
         userAccount4.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount4.setLowerLimit(100.00);
-        userAccountService.add(userAccount4, true);
+        userAccount4.setIBAN("woi");
+        userAccountService.add(userAccount4, false);
 
 //        Transaction transaction = new Transaction();
 //        transaction.setReceiver(userAccount3.getIBAN());

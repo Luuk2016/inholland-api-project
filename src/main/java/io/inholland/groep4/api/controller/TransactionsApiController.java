@@ -3,8 +3,10 @@ package io.inholland.groep4.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.TransactionsApi;
 import io.inholland.groep4.api.model.DTO.TransactionDTO;
+import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
+import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.service.TransactionService;
 import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.threeten.bp.OffsetDateTime;
+
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -96,14 +100,25 @@ public class TransactionsApiController implements TransactionsApi {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'USER')")
     public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
-        Transaction transaction = new Transaction();
-        transaction.setDescription(body.getDescription());
-        transaction.setAmount(body.getAmount());
-        transaction.setSender(body.getSender());
-        transaction.setReceiver(body.getReceiver());
-        transaction = transactionService.add(transaction);
+        Principal principal = request.getUserPrincipal();
+        User user = userService.findByUsername(principal.getName());
 
-        if(transaction == null){
+        Transaction transaction = new Transaction();
+
+        //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
+        for (UserAccount account : user.getAccounts()) {
+            if ((account.getIBAN() == body.getSender()) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))){
+                transaction.setDescription(body.getDescription());
+                transaction.setAmount(body.getAmount());
+                transaction.setSender(body.getSender());
+                transaction.setReceiver(body.getReceiver());
+                transaction.setDateTime(OffsetDateTime.now());
+                transaction = transactionService.add(transaction);
+            } else transaction.setRejectionFlag("Error: Sender IBAN does not belong to the given user!");
+        }
+
+        if (transaction.getRejectionFlag() != null){
+            System.out.println(transaction.getRejectionFlag());
             return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
         } else return new ResponseEntity<Transaction>(HttpStatus.OK);
     }

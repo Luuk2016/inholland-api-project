@@ -91,7 +91,7 @@ public interface UsersApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body);
+    ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body);
 
 }
 

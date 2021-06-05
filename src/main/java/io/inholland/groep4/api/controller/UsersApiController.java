@@ -112,8 +112,13 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Integer id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
-        // @TODO: Update specific user
-        return null;
+    public ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
+        try {
+            body.setId(id);
+            User result = userService.save(body);
+            return ResponseEntity.status(200).body(result);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

@@ -2,6 +2,7 @@ package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.UsersApi;
 import io.inholland.groep4.api.model.DTO.UserDTO;
+import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserService;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
@@ -40,21 +43,53 @@ public class UsersApiController implements UsersApi {
         this.request = request;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<List<User>> getUsers() {
-        // @TODO Show error message if no users found
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.status(200).body(users);
+        // Create a empty list for users
+        List<User> users = new ArrayList<>();
+
+        // Check the role of the user
+        if (request.isUserInRole("ROLE_EMPLOYEE")) {
+            // User is an employee, getting all users
+            users = userService.getAllUsers();
+        } else {
+            // Get the security information
+            Principal principal = request.getUserPrincipal();
+
+            // Get the current user
+            User user = userService.findByUsername(principal.getName());
+
+            // Add the user to the list
+            users.add(user);
+        }
+
+        if (users != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(users);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        // @TODO Show error message if no user found
-        try {
-            User user = userService.getSpecificAccount(id);
-            return ResponseEntity.status(200).body(user);
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Principal principal = request.getUserPrincipal();
+        User user = userService.findByUsername(principal.getName());
+
+        // Check if the requested ID isn't accidentally belonging to the user querying
+        if (user.getId() == id) {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } else {
+            if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                User userQuery = userService.getSpecificUser(id);
+
+                if (user != null) {
+                    return ResponseEntity.status(HttpStatus.OK).body(userQuery);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }
     }
 

@@ -72,5 +72,5 @@ public class UserService {
 
     public User findByUsername(String name) { return userRepository.findByUsername(name); }
 
-    public User getSpecificAccount(Long id) { return userRepository.getUserById(id); }
+    public User getSpecificUser(Long id) { return userRepository.getUserById(id); }
 }

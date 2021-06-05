@@ -47,6 +47,26 @@ public class MyApplicationRunner implements ApplicationRunner {
         user.setBirthdate("01/01/1970");
         userService.add(user, true);
 
+        // Create a new user
+        User user2 = new User();
+        user2.setUsername("swagtron");
+        user2.setPassword("test");
+        user2.setFirstName("Dave");
+        user2.setLastName("Smit");
+        user2.setEmail("swagtron@example.com");
+        user2.setBirthdate("01/01/1970");
+        userService.add(user2, false);
+
+        // Create a new user
+        User user3 = new User();
+        user3.setUsername("zenma1zx");
+        user3.setPassword("test");
+        user3.setFirstName("Aaron");
+        user3.setLastName("Ng");
+        user3.setEmail("zenma@example.com");
+        user3.setBirthdate("01/01/1970");
+        userService.add(user3, false);
+
         // Create a new account
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
@@ -55,5 +75,39 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
         userAccountService.add(userAccount, true);
+
+        // Create a new account
+        UserAccount userAccount2 = new UserAccount();
+        userAccount2.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount2.setOwner(user2);
+        userAccount2.setAccountBalance(500.00);
+        userAccount2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccount2.setLowerLimit(100.00);
+        userAccountService.add(userAccount2, true);
+
+        // Create a new account
+        UserAccount userAccount3 = new UserAccount();
+        userAccount3.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount3.setOwner(user3);
+        userAccount3.setAccountBalance(500.00);
+        userAccount3.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccount3.setLowerLimit(100.00);
+        userAccountService.add(userAccount3, true);
+
+        // Create a new account
+        UserAccount userAccount4 = new UserAccount();
+        userAccount4.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount4.setOwner(user3);
+        userAccount4.setAccountBalance(500.00);
+        userAccount4.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccount4.setLowerLimit(100.00);
+        userAccountService.add(userAccount4, true);
+
+//        Transaction transaction = new Transaction();
+//        transaction.setReceiver(userAccount3.getIBAN());
+//        transaction.setSender(userAccount2.getIBAN());
+//        transaction.setAmount(12.67);
+//        transaction.setDescription("Rolex");
+//        transactionService.add(transaction);
     }
 }

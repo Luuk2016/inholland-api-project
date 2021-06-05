@@ -10,7 +10,6 @@ import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,16 +96,15 @@ public class TransactionsApiController implements TransactionsApi {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'USER')")
     public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Transaction>(objectMapper.readValue("{\n  \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 12345.67,\n  \"sender\" : \"NL91 ABNA 0417 1643 00\",\n  \"reciever\" : \"NL91 ABNA 0417 1643 00\",\n  \"description\" : \"Rolex\",\n  \"id\" : 99999\n}", Transaction.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+        Transaction transaction = new Transaction();
+        transaction.setDescription(body.getDescription());
+        transaction.setAmount(body.getAmount());
+        transaction.setSender(body.getSender());
+        transaction.setReceiver(body.getReceiver());
+        transaction = transactionService.add(transaction);
 
-        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
+        if(transaction == null){
+            return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<Transaction>(HttpStatus.OK);
     }
 }

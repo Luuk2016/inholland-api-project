@@ -23,29 +23,27 @@ public class TransactionService {
         UserAccount sender = userAccountRepository.findByIBAN(transaction.getSender());
         UserAccount receiver = userAccountRepository.findByIBAN(transaction.getReceiver());
 
-        //check if the sender and receiver IBANs exist
-        if (sender == null) {
-            transaction.setRejectionFlag("Error: The sender IBAN does not exist!");
+        //check if the sender and receiver IBANs exist and the accounts haven't been closed
+        if (sender == null || sender.getAccountStatus() == UserAccount.AccountStatusEnum.INACTIVE) {
+            transaction.setRejectionFlag("Error: The sender IBAN does not exist or the account has been closed!");
             return transaction;
-        } else if (receiver == null) {
-            transaction.setRejectionFlag("Error: The receiver IBAN does not exist!");
+        } else if (receiver == null || receiver.getAccountStatus() == UserAccount.AccountStatusEnum.INACTIVE) {
+            transaction.setRejectionFlag("Error: The receiver IBAN does not exist or the account has been closed!");
             return transaction;
         }
 
-        //Users are not allowed to send transactions to savings accounts that don't belong to them. Savings accounts are not allowed to send transactions to accounts that don't belong to the same user
-        if (sender.getAccountType() == UserAccount.AccountTypeEnum.CURRENT) {
-            if (receiver.getAccountType() == UserAccount.AccountTypeEnum.SAVINGS) {
+        //Savings accounts are not allowed to send transactions to accounts that don't belong to the same user. Users are not allowed to send transactions to savings accounts that don't belong to them.
+        if (sender.getOwner() != receiver.getOwner()) {
+            if (sender.getAccountType() == UserAccount.AccountTypeEnum.SAVINGS) {
+                transaction.setRejectionFlag("Error: Savings accounts can only send transactions to accounts that belong to the same user!");
+                return transaction;
+            } else if (receiver.getAccountType() == UserAccount.AccountTypeEnum.SAVINGS) {
                 transaction.setRejectionFlag("Error: Transactions are not allowed to be made to savings accounts that don't belong to the same user!");
                 return transaction;
             }
-        } else {
-            if (sender.getOwner() != receiver.getOwner()) {
-                transaction.setRejectionFlag("Error: Savings accounts can only send transactions to current accounts that belong to the same user!");
-                return transaction;
-            }
         }
 
-        //if the sender isn't attempting an illegal transaction and doesn't have insufficient funds to complete the transaction, register this transaction to the database
+        //check if the sender isn't attempting an illegal transaction and doesn't have insufficient funds to complete the transaction, register this transaction to the database
         if (!(transaction.getAmount() <= 0.00)) {
             if (!((sender.getAccountBalance() - transaction.getAmount()) < sender.getLowerLimit())) {
                 sender.setAccountBalance(sender.getAccountBalance() - transaction.getAmount());

@@ -106,12 +106,12 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount4.setIBAN("woi");
         userAccountService.add(userAccount4, false);
 
-//        Transaction transaction = new Transaction();
-//        transaction.setReceiver(userAccount3.getIBAN());
-//        transaction.setSender(userAccount2.getIBAN());
-//        transaction.setAmount(12.67);
-//        transaction.setDescription("Rolex");
-//        transactionService.add(transaction);
+        Transaction transaction = new Transaction();
+        transaction.setReceiver(userAccount3.getIBAN());
+        transaction.setSender(userAccount2.getIBAN());
+        transaction.setAmount(12.67);
+        transaction.setDescription("Rolex");
+        transactionService.add(transaction);
 
     }
 }

@@ -78,7 +78,7 @@ public class AccountsApiController implements AccountsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
         Principal principal = request.getUserPrincipal();
         User user = userService.findByUsername(principal.getName());
 

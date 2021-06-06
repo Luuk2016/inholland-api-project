@@ -19,16 +19,18 @@ public class UserAccountService {
     private UserAccountRepository userAccountRepository;
 
     public UserAccount add(UserAccount userAccount, boolean randomIBAN) throws Exception {
-        // Check if a random iban should me generated
-        if (randomIBAN) {
-            userAccount.setIBAN(getIBAN());
+        try{
+            // Check if a random iban should me generated
+            if (randomIBAN) {
+                userAccount.setIBAN(getIBAN());
+            }
+
+            userAccountRepository.save(userAccount);
+            return userAccount;
         }
-        else
-        {
+        catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Incorrect iban given");
         }
-        userAccountRepository.save(userAccount);
-        return userAccount;
     }
 
     public String getIBAN() throws Exception {

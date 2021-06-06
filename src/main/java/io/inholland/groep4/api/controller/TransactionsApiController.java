@@ -115,29 +115,33 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'USER')")
-    public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
-        Principal principal = request.getUserPrincipal();
-        User user = userService.findByUsername(principal.getName());
-        //System.out.println(user.toString());
+    public ResponseEntity<?> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
+        try {
+            Principal principal = request.getUserPrincipal();
+            User user = userService.findByUsername(principal.getName());
+            //System.out.println(user.toString());
 
-        Transaction transaction = new Transaction();
+            Transaction transaction = new Transaction();
 
-        //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
-        for (UserAccount account : user.getAccounts()) {
-            if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))){
-                transaction.setDescription(body.getDescription());
-                transaction.setAmount(body.getAmount());
-                transaction.setSender(body.getSender());
-                transaction.setReceiver(body.getReceiver());
-                transaction.setDateTime(OffsetDateTime.now());
-                transaction = transactionService.add(transaction);
-                break;
-            } else transaction.setRejectionFlag("Error: Sender IBAN does not belong to the given user!");
+            //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
+            for (UserAccount account : user.getAccounts()) {
+                if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))){
+                    transaction.setDescription(body.getDescription());
+                    transaction.setAmount(body.getAmount());
+                    transaction.setSender(body.getSender());
+                    transaction.setReceiver(body.getReceiver());
+                    transaction.setDateTime(OffsetDateTime.now());
+                    transaction = transactionService.add(transaction);
+                    break;
+                } else transaction.setRejectionFlag("Error: Sender IBAN does not belong to the given user!");
+            }
+
+            if (transaction.getRejectionFlag() != ""){
+                System.out.println(transaction.getRejectionFlag());
+                return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
+            } else return new ResponseEntity<Transaction>(HttpStatus.OK).ok().body(transaction);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-        if (transaction.getRejectionFlag() != ""){
-            System.out.println(transaction.getRejectionFlag());
-            return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
-        } else return new ResponseEntity<Transaction>(HttpStatus.OK).ok().body(transaction);
     }
 }

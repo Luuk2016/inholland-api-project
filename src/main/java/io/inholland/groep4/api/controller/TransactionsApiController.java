@@ -126,6 +126,6 @@ public class TransactionsApiController implements TransactionsApi {
         if (transaction.getRejectionFlag() != ""){
             System.out.println(transaction.getRejectionFlag());
             return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
-        } else return new ResponseEntity<Transaction>(HttpStatus.OK);
+        } else return new ResponseEntity<Transaction>(HttpStatus.OK).ok().body(transaction);
     }
 }

@@ -47,4 +47,8 @@ public class UserAccountService {
     public List<UserAccount> getAccountsByUser(User user) { return userAccountRepository.getUserAccountByOwner(user); }
 
     public boolean checkIfAccountBelongsToOwner(User user, Long id) { return userAccountRepository.existsByOwnerAndId(user, id); }
+
+    public UserAccount save(UserAccount user) {
+        return userAccountRepository.save(user);
+    }
 }

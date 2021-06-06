@@ -2,7 +2,6 @@ package io.inholland.groep4.api.service;
 
 import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.User;
-import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.UserRepository;
 import io.inholland.groep4.api.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,11 +65,15 @@ public class UserService {
         }
     }
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     public User findByUsername(String name) { return userRepository.findByUsername(name); }
 
-    public User getSpecificAccount(Long id) { return userRepository.getUserById(id); }
+    public User getSpecificUser(Long id) { return userRepository.getUserById(id); }
 }

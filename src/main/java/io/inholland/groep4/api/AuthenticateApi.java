@@ -26,7 +26,7 @@ import javax.validation.Valid;
 @Validated
 public interface AuthenticateApi {
 
-    @Operation(summary = "Authenticate", description = "Receive an Bearer Token", tags={ "Auth", "Customers", "Employees" })
+    @Operation(summary = "Authenticate", description = "Get a bearer token to authenticate with the API", tags={ "Auth", "Customers", "Employees" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "authentication successful", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
         

@@ -29,7 +29,7 @@ import java.util.List;
 @Validated
 public interface AccountsApi {
 
-    @Operation(summary = "Get accounts", description = "Get accounts", security = {
+    @Operation(summary = "Get accounts", description = "If admin, show all accounts. If user, show your own account.", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Customers", "Employees" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Getting accounts successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
@@ -47,7 +47,7 @@ public interface AccountsApi {
     ResponseEntity<List<UserAccount>> getAccounts();
 
 
-    @Operation(summary = "Get specific account", description = "Get specific account", security = {
+    @Operation(summary = "Get a specific account", description = "If admin, able to show other accounts that don't belong to you. If user, only able to show your own account.", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Customers", "Employees" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Getting specific account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
@@ -65,7 +65,7 @@ public interface AccountsApi {
     ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
-    @Operation(summary = "Create account", description = "Create account", security = {
+    @Operation(summary = "Create account", description = "Create a new account (current/savings)", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
@@ -81,4 +81,19 @@ public interface AccountsApi {
             method = RequestMethod.POST)
     ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
 
+    @Operation(summary = "Updates an account", description = "Update an account by ID", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Edit account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
+
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+
+            @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
+
+            @ApiResponse(responseCode = "404", description = "Item not found") })
+    @RequestMapping(value = "/accounts/{id}",
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body);
 }

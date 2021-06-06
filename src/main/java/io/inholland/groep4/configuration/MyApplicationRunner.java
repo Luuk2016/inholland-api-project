@@ -38,14 +38,14 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccountService.add(account, false);
 
         // Create a new user
-        User user = new User();
-        user.setUsername("john");
-        user.setPassword("test");
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setEmail("johndoe@example.com");
-        user.setBirthdate("01/01/1970");
-        userService.add(user, true);
+        User user1 = new User();
+        user1.setUsername("john");
+        user1.setPassword("test");
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setEmail("johndoe@example.com");
+        user1.setBirthdate("01/01/1970");
+        userService.add(user1, true);
 
         // Create a new user
         User user2 = new User();
@@ -112,5 +112,6 @@ public class MyApplicationRunner implements ApplicationRunner {
 //        transaction.setAmount(12.67);
 //        transaction.setDescription("Rolex");
 //        transactionService.add(transaction);
+
     }
 }

@@ -39,7 +39,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users/{id}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
+    ResponseEntity<?> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "Get users", description = "If admin, show all users. If user, only show your own details.", security = {
@@ -57,7 +57,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<List<User>> getUsers();
+    ResponseEntity<?> getUsers();
 
 
     @Operation(summary = "Create user", description = "Create a new user", security = {
@@ -74,7 +74,7 @@ public interface UsersApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
-    ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body);
+    ResponseEntity<?> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body);
 
 
     @Operation(summary = "Update user", description = "Update a user by using a userID", security = {
@@ -91,7 +91,7 @@ public interface UsersApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body);
+    ResponseEntity<?> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body);
 
 }
 

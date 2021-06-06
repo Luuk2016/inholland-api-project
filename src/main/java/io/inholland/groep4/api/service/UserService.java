@@ -31,7 +31,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String login(String username, String password) {
+    public String login(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
@@ -42,7 +42,7 @@ public class UserService {
         }
     }
 
-    public User add(User user, boolean employee) {
+    public User add(User user, boolean employee) throws Exception {
         // Check if the user doesn't already exist
         if (userRepository.findByUsername(user.getUsername()) == null) {
 
@@ -65,15 +65,34 @@ public class UserService {
         }
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public User save(User user) throws Exception {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            return userRepository.save(user);
+        }
+        else
+        {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Username not found");
+        }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws Exception {
+        if (userRepository.findAll().size() == 0) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No users found");
+        }
         return userRepository.findAll();
     }
 
-    public User findByUsername(String name) { return userRepository.findByUsername(name); }
+    public User findByUsername(String name) throws Exception {
+        if (userRepository.findByUsername(name) == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Username not found");
+        }
+        return userRepository.findByUsername(name);
+    }
 
-    public User getSpecificUser(Long id) { return userRepository.getUserById(id); }
+    public User getSpecificUser(Long id) throws Exception {
+        if (userRepository.getUserById(id) == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Id not found");
+        }
+        return userRepository.getUserById(id);
+    }
 }

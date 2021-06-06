@@ -44,57 +44,71 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<List<User>> getUsers() {
-        // Create a empty list for users
-        List<User> users = new ArrayList<>();
+    public ResponseEntity<?> getUsers() {
+        try
+        {
+            // Create a empty list for users
+            List<User> users = new ArrayList<>();
 
-        // Check the role of the user
-        if (request.isUserInRole("ROLE_EMPLOYEE")) {
-            // User is an employee, getting all users
-            users = userService.getAllUsers();
-        } else {
-            // Get the security information
-            Principal principal = request.getUserPrincipal();
+            // Check the role of the user
+            if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                // User is an employee, getting all users
+                users = userService.getAllUsers();
+            } else {
+                // Get the security information
+                Principal principal = request.getUserPrincipal();
 
-            // Get the current user
-            User user = userService.findByUsername(principal.getName());
+                // Get the current user
+                User user = userService.findByUsername(principal.getName());
 
-            // Add the user to the list
-            users.add(user);
+                // Add the user to the list
+                users.add(user);
+            }
+
+            if (users != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(users);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
-        if (users != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(users);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        Principal principal = request.getUserPrincipal();
-        User user = userService.findByUsername(principal.getName());
+    public ResponseEntity<?> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        try
+        {
+            Principal principal = request.getUserPrincipal();
+            User user = userService.findByUsername(principal.getName());
 
-        // Check if the requested ID isn't accidentally belonging to the user querying
-        if (user.getId() == id) {
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } else {
-            if (request.isUserInRole("ROLE_EMPLOYEE")) {
-                User userQuery = userService.getSpecificUser(id);
+            // Check if the requested ID isn't accidentally belonging to the user querying
 
-                if (user != null) {
-                    return ResponseEntity.status(HttpStatus.OK).body(userQuery);
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-                }
+            if (user.getId() == id) {
+                return ResponseEntity.status(HttpStatus.OK).body(user);
             } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                    User userQuery = userService.getSpecificUser(id);
+
+                    if (user != null) {
+                        return ResponseEntity.status(HttpStatus.OK).body(userQuery);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                    }
+                } else {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
             }
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body) {
+    public ResponseEntity<?> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body) {
         try {
             User user = new User();
             user.setUsername(body.getUsername());
@@ -106,19 +120,19 @@ public class UsersApiController implements UsersApi {
 
             User result = userService.add(user, false);
             return ResponseEntity.status(200).body(result);
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
+    public ResponseEntity<?> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
         try {
             body.setId(id);
             User result = userService.save(body);
             return ResponseEntity.status(200).body(result);
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

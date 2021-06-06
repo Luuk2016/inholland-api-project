@@ -40,7 +40,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions/{id}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<Transaction> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
+    ResponseEntity<?> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "Get transactions", description = "If admin, show all transactions. If user, show only your own transactions.", security = {
@@ -58,7 +58,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactions();
+    ResponseEntity<?> getTransactions();
 
 
     @Operation(summary = "Create transaction", description = "Create a new transaction", security = {
@@ -77,7 +77,7 @@ public interface TransactionsApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
-    ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body);
+    ResponseEntity<?> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body);
 
 }
 

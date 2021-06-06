@@ -6,7 +6,9 @@ import io.inholland.groep4.api.repository.UserAccountRepository;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,16 +18,20 @@ public class UserAccountService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    public UserAccount add(UserAccount userAccount, boolean randomIBAN) {
+    public UserAccount add(UserAccount userAccount, boolean randomIBAN) throws Exception {
         // Check if a random iban should me generated
         if (randomIBAN) {
             userAccount.setIBAN(getIBAN());
+        }
+        else
+        {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Incorrect iban given");
         }
         userAccountRepository.save(userAccount);
         return userAccount;
     }
 
-    public String getIBAN() {
+    public String getIBAN() throws Exception {
         // Generate a new IBAN
         Iban iban = new Iban.Builder().countryCode(CountryCode.NL).bankCode("INHO").buildRandom();
 
@@ -34,7 +40,6 @@ public class UserAccountService {
         while (existByIBAN(iban.toString())) {
             iban = new Iban.Builder().countryCode(CountryCode.NL).bankCode("INHO").buildRandom();
         }
-
         return iban.toString();
     }
 

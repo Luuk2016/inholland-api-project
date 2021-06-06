@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
 @RestController
@@ -50,53 +51,65 @@ public class AccountsApiController implements AccountsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<List<UserAccount>> getAccounts() {
-        // Create a empty list for accounts
-        List<UserAccount> accounts = new ArrayList<>();
+    public ResponseEntity<?> getAccounts() {
+        try
+        {
+            // Create a empty list for accounts
+            List<UserAccount> accounts = new ArrayList<>();
 
-        // Check the role of the user
-        if (request.isUserInRole("ROLE_EMPLOYEE")) {
-            // User is an employee, getting all accounts
-            accounts = userAccountService.getAllAccounts();
-        } else {
-            // Get the security information
-            Principal principal = request.getUserPrincipal();
+            // Check the role of the user
+            if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                // User is an employee, getting all accounts
+                accounts = userAccountService.getAllAccounts();
+            } else {
+                // Get the security information
+                Principal principal = request.getUserPrincipal();
 
-            // Get the current user
-            User user = userService.findByUsername(principal.getName());
+                // Get the current user
+                User user = userService.findByUsername(principal.getName());
 
-            // Get the user accounts
-            accounts = userAccountService.getAccountsByUser(user);
-        }
+                // Get the user accounts
+                accounts = userAccountService.getAccountsByUser(user);
+            }
 
-        if (accounts != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(accounts);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            if (accounts != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(accounts);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        Principal principal = request.getUserPrincipal();
-        User user = userService.findByUsername(principal.getName());
+    public ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+      try
+      {
+          Principal principal = request.getUserPrincipal();
+          User user = userService.findByUsername(principal.getName());
 
-        // Check if the user is an employee or account owner
-        if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
-            UserAccount account = userAccountService.getAccountById(id);
+          // Check if the user is an employee or account owner
+          if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
+              UserAccount account = userAccountService.getAccountById(id);
 
-            if (account != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(account);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+              if (account != null) {
+                  return ResponseEntity.status(HttpStatus.OK).body(account);
+              } else {
+                  return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+              }
+          } else {
+              return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+          }
+      } catch (Exception e)
+      {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+      }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
+    public ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
         try {
             // Create a new account
             UserAccount userAccount = new UserAccount();
@@ -111,8 +124,8 @@ public class AccountsApiController implements AccountsApi {
             UserAccount result = userAccountService.add(userAccount, true);
 
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

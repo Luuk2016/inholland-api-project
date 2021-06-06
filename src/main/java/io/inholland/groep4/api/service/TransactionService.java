@@ -6,7 +6,9 @@ import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.repository.TransactionRepository;
 import io.inholland.groep4.api.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class TransactionService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    public Transaction add(Transaction transaction) {
+    public Transaction add(Transaction transaction) throws Exception {
         UserAccount sender = userAccountRepository.findByIBAN(transaction.getSender());
         UserAccount receiver = userAccountRepository.findByIBAN(transaction.getReceiver());
 
@@ -33,8 +35,10 @@ public class TransactionService {
             }
             return transaction;
         }
-
-        return null;
+        else
+        {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Transactions cannot be added");
+        }
     }
 
     public List<Transaction> getAllTransactions() { return transactionRepository.findAll(); }

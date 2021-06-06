@@ -44,7 +44,7 @@ public interface AccountsApi {
     @RequestMapping(value = "/accounts",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<List<UserAccount>> getAccounts();
+    ResponseEntity<?> getAccounts();
 
 
     @Operation(summary = "Get a specific account", description = "If admin, able to show other accounts that don't belong to you. If user, only able to show your own account.", security = {
@@ -62,7 +62,7 @@ public interface AccountsApi {
     @RequestMapping(value = "/accounts/{id}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<UserAccount> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
+    ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "Create account", description = "Create a new account (current/savings)", security = {
@@ -79,7 +79,7 @@ public interface AccountsApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
-    ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
+    ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
 
     @Operation(summary = "Updates an account", description = "Update an account by ID", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
@@ -95,5 +95,5 @@ public interface AccountsApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body);
+    ResponseEntity<?> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body);
 }

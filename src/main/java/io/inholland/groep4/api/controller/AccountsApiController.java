@@ -116,4 +116,10 @@ public class AccountsApiController implements AccountsApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Integer id,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body) {
+        
+        return new ResponseEntity<UserAccount>(HttpStatus.NOT_IMPLEMENTED);
+    }
 }

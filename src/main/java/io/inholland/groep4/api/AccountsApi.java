@@ -81,4 +81,19 @@ public interface AccountsApi {
             method = RequestMethod.POST)
     ResponseEntity<UserAccount> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
 
+    @Operation(summary = "Updates an account", description = "Update an account by ID", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Edit account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
+
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+
+            @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
+
+            @ApiResponse(responseCode = "404", description = "Item not found") })
+    @RequestMapping(value = "/accounts/{id}",
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body);
 }

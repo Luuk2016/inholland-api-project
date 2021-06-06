@@ -2,7 +2,6 @@ package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.AccountsApi;
 import io.inholland.groep4.api.model.DTO.UserAccountDTO;
-import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -112,6 +111,17 @@ public class AccountsApiController implements AccountsApi {
             UserAccount result = userAccountService.add(userAccount, true);
 
             return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body) {
+        try {
+            body.setId(id);
+            UserAccount result = userAccountService.save(body);
+            return ResponseEntity.status(200).body(result);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

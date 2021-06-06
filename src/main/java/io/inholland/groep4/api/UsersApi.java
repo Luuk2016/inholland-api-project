@@ -24,8 +24,8 @@ import java.util.List;
 @Validated
 public interface UsersApi {
 
-    @Operation(summary = "Get specific user", description = "Get specific user", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
+    @Operation(summary = "Get specific user", description = "If admin, able to show other users. If user, only able to show your details.", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees", "Customers" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Getting specific user successful", content = @Content(schema = @Schema(implementation = User.class))),
 
@@ -42,8 +42,8 @@ public interface UsersApi {
     ResponseEntity<User> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
-    @Operation(summary = "Get users", description = "Get users", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
+    @Operation(summary = "Get users", description = "If admin, show all users. If user, only show your own details.", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees", "Customers" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Getting users successful", content = @Content(schema = @Schema(implementation = User.class))),
 
@@ -60,7 +60,7 @@ public interface UsersApi {
     ResponseEntity<List<User>> getUsers();
 
 
-    @Operation(summary = "Create new user", description = "Create new user", security = {
+    @Operation(summary = "Create user", description = "Create a new user", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
@@ -77,8 +77,8 @@ public interface UsersApi {
     ResponseEntity<User> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body);
 
 
-    @Operation(summary = "Updates an User by Id", description = "", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees", "Customers" })
+    @Operation(summary = "Update user", description = "Update a user by using a userID", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Edit user successful", content = @Content(schema = @Schema(implementation = User.class))),
 

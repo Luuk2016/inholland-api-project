@@ -74,5 +74,13 @@ public class MyApplicationRunner implements ApplicationRunner {
         account2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         account2.setLowerLimit(100.00);
         userAccountService.add(account2, true);
+
+        Transaction transaction = new Transaction();
+        transaction.setReceiver(account1.getIBAN());
+        transaction.setSender(account2.getIBAN());
+        transaction.setAmount(12.67);
+        transaction.setDescription("Rolex");
+        transaction.setDateTime(OffsetDateTime.now());
+        transactionService.add(transaction);
     }
 }

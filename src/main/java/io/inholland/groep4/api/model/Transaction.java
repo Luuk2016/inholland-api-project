@@ -48,6 +48,8 @@ public class Transaction {
     @JsonProperty("description")
     private String description = null;
 
+    private String rejectionFlag;
+
     public Transaction(Long id, OffsetDateTime dateTime, User owner, String sender, String receiver, Double amount, String description) {
         this.id = id;
         this.dateTime = dateTime;
@@ -200,6 +202,9 @@ public class Transaction {
         this.description = description;
     }
 
+    public String getRejectionFlag() { return rejectionFlag; }
+
+    public void setRejectionFlag(String rejectionFlag) { this.rejectionFlag = rejectionFlag; }
 
     @Override
     public boolean equals(java.lang.Object o) {

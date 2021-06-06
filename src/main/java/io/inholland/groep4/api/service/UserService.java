@@ -42,7 +42,7 @@ public class UserService {
         }
     }
 
-    public User add(User user, boolean employee) {
+    public User add(User user, boolean employee) throws Exception {
         // Check if the user doesn't already exist
         if (userRepository.findByUsername(user.getUsername()) == null) {
 

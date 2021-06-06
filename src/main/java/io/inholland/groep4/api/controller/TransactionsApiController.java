@@ -8,6 +8,7 @@ import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.service.TransactionService;
+import io.inholland.groep4.api.service.UserAccountService;
 import io.inholland.groep4.api.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -45,6 +46,9 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @Autowired
     public TransactionsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -102,22 +106,24 @@ public class TransactionsApiController implements TransactionsApi {
     public ResponseEntity<Transaction> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
         Principal principal = request.getUserPrincipal();
         User user = userService.findByUsername(principal.getName());
+        //System.out.println(user.toString());
 
         Transaction transaction = new Transaction();
 
         //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
         for (UserAccount account : user.getAccounts()) {
-            if ((account.getIBAN() == body.getSender()) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))){
+            if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))){
                 transaction.setDescription(body.getDescription());
                 transaction.setAmount(body.getAmount());
                 transaction.setSender(body.getSender());
                 transaction.setReceiver(body.getReceiver());
                 transaction.setDateTime(OffsetDateTime.now());
                 transaction = transactionService.add(transaction);
+                break;
             } else transaction.setRejectionFlag("Error: Sender IBAN does not belong to the given user!");
         }
 
-        if (transaction.getRejectionFlag() != null){
+        if (transaction.getRejectionFlag() != ""){
             System.out.println(transaction.getRejectionFlag());
             return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
         } else return new ResponseEntity<Transaction>(HttpStatus.OK);

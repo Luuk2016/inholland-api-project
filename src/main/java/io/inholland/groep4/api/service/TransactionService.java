@@ -48,6 +48,7 @@ public class TransactionService {
             if (!((sender.getAccountBalance() - transaction.getAmount()) < sender.getLowerLimit())) {
                 sender.setAccountBalance(sender.getAccountBalance() - transaction.getAmount());
                 receiver.setAccountBalance(receiver.getAccountBalance() + transaction.getAmount());
+                transaction.setRejectionFlag("");
 
                 transactionRepository.save(transaction);
             } else {

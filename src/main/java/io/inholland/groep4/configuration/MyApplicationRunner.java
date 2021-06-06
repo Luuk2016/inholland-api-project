@@ -70,7 +70,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         // Create a new account
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount.setOwner(user);
+        userAccount.setOwner(user1);
         userAccount.setAccountBalance(500.00);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);

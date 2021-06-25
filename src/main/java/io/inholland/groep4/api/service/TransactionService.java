@@ -1,5 +1,6 @@
 package io.inholland.groep4.api.service;
 
+import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
@@ -35,7 +36,7 @@ public class TransactionService {
         }
 
         //Savings accounts are not allowed to send transactions to accounts that don't belong to the same user. Users are not allowed to send transactions to savings accounts that don't belong to them.
-        if (sender.getOwner() != receiver.getOwner()) {
+        if (sender.getOwner() != receiver.getOwner() || sender.getOwner().getRoles().contains(Role.ROLE_EMPLOYEE)) {
             if (sender.getAccountType() == UserAccount.AccountTypeEnum.SAVINGS) {
                 transaction.setRejectionFlag("Error: Savings accounts can only send transactions to accounts that belong to the same user!");
                 return transaction;

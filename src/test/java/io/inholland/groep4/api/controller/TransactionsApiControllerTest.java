@@ -27,14 +27,14 @@ public class TransactionsApiControllerTest {
     @WithMockUser(username = "john",password = "test", roles = "EMPLOYEE")
     public void getTransactionsShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "john",password = "test", roles = "EMPLOYEE")
     public void getSpecificTransactionShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions/9"))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
     }
 
     @Test

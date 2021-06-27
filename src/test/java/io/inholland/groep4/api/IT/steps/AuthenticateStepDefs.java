@@ -1,4 +1,4 @@
-package io.inholland.groep4.api.steps;
+package io.inholland.groep4.api.IT.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.inholland.groep4.api.controller.SpringIntegrationTest;
 import io.inholland.groep4.api.model.DTO.LoginDTO;
+import org.junit.Assert;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthenticateStepDefs extends SpringIntegrationTest {
 
     RestTemplate template = new RestTemplate();
@@ -22,7 +25,7 @@ public class AuthenticateStepDefs extends SpringIntegrationTest {
     String response;
 
     HttpHeaders headers = new HttpHeaders();
-    String baseUrl = "http://localhost:8080/api/authenticate";
+    String baseUrl = "http://localhost:8080/authenticate";
 
     @When("^the client posts their credentials to /authenticate$")
     public void theClientPostsAuthentication() throws JsonProcessingException, URISyntaxException {
@@ -38,5 +41,7 @@ public class AuthenticateStepDefs extends SpringIntegrationTest {
 
     @Then("the client receives status code of {int}")
     public void theClientReceivesStatusCodeOf(int arg0) {
+        int response = responseEntity.getStatusCodeValue();
+        Assert.assertEquals(arg0, response);
     }
 }

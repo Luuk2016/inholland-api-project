@@ -2,22 +2,16 @@ package io.inholland.groep4.api.IT.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.en.*;
 import io.inholland.groep4.api.controller.SpringIntegrationTest;
 import io.inholland.groep4.api.model.DTO.LoginDTO;
 import org.junit.Assert;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthenticateStepDefs extends SpringIntegrationTest {
 
     RestTemplate template = new RestTemplate();

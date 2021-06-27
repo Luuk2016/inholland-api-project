@@ -1,6 +1,6 @@
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+package io.inholland.groep4.api.IT.steps;
+
+import io.cucumber.java.en.*;
 
 public class UserStepDefs {
     @When("a user is authenticated")

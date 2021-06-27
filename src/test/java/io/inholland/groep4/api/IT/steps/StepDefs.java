@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 @CucumberContextConfiguration
 @ContextConfiguration(classes = CucumberConf.class)
 public class StepDefs {
+    //TODO: calls not to /authenticate should only be made if the user is authenticated
 
     RestTemplate template = new RestTemplate();
     ResponseEntity<String> responseEntity;
@@ -25,8 +26,8 @@ public class StepDefs {
     HttpHeaders headers = new HttpHeaders();
     String baseUrl = "http://localhost:8080/authenticate";
 
-    @When("^the client posts their credentials to /authenticate$")
-    public void theClientPostsAuthentication() throws JsonProcessingException, URISyntaxException {
+    @When("^user posts their credentials to /authenticate$")
+    public void UserPostsAuthentication() throws JsonProcessingException, URISyntaxException {
         ObjectMapper mapper = new ObjectMapper();
         LoginDTO dto = new LoginDTO();
         dto.setPassword("test");
@@ -37,14 +38,57 @@ public class StepDefs {
         responseEntity = template.postForEntity(uri, entity, String.class);
     }
 
-    @When("user is authenticated")
-    public void UserIsAuthenticated() {
-
+    @Given("user is authenticated")
+    public void UserIsAuthenticated() throws JsonProcessingException, URISyntaxException {
+        UserPostsAuthentication();
     }
 
     @And("^user sends out a GET request to /accounts$")
-    public void userSendsOutAGETRequestToAccounts() {
+    public void userSendsOutAGETRequestToAccounts() throws JsonProcessingException, URISyntaxException {
+        ObjectMapper mapper = new ObjectMapper();
+        LoginDTO dto = new LoginDTO();
+        dto.setPassword("test");
+        dto.setUsername("john");
+        URI uri = new URI("http://localhost:8080/accounts");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
+        responseEntity = template.postForEntity(uri, entity, String.class);
+    }
 
+    @When("^user sends out a GET request to /users$")
+    public void userSendsOutAGETRequestToUsers() throws URISyntaxException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        LoginDTO dto = new LoginDTO();
+        dto.setPassword("test");
+        dto.setUsername("john");
+        URI uri = new URI("http://localhost:8080/users");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
+        responseEntity = template.postForEntity(uri, entity, String.class);
+    }
+
+    @When("^user sends out a GET request to /transactions$")
+    public void userSendsOutAGETRequestToTransactions() throws URISyntaxException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        LoginDTO dto = new LoginDTO();
+        dto.setPassword("test");
+        dto.setUsername("john");
+        URI uri = new URI("http://localhost:8080/transactions");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
+        responseEntity = template.postForEntity(uri, entity, String.class);
+    }
+
+    @When("^user sends out a GET request to their own /accounts endpoint$")
+    public void userSendsOutAGETRequestToTheirOwnAccountsEndpoint() {
+    }
+
+    @When("^user sends out a GET request to their own /users endpoint$")
+    public void userSendsOutAGETRequestToTheirOwnUsersEndpoint() {
+    }
+
+    @When("^user sends out a GET request to their own /transactions endpoint$")
+    public void userSendsOutAGETRequestToTheirOwnTransactionsEndpoint() {
     }
 
     @Then("the client receives status code of {int}")
@@ -52,6 +96,4 @@ public class StepDefs {
         int response = responseEntity.getStatusCodeValue();
         Assert.assertEquals(arg0, response);
     }
-
-
 }

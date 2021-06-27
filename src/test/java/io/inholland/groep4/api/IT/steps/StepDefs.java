@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class AuthenticateStepDefs extends SpringIntegrationTest {
+public class StepDefs extends SpringIntegrationTest {
 
     RestTemplate template = new RestTemplate();
     ResponseEntity<String> responseEntity;
@@ -27,10 +27,20 @@ public class AuthenticateStepDefs extends SpringIntegrationTest {
         LoginDTO dto = new LoginDTO();
         dto.setPassword("test");
         dto.setUsername("john");
-        URI uri = new URI(baseUrl);
+        URI uri = new URI("http://localhost:8080/authenticate");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);
+    }
+
+    @When("a user is authenticated")
+    public void aUserIsAuthenticated() {
+
+    }
+
+    @And("^sends out a GET request to /accounts$")
+    public void sendsOutAGETRequestToAccounts() {
+
     }
 
     @Then("the client receives status code of {int}")

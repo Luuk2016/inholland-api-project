@@ -22,7 +22,7 @@ public class TransactionService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    public Transaction add(Transaction transaction) throws Exception {
+    public Transaction add(Transaction transaction) {
         UserAccount sender = userAccountRepository.findByIBAN(transaction.getSender());
         UserAccount receiver = userAccountRepository.findByIBAN(transaction.getReceiver());
 
@@ -64,11 +64,32 @@ public class TransactionService {
         return transaction;
     }
 
-    public List<Transaction> getAllTransactions() { return transactionRepository.findAll(); }
+    public List<Transaction> getAllTransactions() {
+        if (transactionRepository.findAll().size() == 0) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No transactions found");
+        }
+        return transactionRepository.findAll();
+    }
 
-    public Transaction getTransactionById(Long id) { return transactionRepository.getTransactionById(id); }
+    public Transaction getTransactionById(Long id) {
+        if (transactionRepository.getTransactionById(id) == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No transactions found");
+        }
+        return transactionRepository.getTransactionById(id);
+    }
 
-    public List<Transaction> getAllUserTransactions(User user) { return transactionRepository.getTransactionByOwner(user); }
+    public List<Transaction> getAllUserTransactions(User user) {
+        if (transactionRepository.findAll().size() == 0) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No user transactions found");
+        }
+        return transactionRepository.getTransactionByOwner(user);
+    }
 
-    public boolean checkIfTransactionBelongsToOwner(User user, Long id) { return transactionRepository.existsByOwnerAndId(user, id); }
+    public boolean checkIfTransactionBelongsToOwner(User user, Long id) {
+        if(!transactionRepository.existsByOwnerAndId(user, id))
+        {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Transactions does not belong to owner");
+        }
+        return transactionRepository.existsByOwnerAndId(user, id);
+    }
 }

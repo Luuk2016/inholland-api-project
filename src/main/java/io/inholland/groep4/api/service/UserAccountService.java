@@ -18,7 +18,7 @@ public class UserAccountService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    public UserAccount add(UserAccount userAccount, boolean randomIBAN) throws Exception {
+    public UserAccount add(UserAccount userAccount, boolean randomIBAN) {
         try{
             // Check if a random iban should me generated
             if (randomIBAN) {
@@ -33,7 +33,7 @@ public class UserAccountService {
         }
     }
 
-    public String getIBAN() throws Exception {
+    public String getIBAN() {
         // Generate a new IBAN
         Iban iban = new Iban.Builder().countryCode(CountryCode.NL).bankCode("INHO").buildRandom();
 
@@ -45,17 +45,39 @@ public class UserAccountService {
         return iban.toString();
     }
 
-    public List<UserAccount> getAllAccounts() { return userAccountRepository.findAll(); }
-
-    public boolean existByIBAN(String iban) { return userAccountRepository.existsByIBAN(iban); }
+    public List<UserAccount> getAllAccounts() {
+        if (userAccountRepository.findAll().size() == 0) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No accounts found");
+        }
+        return userAccountRepository.findAll();
+    }
   
-    public UserAccount getAccountById(Long id) { return userAccountRepository.getUserAccountById(id); }
+    public UserAccount getAccountById(Long id) {
+        if (userAccountRepository.getUserAccountById(id) == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Id not found");
+        }
+        return userAccountRepository.getUserAccountById(id);
+    }
 
-    public List<UserAccount> getAccountsByUser(User user) { return userAccountRepository.getUserAccountByOwner(user); }
-
-    public boolean checkIfAccountBelongsToOwner(User user, Long id) { return userAccountRepository.existsByOwnerAndId(user, id); }
+    public boolean checkIfAccountBelongsToOwner(User user, Long id) {
+        if(!userAccountRepository.existsByOwnerAndId(user, id))
+        {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Account does not belong to owner");
+        }
+        return userAccountRepository.existsByOwnerAndId(user, id);
+    }
 
     public UserAccount save(UserAccount user) {
+        if (userAccountRepository.getUserAccountById(user.getId()) == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No accounts found");
+        }
         return userAccountRepository.save(user);
+    }
+
+    public List<UserAccount> getAccountsByUser(User user) {
+        return userAccountRepository.getUserAccountByOwner(user);
+    }
+    public boolean existByIBAN(String iban) {
+        return userAccountRepository.existsByIBAN(iban);
     }
 }

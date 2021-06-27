@@ -2,7 +2,6 @@ package io.inholland.groep4.api.controller;
 
 import io.inholland.groep4.api.UsersApi;
 import io.inholland.groep4.api.model.DTO.UserDTO;
-import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserService;

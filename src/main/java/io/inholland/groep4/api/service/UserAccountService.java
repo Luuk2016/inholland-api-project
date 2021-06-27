@@ -56,7 +56,8 @@ public class UserAccountService {
         if (userAccountRepository.getUserAccountById(id) == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Id not found");
         }
-        return userAccountRepository.getUserAccountById(id); }
+        return userAccountRepository.getUserAccountById(id);
+    }
 
     public boolean checkIfAccountBelongsToOwner(User user, Long id) {
         if(!userAccountRepository.existsByOwnerAndId(user, id))

@@ -1,3 +1,4 @@
+@Authenticate
 Feature: Authenticate tests
 
   Scenario: Retrieve user object from authentication request

@@ -3,16 +3,20 @@ package io.inholland.groep4.api.IT.steps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.*;
-import io.inholland.groep4.api.controller.SpringIntegrationTest;
+import io.cucumber.spring.CucumberContextConfiguration;
+import io.inholland.groep4.api.IT.CucumberConf;
 import io.inholland.groep4.api.model.DTO.LoginDTO;
 import org.junit.Assert;
 import org.springframework.http.*;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class StepDefs extends SpringIntegrationTest {
+@CucumberContextConfiguration
+@ContextConfiguration(classes = CucumberConf.class)
+public class StepDefs {
 
     RestTemplate template = new RestTemplate();
     ResponseEntity<String> responseEntity;
@@ -33,13 +37,13 @@ public class StepDefs extends SpringIntegrationTest {
         responseEntity = template.postForEntity(uri, entity, String.class);
     }
 
-    @When("a user is authenticated")
-    public void aUserIsAuthenticated() {
+    @When("user is authenticated")
+    public void UserIsAuthenticated() {
 
     }
 
-    @And("^sends out a GET request to /accounts$")
-    public void sendsOutAGETRequestToAccounts() {
+    @And("^user sends out a GET request to /accounts$")
+    public void userSendsOutAGETRequestToAccounts() {
 
     }
 
@@ -48,4 +52,6 @@ public class StepDefs extends SpringIntegrationTest {
         int response = responseEntity.getStatusCodeValue();
         Assert.assertEquals(arg0, response);
     }
+
+
 }

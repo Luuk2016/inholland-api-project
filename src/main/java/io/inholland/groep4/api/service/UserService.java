@@ -31,7 +31,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String login(String username, String password) throws Exception {
+    public String login(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
@@ -42,7 +42,7 @@ public class UserService {
         }
     }
 
-    public User add(User user, boolean employee) throws Exception {
+    public User add(User user, boolean employee) {
         // Check if the user doesn't already exist
         if (userRepository.findByUsername(user.getUsername()) == null) {
 
@@ -65,7 +65,7 @@ public class UserService {
         }
     }
 
-    public User save(User user) throws Exception {
+    public User save(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return userRepository.save(user);
         }
@@ -75,21 +75,21 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers() throws Exception {
+    public List<User> getAllUsers() {
         if (userRepository.findAll().size() == 0) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No users found");
         }
         return userRepository.findAll();
     }
 
-    public User findByUsername(String name) throws Exception {
+    public User findByUsername(String name) {
         if (userRepository.findByUsername(name) == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Username not found");
         }
         return userRepository.findByUsername(name);
     }
 
-    public User getSpecificUser(Long id) throws Exception {
+    public User getSpecificUser(Long id) {
         if (userRepository.getUserById(id) == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Id not found");
         }

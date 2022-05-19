@@ -1,14 +1,12 @@
 package io.inholland.groep4.api.model;
 
 import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,6 +21,7 @@ import javax.validation.constraints.*;
 
 @Entity
 public class UserAccount {
+
     /**
      * Gets or Sets accountType
      */

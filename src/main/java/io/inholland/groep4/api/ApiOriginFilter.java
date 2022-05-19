@@ -1,7 +1,6 @@
 package io.inholland.groep4.api;
 
 import java.io.IOException;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 

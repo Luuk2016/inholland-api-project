@@ -35,7 +35,7 @@ public class AccountsApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "john",password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
     public void createAccountShouldReturnOk() throws Exception
     {
         User user = new User();

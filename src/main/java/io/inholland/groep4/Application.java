@@ -31,6 +31,5 @@ public class Application implements CommandLineRunner {
         public int getExitCode() {
             return 10;
         }
-
     }
 }

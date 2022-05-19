@@ -3,9 +3,13 @@ package io.inholland.groep4.api.model.DTO;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 public class UserAccountDTO {
 
     @Schema(example = "current", required = true, description = "")
@@ -23,36 +27,4 @@ public class UserAccountDTO {
     @Schema(example = "active", required = true, description = "")
     @NotNull
     private UserAccount.AccountStatusEnum accountStatus;
-
-    public UserAccount.AccountTypeEnum getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(UserAccount.AccountTypeEnum accountType) {
-        this.accountType = accountType;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public Double getLowerLimit() {
-        return lowerLimit;
-    }
-
-    public void setLowerLimit(Double lowerLimit) {
-        this.lowerLimit = lowerLimit;
-    }
-
-    public UserAccount.AccountStatusEnum getAccountStatus() {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(UserAccount.AccountStatusEnum accountStatus) {
-        this.accountStatus = accountStatus;
-    }
 }

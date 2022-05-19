@@ -10,7 +10,7 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Transaction getTransactionById(Long id);
 
-    List<Transaction> getTransactionByOwner(User user);
+    List<Transaction> getTransactionsByOwner(User user);
 
     boolean existsByOwnerAndId(User owner, Long id);
 }

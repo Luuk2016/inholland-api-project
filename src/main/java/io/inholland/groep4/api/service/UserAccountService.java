@@ -75,7 +75,7 @@ public class UserAccountService {
     }
 
     public List<UserAccount> getAccountsByUser(User user) {
-        return userAccountRepository.getUserAccountByOwner(user);
+        return userAccountRepository.getUserAccountsByOwner(user);
     }
     public boolean existByIBAN(String iban) {
         return userAccountRepository.existsByIBAN(iban);

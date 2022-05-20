@@ -22,8 +22,8 @@ public class AuthenticateApiControllerTest {
     @Test
     public void authenticateShouldReturnOk() throws Exception {
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setUsername("john");
-        loginDTO.setPassword("test");
+        loginDTO.setUsername("test-employee1");
+        loginDTO.setPassword("password");
 
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post("/authenticate")

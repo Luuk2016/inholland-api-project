@@ -22,28 +22,28 @@ public class TransactionsApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getTransactionsShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificTransactionShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions/9"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void createTransactionShouldReturnOk() throws Exception {
         // Create a new transaction
         Transaction transaction = new Transaction();
-        transaction.setSender("yeet");
-        transaction.setReceiver("woi");
+        transaction.setSender("USER_ACCOUNT_2_IBAN");
+        transaction.setReceiver("USER_ACCOUNT_3_IBAN");
         transaction.setAmount(49.95);
-        transaction.setDescription("Omega");
+        transaction.setDescription("Test description");
 
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post("/transactions")

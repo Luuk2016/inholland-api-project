@@ -35,8 +35,8 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         // Create a new user
         User user1 = new User();
-        user1.setUsername("john");
-        user1.setPassword("test");
+        user1.setUsername("test-employee1");
+        user1.setPassword("password");
         user1.setFirstName("John");
         user1.setLastName("Doe");
         user1.setEmail("johndoe@example.com");
@@ -45,21 +45,21 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         // Create a new user
         User user2 = new User();
-        user2.setUsername("swagtron");
-        user2.setPassword("test");
-        user2.setFirstName("Dave");
-        user2.setLastName("Smit");
-        user2.setEmail("swagtron@example.com");
+        user2.setUsername("test-user1");
+        user2.setPassword("password");
+        user2.setFirstName("Jane");
+        user2.setLastName("Roe");
+        user2.setEmail("janeroe@example.com");
         user2.setBirthdate("01/01/1970");
         userService.add(user2, false);
 
         // Create a new user
         User user3 = new User();
-        user3.setUsername("zenma1zx");
-        user3.setPassword("test");
-        user3.setFirstName("Aaron");
-        user3.setLastName("Ng");
-        user3.setEmail("zenma@example.com");
+        user3.setUsername("test-user2");
+        user3.setPassword("password");
+        user3.setFirstName("John");
+        user3.setLastName("Roe");
+        user3.setEmail("johnroe@example.com");
         user3.setBirthdate("01/01/1970");
         userService.add(user3, false);
 
@@ -79,7 +79,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount2.setAccountBalance(500.00);
         userAccount2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount2.setLowerLimit(100.00);
-        userAccount2.setIBAN("bruh");
+        userAccount2.setIBAN("USER_ACCOUNT_2_IBAN");
         userAccountService.add(userAccount2, false);
 
         // Create a new account
@@ -89,7 +89,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount3.setAccountBalance(500.00);
         userAccount3.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount3.setLowerLimit(100.00);
-        userAccount3.setIBAN("yeet");
+        userAccount3.setIBAN("USER_ACCOUNT_3_IBAN");
         userAccountService.add(userAccount3, false);
 
         // Create a new account
@@ -99,7 +99,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         userAccount4.setAccountBalance(500.00);
         userAccount4.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount4.setLowerLimit(100.00);
-        userAccount4.setIBAN("woi");
+        userAccount4.setIBAN("USER_ACCOUNT_4_IBAN");
         userAccountService.add(userAccount4, false);
 
         Transaction transaction = new Transaction();

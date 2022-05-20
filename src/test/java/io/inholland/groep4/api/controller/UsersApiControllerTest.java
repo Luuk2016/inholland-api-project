@@ -22,21 +22,21 @@ public class UsersApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getUserShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/users"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificAccountShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/users/2"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void createUserShouldReturnOk() throws Exception {
         User user = new User();
         user.setUsername("peter");

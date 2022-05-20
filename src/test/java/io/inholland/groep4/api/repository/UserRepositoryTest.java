@@ -1,11 +1,13 @@
 package io.inholland.groep4.api.repository;
 
+import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,8 +30,7 @@ public class UserRepositoryTest {
         User requestedUser = userRepository.findByUsername("test user");
 
         // Then...
-        assertThat(requestedUser.getUsername())
-                .isEqualTo(createdUser.getUsername());
+        assertThat(requestedUser.getUsername()).isEqualTo(createdUser.getUsername());
     }
 
     @Test
@@ -43,7 +44,6 @@ public class UserRepositoryTest {
         Optional<User> foundUser = userRepository.findById(20L);
 
         // Then...
-        foundUser.ifPresent(user -> assertThat(user.getId())
-                .isEqualTo(createdUser.getId()));
+        foundUser.ifPresent(user -> assertThat(user).isEqualTo(createdUser));
     }
 }

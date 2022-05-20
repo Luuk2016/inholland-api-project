@@ -36,8 +36,7 @@ public class TransactionRepositoryTest {
         Transaction requestedTransaction = transactionRepository.getTransactionById(createdTransaction.getId());
 
         // Then...
-        assertThat(requestedTransaction.getId())
-                .isEqualTo(createdTransaction.getId());
+        assertThat(requestedTransaction).isEqualTo(createdTransaction);
     }
 
     @Test
@@ -74,8 +73,7 @@ public class TransactionRepositoryTest {
         Optional<Transaction> requestedTransaction = transactionList.stream().findFirst();
 
         // Then...
-        requestedTransaction.ifPresent(transaction -> assertThat(transaction.getId())
-                .isEqualTo(createdTransaction.getId()));
+        requestedTransaction.ifPresent(transaction -> assertThat(transaction).isEqualTo(createdTransaction));
     }
 
     @Test
@@ -107,8 +105,6 @@ public class TransactionRepositoryTest {
         createdTransaction.setReceiver(receiverAccount.getIBAN());
         transactionRepository.save(createdTransaction);
 
-        assertThat(transactionRepository.existsByOwnerAndId(sender, createdTransaction.getId()))
-                .isEqualTo(true);
-
+        assertThat(transactionRepository.existsByOwnerAndId(sender, createdTransaction.getId())).isEqualTo(true);
     }
 }

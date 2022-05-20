@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -23,15 +24,15 @@ public class StepDefs {
     String response;
 
     HttpHeaders headers = new HttpHeaders();
-    String baseUrl = "http://localhost:8080/authenticate";
+    String baseUrl = "http://localhost:8080";
 
     @When("^user posts their credentials to /authenticate$")
     public void UserPostsAuthentication() throws JsonProcessingException, URISyntaxException {
         ObjectMapper mapper = new ObjectMapper();
         LoginDTO dto = new LoginDTO();
-        dto.setPassword("test");
         dto.setUsername("john");
-        URI uri = new URI("http://localhost:8080/authenticate");
+        dto.setPassword("test");
+        URI uri = new URI(baseUrl + "/authenticate");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);
@@ -46,9 +47,9 @@ public class StepDefs {
     public void userSendsOutAGETRequestToAccounts() throws JsonProcessingException, URISyntaxException {
         ObjectMapper mapper = new ObjectMapper();
         LoginDTO dto = new LoginDTO();
-        dto.setPassword("test");
         dto.setUsername("john");
-        URI uri = new URI("http://localhost:8080/accounts");
+        dto.setPassword("test");
+        URI uri = new URI(baseUrl + "/accounts");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);
@@ -58,9 +59,9 @@ public class StepDefs {
     public void userSendsOutAGETRequestToUsers() throws URISyntaxException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         LoginDTO dto = new LoginDTO();
-        dto.setPassword("test");
         dto.setUsername("john");
-        URI uri = new URI("http://localhost:8080/users");
+        dto.setPassword("test");
+        URI uri = new URI(baseUrl + "/users");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);
@@ -70,9 +71,9 @@ public class StepDefs {
     public void userSendsOutAGETRequestToTransactions() throws URISyntaxException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         LoginDTO dto = new LoginDTO();
-        dto.setPassword("test");
         dto.setUsername("john");
-        URI uri = new URI("http://localhost:8080/transactions");
+        dto.setPassword("test");
+        URI uri = new URI(baseUrl + "/transactions");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(dto), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);

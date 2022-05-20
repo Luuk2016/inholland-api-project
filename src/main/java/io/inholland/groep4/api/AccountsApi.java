@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.validation.Valid;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
@@ -28,70 +29,54 @@ import javax.validation.Valid;
 public interface AccountsApi {
 
     @Operation(summary = "Get accounts", description = "If admin, show all accounts. If user, show your own account.", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Customers", "Employees" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Customers", "Employees"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Getting accounts successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
-
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
-
             @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
-
             @ApiResponse(responseCode = "403", description = "You are forbidden to view this content"),
-
-            @ApiResponse(responseCode = "404", description = "Item not found") })
+            @ApiResponse(responseCode = "404", description = "Item not found")})
     @RequestMapping(value = "/accounts",
-            produces = { "application/json" },
+            produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<?> getAccounts();
 
-
     @Operation(summary = "Get a specific account", description = "If admin, able to show other accounts that don't belong to you. If user, only able to show your own account.", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Customers", "Employees" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Customers", "Employees"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Getting specific account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
-
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
-
             @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
-
             @ApiResponse(responseCode = "403", description = "You are forbidden to view this content"),
-
-            @ApiResponse(responseCode = "404", description = "Item not found") })
+            @ApiResponse(responseCode = "404", description = "Item not found")})
     @RequestMapping(value = "/accounts/{id}",
-            produces = { "application/json" },
+            produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id);
-
+    ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The user ID", required = true, schema = @Schema()) @PathVariable("id") Long id);
 
     @Operation(summary = "Create account", description = "Create a new account (current/savings)", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employees"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
-
             @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
-
             @ApiResponse(responseCode = "403", description = "You are forbidden to view this content"),
-
-            @ApiResponse(responseCode = "404", description = "Item not found") })
+            @ApiResponse(responseCode = "404", description = "Item not found")})
     @RequestMapping(value = "/accounts",
-            produces = { "application/json" },
-            consumes = { "application/json" },
+            produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body);
+    ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccountDTO body);
 
     @Operation(summary = "Updates an account", description = "Update an account by ID", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employees" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employees"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Edit account successful", content = @Content(schema = @Schema(implementation = UserAccount.class))),
-
             @ApiResponse(responseCode = "400", description = "Bad request"),
-
             @ApiResponse(responseCode = "401", description = "JWT Bearer Token is missing or invalid"),
-
-            @ApiResponse(responseCode = "404", description = "Item not found") })
+            @ApiResponse(responseCode = "404", description = "Item not found")})
     @RequestMapping(value = "/accounts/{id}",
-            produces = { "application/json" },
-            consumes = { "application/json" },
+            produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<?> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body);
+    ResponseEntity<?> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required = true, schema = @Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccount body);
 }

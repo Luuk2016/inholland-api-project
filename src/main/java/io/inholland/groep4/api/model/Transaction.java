@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -201,9 +202,13 @@ public class Transaction {
         this.description = description;
     }
 
-    public String getRejectionFlag() { return rejectionFlag; }
+    public String getRejectionFlag() {
+        return rejectionFlag;
+    }
 
-    public void setRejectionFlag(String rejectionFlag) { this.rejectionFlag = rejectionFlag; }
+    public void setRejectionFlag(String rejectionFlag) {
+        this.rejectionFlag = rejectionFlag;
+    }
 
     @Override
     public boolean equals(java.lang.Object o) {

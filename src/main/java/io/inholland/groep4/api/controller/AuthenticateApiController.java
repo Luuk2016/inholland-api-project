@@ -38,7 +38,7 @@ public class AuthenticateApiController implements AuthenticateApi {
         this.request = request;
     }
 
-    public ResponseEntity<?> authenticate(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody LoginDTO body) {
+    public ResponseEntity<?> authenticate(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody LoginDTO body) {
         try {
             String token = userService.login(body.getUsername(), body.getPassword());
             LoginResponseDTO loginResponse = new LoginResponseDTO();

@@ -19,7 +19,7 @@ public class UserAccountService {
     private UserAccountRepository userAccountRepository;
 
     public UserAccount add(UserAccount userAccount, boolean randomIBAN) {
-        try{
+        try {
             // Check if a random iban should me generated
             if (randomIBAN) {
                 userAccount.setIBAN(getIBAN());
@@ -27,8 +27,7 @@ public class UserAccountService {
 
             userAccountRepository.save(userAccount);
             return userAccount;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Incorrect iban given");
         }
     }
@@ -51,7 +50,7 @@ public class UserAccountService {
         }
         return userAccountRepository.findAll();
     }
-  
+
     public UserAccount getAccountById(Long id) {
         if (userAccountRepository.getUserAccountById(id) == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Id not found");
@@ -60,8 +59,7 @@ public class UserAccountService {
     }
 
     public boolean checkIfAccountBelongsToOwner(User user, Long id) {
-        if(!userAccountRepository.existsByOwnerAndId(user, id))
-        {
+        if (!userAccountRepository.existsByOwnerAndId(user, id)) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Account does not belong to owner");
         }
         return userAccountRepository.existsByOwnerAndId(user, id);
@@ -75,8 +73,9 @@ public class UserAccountService {
     }
 
     public List<UserAccount> getAccountsByUser(User user) {
-        return userAccountRepository.getUserAccountByOwner(user);
+        return userAccountRepository.getUserAccountsByOwner(user);
     }
+
     public boolean existByIBAN(String iban) {
         return userAccountRepository.existsByIBAN(iban);
     }

@@ -22,23 +22,22 @@ public class TransactionsApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "john",password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
     public void getTransactionsShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "john",password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
     public void getSpecificTransactionShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions/9"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "john",password = "test", roles = "EMPLOYEE")
-    public void createTransactionShouldReturnOk() throws Exception
-    {
+    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
+    public void createTransactionShouldReturnOk() throws Exception {
         // Create a new transaction
         Transaction transaction = new Transaction();
         transaction.setSender("yeet");
@@ -46,12 +45,12 @@ public class TransactionsApiControllerTest {
         transaction.setAmount(49.95);
         transaction.setDescription("Omega");
 
-        this.mockMvc.perform( MockMvcRequestBuilders
-            .post("/transactions")
-            .content(asJsonString(transaction))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/transactions")
+                        .content(asJsonString(transaction))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     public static String asJsonString(final Object obj) {

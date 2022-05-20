@@ -33,7 +33,6 @@ public class LoginDTO {
      **/
     @Schema(example = "john", required = true, description = "")
     @NotNull
-
     public String getUsername() {
         return username;
     }
@@ -54,7 +53,6 @@ public class LoginDTO {
      **/
     @Schema(example = "test", required = true, description = "")
     @NotNull
-
     public String getPassword() {
         return password;
     }
@@ -62,7 +60,6 @@ public class LoginDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     @Override
     public boolean equals(java.lang.Object o) {

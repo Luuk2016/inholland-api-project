@@ -36,8 +36,7 @@ public class AccountsApiControllerTest {
 
     @Test
     @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
-    public void createAccountShouldReturnOk() throws Exception
-    {
+    public void createAccountShouldReturnOk() throws Exception {
         User user = new User();
         user.setUsername("peter");
         user.setPassword("test");
@@ -53,12 +52,12 @@ public class AccountsApiControllerTest {
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
 
-        this.mockMvc.perform( MockMvcRequestBuilders
-            .post("/accounts")
-            .content(asJsonString(userAccount))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/accounts")
+                        .content(asJsonString(userAccount))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     public static String asJsonString(final Object obj) {

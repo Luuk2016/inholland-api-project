@@ -20,11 +20,11 @@ import java.util.List;
 public class SwaggerDocumentationConfig {
 
     @Bean
-    public Docket customImplementation(){
+    public Docket customImplementation() {
         return new Docket(DocumentationType.OAS_30)
                 .select()
-                    .apis(RequestHandlerSelectors.basePackage("io.inholland.groep4.api.controller"))
-                    .build()
+                .apis(RequestHandlerSelectors.basePackage("io.inholland.groep4.api.controller"))
+                .build()
                 .directModelSubstitute(org.threeten.bp.LocalDate.class, java.sql.Date.class)
                 .directModelSubstitute(org.threeten.bp.OffsetDateTime.class, java.util.Date.class)
                 .apiInfo(apiInfo())
@@ -46,34 +46,34 @@ public class SwaggerDocumentationConfig {
 
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        return Arrays.asList(new SecurityReference("Authorization", new AuthorizationScope[] { authorizationScope }));
+        return Arrays.asList(new SecurityReference("Authorization", new AuthorizationScope[]{authorizationScope}));
     }
 
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Banking API (groep4)")
-            .description("The API for Inholland project API")
-            .license("Apache 2.0")
-            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
-            .termsOfServiceUrl("")
-            .version("1.1.1-oas3")
-            .contact(new Contact("","", ""))
-            .build();
+                .title("Banking API (groep4)")
+                .description("The API for Inholland project API")
+                .license("Apache 2.0")
+                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .termsOfServiceUrl("")
+                .version("1.1.1-oas3")
+                .contact(new Contact("", "", ""))
+                .build();
     }
 
     @Bean
     public OpenAPI openApi() {
         return new OpenAPI()
-            .info(new Info()
-                .title("Banking API (groep4)")
-                .description("The API for Inholland project API")
-                .termsOfService("")
-                .version("1.1.1-oas3")
-                .license(new License()
-                    .name("Apache 2.0")
-                    .url("http://www.apache.org/licenses/LICENSE-2.0.html"))
-                .contact(new io.swagger.v3.oas.models.info.Contact()
-                    .email("")));
+                .info(new Info()
+                        .title("Banking API (groep4)")
+                        .description("The API for Inholland project API")
+                        .termsOfService("")
+                        .version("1.1.1-oas3")
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+                        .contact(new io.swagger.v3.oas.models.info.Contact()
+                                .email("")));
     }
 
 }

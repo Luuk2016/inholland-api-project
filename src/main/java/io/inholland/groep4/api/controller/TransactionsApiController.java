@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.threeten.bp.OffsetDateTime;
+
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -56,8 +57,7 @@ public class TransactionsApiController implements TransactionsApi {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<?> getTransactions() {
-        try
-        {
+        try {
             // Create a empty list for transactions
             List<Transaction> transactions = new ArrayList<>();
 
@@ -76,44 +76,43 @@ public class TransactionsApiController implements TransactionsApi {
                 transactions = transactionService.getAllUserTransactions(user);
             }
 
+            // Check if the transactions were found
             if (transactions != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(transactions);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-  	@PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<?> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-       try
-       {
-           Principal principal = request.getUserPrincipal();
-           User user = userService.findByUsername(principal.getName());
+    @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
+    public ResponseEntity<?> getSpecificTransaction(@Parameter(in = ParameterIn.PATH, description = "The transaction ID", required = true, schema = @Schema()) @PathVariable("id") Long id) {
+        try {
+            Principal principal = request.getUserPrincipal();
+            User user = userService.findByUsername(principal.getName());
 
-           // Check if the user is an employee or transaction owner
-           if (request.isUserInRole("ROLE_EMPLOYEE") || transactionService.checkIfTransactionBelongsToOwner(user, id)) {
-               Transaction transaction = transactionService.getTransactionById(id);
+            // Check if the user is an employee or transaction owner
+            if (request.isUserInRole("ROLE_EMPLOYEE") || transactionService.checkIfTransactionBelongsToOwner(user, id)) {
+                Transaction transaction = transactionService.getTransactionById(id);
 
-               if (transaction != null) {
-                   return ResponseEntity.status(HttpStatus.OK).body(transaction);
-               } else {
-                   return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-               }
-           } else {
-               return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-           }
-       } catch (Exception e)
-       {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-       }
+                // Check if the transaction was found
+                if (transaction != null) {
+                    return ResponseEntity.status(HttpStatus.OK).body(transaction);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'USER')")
-    public ResponseEntity<?> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
+    public ResponseEntity<?> postTransactions(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO body) {
         try {
             Principal principal = request.getUserPrincipal();
             User user = userService.findByUsername(principal.getName());
@@ -123,7 +122,7 @@ public class TransactionsApiController implements TransactionsApi {
 
             //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
             for (UserAccount account : user.getAccounts()) {
-                if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))){
+                if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))) {
                     transaction.setDescription(body.getDescription());
                     transaction.setAmount(body.getAmount());
                     transaction.setSender(body.getSender());
@@ -134,10 +133,12 @@ public class TransactionsApiController implements TransactionsApi {
                 } else transaction.setRejectionFlag("Error: Sender IBAN does not belong to the given user!");
             }
 
-            if (transaction.getRejectionFlag() != ""){
+            if (transaction.getRejectionFlag() != "") {
                 System.out.println(transaction.getRejectionFlag());
                 return new ResponseEntity<Transaction>(HttpStatus.BAD_REQUEST);
-            } else return new ResponseEntity<Transaction>(HttpStatus.OK).ok().body(transaction);
+            } else {
+                return new ResponseEntity<Transaction>(HttpStatus.OK).ok().body(transaction);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

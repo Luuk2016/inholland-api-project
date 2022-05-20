@@ -1,8 +1,10 @@
 package io.inholland.groep4.api.model;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -13,7 +15,7 @@ import javax.validation.constraints.*;
  * User
  */
 @Entity
-public class User   {
+public class User {
     @GeneratedValue
     @Id
     @JsonProperty("id")
@@ -94,6 +96,7 @@ public class User   {
             return null;
         }
     }
+
     @JsonProperty("accessLevel")
     @Column
     @ElementCollection(targetClass = AccessLevelEnum.class)
@@ -130,12 +133,12 @@ public class User   {
             return null;
         }
     }
+
     @JsonProperty("status")
     @Column
     @ElementCollection(targetClass = StatusEnum.class)
     @Valid
     private List<StatusEnum> status = null;
-
 
 
     public User id(Long id) {
@@ -146,12 +149,14 @@ public class User   {
     /**
      * Get id
      * minimum: 1
+     *
      * @return id
      **/
     @Schema(example = "9999", required = true, description = "")
     @NotNull
 
-    @Min(1L)  public Long getId() {
+    @Min(1L)
+    public Long getId() {
         return id;
     }
 
@@ -166,6 +171,7 @@ public class User   {
 
     /**
      * Get firstName
+     *
      * @return firstName
      **/
     @Schema(example = "John", required = true, description = "")
@@ -186,6 +192,7 @@ public class User   {
 
     /**
      * Get lastName
+     *
      * @return lastName
      **/
     @Schema(example = "Doe", required = true, description = "")
@@ -206,6 +213,7 @@ public class User   {
 
     /**
      * Get email
+     *
      * @return email
      **/
     @Schema(example = "johndoe@groep4API.com", required = true, description = "")
@@ -226,6 +234,7 @@ public class User   {
 
     /**
      * Get username
+     *
      * @return username
      **/
     @Schema(example = "johndoe", required = true, description = "")
@@ -246,6 +255,7 @@ public class User   {
 
     /**
      * Get password
+     *
      * @return password
      **/
     @Schema(example = "testPassword", required = true, description = "")
@@ -266,6 +276,7 @@ public class User   {
 
     /**
      * Get birthdate
+     *
      * @return birthdate
      **/
     @Schema(example = "1969-04-20", description = "")
@@ -290,6 +301,7 @@ public class User   {
 
     /**
      * Get accessLevel
+     *
      * @return accessLevel
      **/
     @Schema(example = "employee", required = true, description = "")
@@ -318,6 +330,7 @@ public class User   {
 
     /**
      * Get status
+     *
      * @return status
      **/
     @Schema(example = "active", description = "")

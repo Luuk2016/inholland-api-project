@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,9 +68,7 @@ public class UserService {
     public User save(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return userRepository.save(user);
-        }
-        else
-        {
+        } else {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Username not found");
         }
     }

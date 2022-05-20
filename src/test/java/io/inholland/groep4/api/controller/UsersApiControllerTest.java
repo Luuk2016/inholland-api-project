@@ -22,23 +22,22 @@ public class UsersApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "john" ,password = "test", roles = "EMPLOYEE")
+    @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
     public void getUserShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/users"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
     public void getSpecificAccountShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/users/2"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "john", password = "test", roles = "EMPLOYEE")
-    public void createUserShouldReturnOk() throws Exception
-    {
+    public void createUserShouldReturnOk() throws Exception {
         User user = new User();
         user.setUsername("peter");
         user.setPassword("test");
@@ -47,12 +46,12 @@ public class UsersApiControllerTest {
         user.setEmail("peter@example.com");
         user.setBirthdate("01/01/1970");
 
-        this.mockMvc.perform( MockMvcRequestBuilders
-            .post("/users")
-            .content(asJsonString(user))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users")
+                        .content(asJsonString(user))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     public static String asJsonString(final Object obj) {

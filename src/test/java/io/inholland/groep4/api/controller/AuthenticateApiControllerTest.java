@@ -20,18 +20,17 @@ public class AuthenticateApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void authenticateShouldReturnOk() throws Exception
-    {
+    public void authenticateShouldReturnOk() throws Exception {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUsername("john");
         loginDTO.setPassword("test");
 
-        this.mockMvc.perform( MockMvcRequestBuilders
-            .post("/authenticate")
-            .content(asJsonString(loginDTO))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/authenticate")
+                        .content(asJsonString(loginDTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     public static String asJsonString(final Object obj) {

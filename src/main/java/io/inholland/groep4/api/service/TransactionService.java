@@ -86,8 +86,7 @@ public class TransactionService {
     }
 
     public boolean checkIfTransactionBelongsToOwner(User user, Long id) {
-        if(!transactionRepository.existsByOwnerAndId(user, id))
-        {
+        if (!transactionRepository.existsByOwnerAndId(user, id)) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Transactions does not belong to owner");
         }
         return transactionRepository.existsByOwnerAndId(user, id);

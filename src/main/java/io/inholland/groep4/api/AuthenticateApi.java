@@ -19,24 +19,23 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.validation.Valid;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T18:28:14.004Z[GMT]")
 @Validated
 public interface AuthenticateApi {
 
-    @Operation(summary = "Authenticate", description = "Get a bearer token to authenticate with the API", tags={ "Auth", "Customers", "Employees" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "authentication successful", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
-        
-        @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
-        
-        @ApiResponse(responseCode = "403", description = "You are forbidden to view this content") })
+    @Operation(summary = "Authenticate", description = "Get a bearer token to authenticate with the API", tags = {"Auth", "Customers", "Employees"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "authentication successful", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad input parameter(s)"),
+            @ApiResponse(responseCode = "403", description = "You are forbidden to view this content")})
     @RequestMapping(value = "/authenticate",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<?> authenticate(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody LoginDTO body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<?> authenticate(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody LoginDTO body);
 
 }
 

@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -44,8 +45,7 @@ public class UsersApiController implements UsersApi {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<?> getUsers() {
-        try
-        {
+        try {
             // Create a empty list for users
             List<User> users = new ArrayList<>();
 
@@ -69,22 +69,19 @@ public class UsersApiController implements UsersApi {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<?> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        try
-        {
+    public ResponseEntity<?> getSpecificUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required = true, schema = @Schema()) @PathVariable("id") Long id) {
+        try {
             Principal principal = request.getUserPrincipal();
             User user = userService.findByUsername(principal.getName());
 
             // Check if the requested ID isn't accidentally belonging to the user querying
-
             if (user.getId() == id) {
                 return ResponseEntity.status(HttpStatus.OK).body(user);
             } else {
@@ -100,14 +97,13 @@ public class UsersApiController implements UsersApi {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                 }
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<?> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserDTO body) {
+    public ResponseEntity<?> postUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserDTO body) {
         try {
             User user = new User();
             user.setUsername(body.getUsername());
@@ -125,7 +121,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<?> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
+    public ResponseEntity<?> updateUser(@Parameter(in = ParameterIn.PATH, description = "The user ID", required = true, schema = @Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody User body) {
         try {
             body.setId(id);
             User result = userService.save(body);

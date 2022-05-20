@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -49,8 +50,7 @@ public class AccountsApiController implements AccountsApi {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<?> getAccounts() {
-        try
-        {
+        try {
             // Create a empty list for accounts
             List<UserAccount> accounts = new ArrayList<>();
 
@@ -69,44 +69,43 @@ public class AccountsApiController implements AccountsApi {
                 accounts = userAccountService.getAccountsByUser(user);
             }
 
+            // Check if any accounts were found
             if (accounts != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(accounts);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
-    public ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-      try
-      {
-          Principal principal = request.getUserPrincipal();
-          User user = userService.findByUsername(principal.getName());
+    public ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required = true, schema = @Schema()) @PathVariable("id") Long id) {
+        try {
+            Principal principal = request.getUserPrincipal();
+            User user = userService.findByUsername(principal.getName());
 
-          // Check if the user is an employee or account owner
-          if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
-              UserAccount account = userAccountService.getAccountById(id);
+            // Check if the user is an employee or account owner
+            if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
+                UserAccount account = userAccountService.getAccountById(id);
 
-              if (account != null) {
-                  return ResponseEntity.status(HttpStatus.OK).body(account);
-              } else {
-                  return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-              }
-          } else {
-              return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-          }
-      } catch (Exception e)
-      {
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-      }
+                // Check if the account was found
+                if (account != null) {
+                    return ResponseEntity.status(HttpStatus.OK).body(account);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccountDTO body) {
+    public ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccountDTO body) {
         try {
             // Create a new account
             UserAccount userAccount = new UserAccount();
@@ -118,6 +117,7 @@ public class AccountsApiController implements AccountsApi {
             userAccount.setAccountStatus(body.getAccountStatus());
             userAccount.setAccountBalance(0.00);
 
+            // Store the new account
             UserAccount result = userAccountService.add(userAccount, true);
 
             return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -127,7 +127,7 @@ public class AccountsApiController implements AccountsApi {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required=true, schema=@Schema()) @PathVariable("id") Long id,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserAccount body) {
+    public ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required = true, schema = @Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccount body) {
         try {
             body.setId(id);
             UserAccount result = userAccountService.save(body);

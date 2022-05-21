@@ -2,14 +2,21 @@ package io.inholland.groep4.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.model.DTO.LoginDTO;
+import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -20,7 +27,7 @@ public class AuthenticateApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void authenticateShouldReturnOk() throws Exception {
+    public void authenticateWithCorrectCredentialsShouldGiveToken() throws Exception {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUsername("test-employee1");
         loginDTO.setPassword("password");
@@ -30,7 +37,24 @@ public class AuthenticateApiControllerTest {
                         .content(asJsonString(loginDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
+    }
+
+    @Test
+    public void authenticateWithIncorrectCredentialsShouldGiveError() throws Exception {
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUsername("incorrect-username");
+        loginDTO.setPassword("incorrect-password");
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/authenticate")
+                        .content(asJsonString(loginDTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Username/password invalid\""))
+                .andExpect(status().isBadRequest());
     }
 
     public static String asJsonString(final Object obj) {

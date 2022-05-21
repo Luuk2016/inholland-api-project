@@ -36,12 +36,12 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void createTransactionShouldReturnOk() throws Exception {
         // Create a new transaction
         Transaction transaction = new Transaction();
-        transaction.setSender("USER_ACCOUNT_2_IBAN");
-        transaction.setReceiver("USER_ACCOUNT_3_IBAN");
+        transaction.setSender("USER_ACCOUNT_3_IBAN");
+        transaction.setReceiver("USER_ACCOUNT_4_IBAN");
         transaction.setAmount(49.95);
         transaction.setDescription("Test description");
 

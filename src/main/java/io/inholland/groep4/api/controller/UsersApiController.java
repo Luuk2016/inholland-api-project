@@ -64,15 +64,11 @@ public class UsersApiController implements UsersApi {
                 users.add(user);
             }
 
-            if (users != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(users);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(users);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
@@ -81,18 +77,14 @@ public class UsersApiController implements UsersApi {
             Principal principal = request.getUserPrincipal();
             User user = userService.findByUsername(principal.getName());
 
-            // Check if the requested ID isn't accidentally belonging to the user querying
+            // Check if the user is requesting their own information
             if (user.getId() == id) {
                 return ResponseEntity.status(HttpStatus.OK).body(user);
             } else {
                 if (request.isUserInRole("ROLE_EMPLOYEE")) {
                     User userQuery = userService.getSpecificUser(id);
 
-                    if (user != null) {
-                        return ResponseEntity.status(HttpStatus.OK).body(userQuery);
-                    } else {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-                    }
+                    return ResponseEntity.status(HttpStatus.OK).body(userQuery);
                 } else {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                 }
@@ -114,7 +106,7 @@ public class UsersApiController implements UsersApi {
             user.setBirthdate(body.getBirthdate());
 
             User result = userService.add(user, false);
-            return ResponseEntity.status(200).body(result);
+            return ResponseEntity.status(201).body(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

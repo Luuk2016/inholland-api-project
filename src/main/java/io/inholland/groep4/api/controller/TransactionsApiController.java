@@ -122,7 +122,7 @@ public class TransactionsApiController implements TransactionsApi {
 
             //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
             for (UserAccount account : user.getAccounts()) {
-                if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))) {
+                if ((account.getIBAN().equals(body.getSender())) || (user.getRoles().contains(Role.ROLE_EMPLOYEE))) {
                     transaction.setDescription(body.getDescription());
                     transaction.setAmount(body.getAmount());
                     transaction.setSender(body.getSender());

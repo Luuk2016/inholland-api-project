@@ -33,6 +33,8 @@ public class MyApplicationRunner implements ApplicationRunner {
         account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccountService.add(account, false);
 
+        // @TODO Rework all the default users, useraccounts and transaction below
+
         // Create a new user
         User user1 = new User();
         user1.setUsername("test-employee1");
@@ -57,9 +59,9 @@ public class MyApplicationRunner implements ApplicationRunner {
         User user3 = new User();
         user3.setUsername("test-user2");
         user3.setPassword("password");
-        user3.setFirstName("John");
-        user3.setLastName("Roe");
-        user3.setEmail("johnroe@example.com");
+        user3.setFirstName("Jason");
+        user3.setLastName("Bourne");
+        user3.setEmail("jasonbourne@example.com");
         user3.setBirthdate("01/01/1970");
         userService.add(user3, false);
 
@@ -85,7 +87,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         // Create a new account
         UserAccount userAccount3 = new UserAccount();
         userAccount3.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount3.setOwner(user3);
+        userAccount3.setOwner(user2);
         userAccount3.setAccountBalance(500.00);
         userAccount3.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount3.setLowerLimit(100.00);
@@ -94,7 +96,7 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         // Create a new account
         UserAccount userAccount4 = new UserAccount();
-        userAccount4.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        userAccount4.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
         userAccount4.setOwner(user3);
         userAccount4.setAccountBalance(500.00);
         userAccount4.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);

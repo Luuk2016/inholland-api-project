@@ -33,81 +33,90 @@ public class MyApplicationRunner implements ApplicationRunner {
         account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccountService.add(account, false);
 
-        // @TODO Rework all the default users, useraccounts and transaction below
+        // Create a new test employee
+        User testEmployee1 = new User();
+        testEmployee1.setUsername("test-employee1");
+        testEmployee1.setPassword("password");
+        testEmployee1.setFirstName("test-employee1-firstname");
+        testEmployee1.setLastName("test-employee1-lastname");
+        testEmployee1.setEmail("testemployee1@example.com");
+        testEmployee1.setBirthdate("01/01/1970");
+        userService.add(testEmployee1, true);
 
-        // Create a new user
-        User user1 = new User();
-        user1.setUsername("test-employee1");
-        user1.setPassword("password");
-        user1.setFirstName("John");
-        user1.setLastName("Doe");
-        user1.setEmail("johndoe@example.com");
-        user1.setBirthdate("01/01/1970");
-        userService.add(user1, true);
+        // Create a new test employee
+        User testEmployee2 = new User();
+        testEmployee2.setUsername("test-employee2");
+        testEmployee2.setPassword("password");
+        testEmployee2.setFirstName("test-employee2-firstname");
+        testEmployee2.setLastName("test-employee2-lastname");
+        testEmployee2.setEmail("testemployee2@example.com");
+        testEmployee2.setBirthdate("01/01/1970");
+        userService.add(testEmployee2, true);
 
-        // Create a new user
-        User user2 = new User();
-        user2.setUsername("test-user1");
-        user2.setPassword("password");
-        user2.setFirstName("Jane");
-        user2.setLastName("Roe");
-        user2.setEmail("janeroe@example.com");
-        user2.setBirthdate("01/01/1970");
-        userService.add(user2, false);
+        // Create a new test user
+        User testUser1 = new User();
+        testUser1.setUsername("test-user1");
+        testUser1.setPassword("password");
+        testUser1.setFirstName("test-user1-firstname");
+        testUser1.setLastName("test-user1-lastname");
+        testUser1.setEmail("testuser1@example.com");
+        testUser1.setBirthdate("01/01/1970");
+        userService.add(testUser1, false);
 
-        // Create a new user
-        User user3 = new User();
-        user3.setUsername("test-user2");
-        user3.setPassword("password");
-        user3.setFirstName("Jason");
-        user3.setLastName("Bourne");
-        user3.setEmail("jasonbourne@example.com");
-        user3.setBirthdate("01/01/1970");
-        userService.add(user3, false);
-
-        // Create a new account
-        UserAccount userAccount = new UserAccount();
-        userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount.setOwner(user1);
-        userAccount.setAccountBalance(500.00);
-        userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccount.setLowerLimit(100.00);
-        userAccountService.add(userAccount, true);
-
-        // Create a new account
-        UserAccount userAccount2 = new UserAccount();
-        userAccount2.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount2.setOwner(user2);
-        userAccount2.setAccountBalance(500.00);
-        userAccount2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccount2.setLowerLimit(100.00);
-        userAccount2.setIBAN("USER_ACCOUNT_2_IBAN");
-        userAccountService.add(userAccount2, false);
+        // Create a new test user
+        User testUser2 = new User();
+        testUser2.setUsername("test-user2");
+        testUser2.setPassword("password");
+        testUser2.setFirstName("test-user2-firstname");
+        testUser2.setLastName("test-user2-lastname");
+        testUser2.setEmail("testuser2@example.com");
+        testUser2.setBirthdate("01/01/1970");
+        userService.add(testUser2, false);
 
         // Create a new account
-        UserAccount userAccount3 = new UserAccount();
-        userAccount3.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount3.setOwner(user2);
-        userAccount3.setAccountBalance(500.00);
-        userAccount3.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccount3.setLowerLimit(100.00);
-        userAccount3.setIBAN("USER_ACCOUNT_3_IBAN");
-        userAccountService.add(userAccount3, false);
+        UserAccount testEmployeeAccount1 = new UserAccount();
+        testEmployeeAccount1.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        testEmployeeAccount1.setOwner(testEmployee1);
+        testEmployeeAccount1.setAccountBalance(500.00);
+        testEmployeeAccount1.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testEmployeeAccount1.setLowerLimit(100.00);
+        testEmployeeAccount1.setIBAN("USER_ACCOUNT_1_IBAN");
+        userAccountService.add(testEmployeeAccount1, false);
 
         // Create a new account
-        UserAccount userAccount4 = new UserAccount();
-        userAccount4.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        userAccount4.setOwner(user3);
-        userAccount4.setAccountBalance(500.00);
-        userAccount4.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        userAccount4.setLowerLimit(100.00);
-        userAccount4.setIBAN("USER_ACCOUNT_4_IBAN");
-        userAccountService.add(userAccount4, false);
+        UserAccount testEmployeeAccount2 = new UserAccount();
+        testEmployeeAccount2.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        testEmployeeAccount2.setOwner(testEmployee2);
+        testEmployeeAccount2.setAccountBalance(500.00);
+        testEmployeeAccount2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testEmployeeAccount2.setLowerLimit(100.00);
+        testEmployeeAccount2.setIBAN("USER_ACCOUNT_2_IBAN");
+        userAccountService.add(testEmployeeAccount2, false);
+
+        // Create a new account
+        UserAccount testUserAccount1 = new UserAccount();
+        testUserAccount1.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        testUserAccount1.setOwner(testUser1);
+        testUserAccount1.setAccountBalance(500.00);
+        testUserAccount1.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testUserAccount1.setLowerLimit(100.00);
+        testUserAccount1.setIBAN("USER_ACCOUNT_3_IBAN");
+        userAccountService.add(testUserAccount1, false);
+
+        // Create a new account
+        UserAccount testUserAccount2 = new UserAccount();
+        testUserAccount2.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        testUserAccount2.setOwner(testUser2);
+        testUserAccount2.setAccountBalance(500.00);
+        testUserAccount2.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testUserAccount2.setLowerLimit(100.00);
+        testUserAccount2.setIBAN("USER_ACCOUNT_4_IBAN");
+        userAccountService.add(testUserAccount2, false);
 
         Transaction transaction = new Transaction();
-        transaction.setSender(userAccount2.getIBAN());
-        transaction.setReceiver(userAccount3.getIBAN());
-        transaction.setAmount(12.67);
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(9.95);
         transaction.setDescription("TEST-TRANSACTION");
         transactionService.add(transaction);
     }

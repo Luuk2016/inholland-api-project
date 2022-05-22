@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -25,6 +27,7 @@ public class TransactionsApiControllerTest {
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getTransactionsShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -32,6 +35,7 @@ public class TransactionsApiControllerTest {
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificTransactionShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions/9"))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -45,11 +49,11 @@ public class TransactionsApiControllerTest {
         transaction.setAmount(49.95);
         transaction.setDescription("Test description");
 
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/transactions")
+        this.mockMvc.perform(post("/transactions")
                         .content(asJsonString(transaction))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 

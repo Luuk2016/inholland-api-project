@@ -32,9 +32,9 @@ public class UsersApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(3))))
-                .andExpect(jsonPath("$[0].firstName", is("John")))
-                .andExpect(jsonPath("$[1].firstName", is("Jane")))
-                .andExpect(jsonPath("$[2].firstName", is("Jason")));
+                .andExpect(jsonPath("$[0].firstName", is("test-employee1-firstname")))
+                .andExpect(jsonPath("$[1].firstName", is("test-employee2-firstname")))
+                .andExpect(jsonPath("$[2].firstName", is("test-user1-firstname")));
     }
 
     @Test
@@ -45,33 +45,33 @@ public class UsersApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))))
-                .andExpect(jsonPath("$[0].firstName", is("Jane")));
+                .andExpect(jsonPath("$[0].firstName", is("test-user1-firstname")));
     }
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificUserAsEmployeeShouldReturnUser() throws Exception {
-        mockMvc.perform(get("/users/4").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/users/5").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.firstName", is("Jason")));
+                .andExpect(jsonPath("$.firstName", is("test-user2-firstname")));
     }
 
     @Test
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void gettingYourOwnUserShouldReturnUser() throws Exception {
-        mockMvc.perform(get("/users/3").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/users/4").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.firstName", is("Jane")));
+                .andExpect(jsonPath("$.firstName", is("test-user1-firstname")));
     }
 
     @Test
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void gettingOtherUserWithoutAccessShouldGiveForbidden() throws Exception {
-        mockMvc.perform(get("/users/4"))
+        mockMvc.perform(get("/users/2"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -154,23 +154,23 @@ public class UsersApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
+    @WithMockUser(username = "test-employee2", password = "password", roles = "EMPLOYEE")
     public void updateUserSuccesfullyShouldGiveOk() throws Exception {
         User user = new User();
-        user.setUsername("test-employee1");
+        user.setUsername("test-user2");
         user.setPassword("password");
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setEmail("johndoe@email.com");
+        user.setFirstName("test-user2-firstname");
+        user.setLastName("test-user2-lastname");
+        user.setEmail("testuser2@email.com");
         user.setBirthdate("01/01/1970");
 
-        this.mockMvc.perform(put("/users/2").content(asJsonString(user)).contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(put("/users/5").content(asJsonString(user)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.firstName", is("John")))
-                .andExpect(jsonPath("$.lastName", is("Doe")))
-                .andExpect(jsonPath("$.email", is("johndoe@email.com")));
+                .andExpect(jsonPath("$.firstName", is("test-user2-firstname")))
+                .andExpect(jsonPath("$.lastName", is("test-user2-lastname")))
+                .andExpect(jsonPath("$.email", is("testuser2@email.com")));
     }
 
     @Test

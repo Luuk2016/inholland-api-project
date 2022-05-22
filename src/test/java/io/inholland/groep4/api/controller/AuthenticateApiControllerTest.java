@@ -12,8 +12,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,13 +29,13 @@ public class AuthenticateApiControllerTest {
         loginDTO.setUsername("test-employee1");
         loginDTO.setPassword("password");
 
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/authenticate")
+        this.mockMvc.perform(post("/authenticate")
                         .content(asJsonString(loginDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
+                .andExpect(jsonPath("$.token").exists());
     }
 
     @Test
@@ -43,14 +44,13 @@ public class AuthenticateApiControllerTest {
         loginDTO.setUsername("incorrect-username");
         loginDTO.setPassword("incorrect-password");
 
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/authenticate")
+        this.mockMvc.perform(post("/authenticate")
                         .content(asJsonString(loginDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Username/password invalid\""))
-                .andExpect(status().isBadRequest());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Username/password invalid\""));
     }
 
     public static String asJsonString(final Object obj) {

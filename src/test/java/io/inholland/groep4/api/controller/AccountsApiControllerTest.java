@@ -11,10 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,6 +23,17 @@ public class AccountsApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
+    public void getAccountsAsEmployeeShouldReturnAllAccounts() throws Exception {
+        this.mockMvc.perform(get("/accounts").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))))
+                .andExpect(jsonPath("$[0].IBAN", is("NL01INHO0000000001")));
+    }
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")

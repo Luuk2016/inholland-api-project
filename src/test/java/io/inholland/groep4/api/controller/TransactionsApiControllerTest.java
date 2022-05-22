@@ -34,7 +34,7 @@ public class TransactionsApiControllerTest {
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificTransactionShouldReturnOk() throws Exception {
-        this.mockMvc.perform(get("/transactions/9"))
+        this.mockMvc.perform(get("/transactions/10"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

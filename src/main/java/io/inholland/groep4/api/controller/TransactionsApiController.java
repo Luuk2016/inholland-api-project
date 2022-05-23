@@ -82,12 +82,7 @@ public class TransactionsApiController implements TransactionsApi {
                 transactions = transactionService.getAllUserTransactions(user);
             }
 
-            // Check if the transactions were found
-            if (transactions != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(transactions);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(transactions);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -100,18 +95,14 @@ public class TransactionsApiController implements TransactionsApi {
             User user = userService.findByUsername(principal.getName());
 
             // Check if the user is an employee or transaction owner
-            if (request.isUserInRole("ROLE_EMPLOYEE") || transactionService.checkIfTransactionBelongsToOwner(user, id)) {
-                Transaction transaction = transactionService.getTransactionById(id);
-
-                // Check if the transaction was found
-                if (transaction != null) {
-                    return ResponseEntity.status(HttpStatus.OK).body(transaction);
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-                }
+            if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionById(id));
             } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                if (transactionService.checkIfTransactionBelongsToOwner(user, id)){
+                    return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionById(id));
+                }
             }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

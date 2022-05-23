@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -25,10 +26,36 @@ public class TransactionsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
-    public void getTransactionsShouldReturnOk() throws Exception {
+    public void getTransactionsAsEmployeeShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "test-user1", password = "password", roles = "USER")
+    public void getTransactionsAsUserShouldReturnOk() throws Exception {
+        this.mockMvc.perform(get("/transactions"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "test-employee3", password = "password", roles = "EMPLOYEE")
+    public void getTransactionsAsNonexistentEmployeeShouldReturnBadRequest() throws Exception {
+        this.mockMvc.perform(get("/transactions/"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Username not found\""));
+    }
+
+    @Test
+    @WithMockUser(username = "test-user3", password = "password", roles = "USER")
+    public void getTransactionsAsNonexistentUserShouldReturnBadRequest() throws Exception {
+        this.mockMvc.perform(get("/transactions/"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Username not found\""));
     }
 
     @Test

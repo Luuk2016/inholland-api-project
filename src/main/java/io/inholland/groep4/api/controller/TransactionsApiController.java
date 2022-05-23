@@ -63,6 +63,12 @@ public class TransactionsApiController implements TransactionsApi {
 
             // Check the role of the user
             if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                // Get the security information
+                Principal principal = request.getUserPrincipal();
+
+                // Get the current user
+                User user = userService.findByUsername(principal.getName());
+
                 // User is an employee, getting all transactions
                 transactions = transactionService.getAllTransactions();
             } else {

@@ -2,18 +2,15 @@ package io.inholland.groep4.api.IT.steps.authenticate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java8.En;
-import io.inholland.groep4.Application;
 import io.inholland.groep4.api.IT.steps.BaseStepDefinitions;
 import io.inholland.groep4.api.model.DTO.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
 
 @Slf4j
 public class AuthenticateStepDefinitions extends BaseStepDefinitions implements En {

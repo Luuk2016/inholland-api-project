@@ -1,28 +1,36 @@
-@Users
-Feature: an authenticated customer can query for all their accounts
-  Background:
-    Given user is authenticated
+Feature: Everything users
 
-  Scenario: a user is authenticated and sends a GET request to /accounts
-    When user sends out a GET request to /accounts
-    Then the client receives status code of 200
+  Scenario: Getting all users
+    Given I have a valid token for role "employee"
+    When I call the user endpoint
+    Then the result is a status of 200
+    Then the result is a list of users of size 4
 
-  Scenario: a user is authenticated and sends a GET request to /users
-    When user sends out a GET request to /users
-    Then the client receives status code of 200
+  Scenario: Getting your own user
+    Given I have a valid token for role "user"
+    When I call the user endpoint
+    Then the result is a status of 200
+    Then the result is a list of users of size 1
 
-  Scenario: a user is authenticated and sends a GET request to /transactions
-    When user sends out a GET request to /transactions
-    Then the client receives status code of 200
+  Scenario: Getting users with invalid token
+    Given I have an invalid token
+    When I call the user endpoint
+    Then the result is a status of 403
 
-  Scenario: a user is authenticated and sends a GET request to /accounts{id}
-    When user sends out a GET request to their own /accounts endpoint
-    Then the client receives status code of 200
+  Scenario: Getting users with an expired token
+    Given I have an expired token
+    When I call the user endpoint
+    Then the result is a status of 403
 
-  Scenario: a user is authenticated and sends a GET request to /users{id}
-    When user sends out a GET request to their own /users endpoint
-    Then the client receives status code of 200
+  Scenario: Posting user with user role
+    Given I have a valid token for role "user"
+    And I have a valid user object with username "johndoe" and password "test"
+    When I make a post request to the user endpoint
+    Then the result is a status of 403
 
-  Scenario: a user is authenticated and sends a GET request to /transactions{id}
-    When user sends out a GET request to their own /transactions endpoint
-    Then the client receives status code of 200
+  Scenario: Posting user with employee role
+    Given I have a valid token for role "employee"
+    And I have a valid user object with username "johndoe" and password "test"
+    When I make a post request to the user endpoint
+    Then the result is a status of 201
+    And I validate the user object has an id greater than 10

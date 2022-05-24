@@ -66,28 +66,28 @@ public class TransactionService {
 
     public List<Transaction> getAllTransactions() {
         if (transactionRepository.findAll().size() == 0) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No transactions found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transactions found");
         }
         return transactionRepository.findAll();
     }
 
     public Transaction getTransactionById(Long id) {
         if (transactionRepository.getTransactionById(id) == null) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No transactions found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transactions found");
         }
         return transactionRepository.getTransactionById(id);
     }
 
     public List<Transaction> getAllUserTransactions(User user) {
         if (transactionRepository.findAll().size() == 0) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No user transactions found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user transactions found");
         }
         return transactionRepository.getTransactionsByOwner(user);
     }
 
     public boolean checkIfTransactionBelongsToOwner(User user, Long id) {
         if (!transactionRepository.existsByOwnerAndId(user, id)) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Transactions does not belong to owner");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Transactions does not belong to owner");
         }
         return transactionRepository.existsByOwnerAndId(user, id);
     }

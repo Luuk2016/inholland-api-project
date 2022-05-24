@@ -1,6 +1,6 @@
 Feature: Authenticate
 
-  Scenario: Post request to /authenticate will result in jwt token
+  Scenario: Post request to /authenticate will result in bearer token
     Given I have a valid user object
     When I call the authenticate endpoint
     Then I receive a status of 200

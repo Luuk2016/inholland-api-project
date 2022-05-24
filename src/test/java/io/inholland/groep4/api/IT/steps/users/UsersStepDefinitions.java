@@ -6,12 +6,14 @@ import io.cucumber.java8.En;
 import io.inholland.groep4.api.IT.steps.BaseStepDefinitions;
 import io.inholland.groep4.api.model.DTO.UserDTO;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UsersStepDefinitions extends BaseStepDefinitions implements En {
 
@@ -42,6 +44,14 @@ public class UsersStepDefinitions extends BaseStepDefinitions implements En {
             status = response.getStatusCodeValue();
         });
 
+        When("^I call the user endpoint with userid (\\d+)$", (Integer userId) -> {
+            httpHeaders.clear();
+            httpHeaders.add("Authorization", "Bearer " + token);
+            request = new HttpEntity<>(null, httpHeaders);
+            response = restTemplate.exchange(getBaseUrl() + "/users/" + userId, HttpMethod.GET, new HttpEntity<>(null, httpHeaders), String.class);
+            status = response.getStatusCodeValue();
+        });
+
         When("^I make a post request to the user endpoint$", () -> {
             httpHeaders.clear();
             httpHeaders.add("Authorization", "Bearer " + token);
@@ -52,7 +62,7 @@ public class UsersStepDefinitions extends BaseStepDefinitions implements En {
         });
 
         Then("^the result is a status of (\\d+)$", (Integer code) -> {
-            Assertions.assertEquals(code, status);
+            assertEquals(code, status);
         });
 
         Given("^I have a valid token for role \"([^\"]*)\"$", (String role) -> {
@@ -82,15 +92,20 @@ public class UsersStepDefinitions extends BaseStepDefinitions implements En {
             userDTO.setPassword(password);
         });
 
+        And("^I have an invalid user object with username \"([^\"]*)\"", (String username) -> {
+            userDTO = new UserDTO();
+            userDTO.setUsername(username);
+        });
+
         Then("^the result is a list of users of size (\\d+)$", (Integer size) -> {
             int actual = JsonPath.read(response.getBody(), "$.size()");
-            Assertions.assertEquals(size, actual);
+            assertEquals(size, actual);
         });
 
         And("^I validate the user object has an id greater than (\\d+)$", (Integer expected) -> {
             JSONObject jsonObject = new JSONObject(response.getBody());
             int actual = jsonObject.getInt("id");
-            Assertions.assertTrue(actual > expected);
+            assertTrue(actual > expected);
         });
     }
 }

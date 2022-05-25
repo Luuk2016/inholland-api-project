@@ -32,7 +32,6 @@ public class TransactionServiceTest {
         transactions = transactionService.getAllTransactions();
 
         assertThat(transactions).isNotEmpty();
-        assertThat(transactions.get(0).getId()).isEqualTo(10);
         assertThat(transactions.get(0).getAmount()).isEqualTo(9.95);
         assertThat(transactions.get(0).getDateTime()).isEqualTo(null);
         assertThat(transactions.get(0).getDescription()).isEqualTo("TEST-TRANSACTION");

@@ -73,4 +73,34 @@ public class TransactionServiceTest {
         assertEquals(response.getSender(), transaction.getSender());
         assertEquals(response.getRejectionFlag(), "Error: Insufficient funds!");
     }
+
+    @Test
+    public void creatingANewTransactionWithInactiveSenderAccountShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(10L);
+        testEmployeeAccount2 = userAccountService.getAccountById(7L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(9.95);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Error: The sender IBAN does not exist or the account has been closed!");
+    }
+
+    @Test
+    public void creatingANewTransactionWithInactiveReceiverAccountShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(6L);
+        testEmployeeAccount2 = userAccountService.getAccountById(11L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(9.95);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Error: The receiver IBAN does not exist or the account has been closed!");
+    }
 }

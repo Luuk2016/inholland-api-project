@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.service;
 
 import io.inholland.groep4.api.model.Transaction;
+import io.inholland.groep4.api.model.UserAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +17,13 @@ public class TransactionServiceTest {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private UserAccountService userAccountService;
+
     List<Transaction> transactions;
+
+    // Fetch two test employee accounts
+    UserAccount testEmployeeAccount1, testEmployeeAccount2;
 
     Transaction transaction = new Transaction();
 
@@ -35,4 +42,20 @@ public class TransactionServiceTest {
         assertThat(transactions.get(0).getOwner()).isEqualTo(null);
     }
 
+    @Test
+    public void creatingANewTransactionSuccessfullyShouldGiveObject() {
+        testEmployeeAccount1 = userAccountService.getAccountById(6L);
+        testEmployeeAccount2 = userAccountService.getAccountById(7L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(9.95);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getReceiver(), transaction.getReceiver());
+        assertEquals(response.getAmount(), transaction.getAmount());
+        assertEquals(response.getDescription(), transaction.getDescription());
+    }
 }

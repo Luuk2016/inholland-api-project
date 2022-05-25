@@ -57,7 +57,6 @@ public class TransactionService {
             } else {
                 transaction.setRejectionFlag("Error: Insufficient funds!");
             }
-            return transaction;
         } else {
             transaction.setRejectionFlag("Zero or negative amounts are not allowed!");
         }

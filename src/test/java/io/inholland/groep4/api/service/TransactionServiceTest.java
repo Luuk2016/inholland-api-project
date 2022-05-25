@@ -162,4 +162,18 @@ public class TransactionServiceTest {
         assertEquals(response.getSender(), transaction.getSender());
         assertEquals(response.getRejectionFlag(), "Zero or negative amounts are not allowed!");
     }
+
+    @Test
+    public void gettingSpecificTransactionsShouldGiveObject() {
+        transaction = transactionService.getAllTransactions().get(0);
+        Transaction response = transactionService.getTransactionById(transaction.getId());
+
+        assertThat(transaction.getAmount()).isEqualTo(response.getAmount());
+        assertThat(transaction.getDateTime()).isEqualTo(response.getDateTime());
+        assertThat(transaction.getDescription()).isEqualTo(response.getDescription());
+        assertThat(transaction.getReceiver()).isEqualTo(response.getReceiver());
+        assertThat(transaction.getRejectionFlag()).isEqualTo(response.getRejectionFlag());
+        assertThat(transaction.getSender()).isEqualTo(response.getSender());
+        assertThat(transaction.getOwner()).isEqualTo(response.getOwner());
+    }
 }

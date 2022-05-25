@@ -58,4 +58,19 @@ public class TransactionServiceTest {
         assertEquals(response.getAmount(), transaction.getAmount());
         assertEquals(response.getDescription(), transaction.getDescription());
     }
+
+    @Test
+    public void creatingANewTransactionWithInsufficientFundsShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(6L);
+        testEmployeeAccount2 = userAccountService.getAccountById(7L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(999.99);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Error: Insufficient funds!");
+    }
 }

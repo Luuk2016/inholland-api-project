@@ -28,7 +28,7 @@ public class TransactionServiceTest {
     Transaction transaction = new Transaction();
 
     @Test
-    public void gettingAllTransactionsShouldGiveListOfUsers() {
+    public void gettingAllTransactionsShouldGiveListOfTransactions() {
         transactions = transactionService.getAllTransactions();
 
         assertThat(transactions).isNotEmpty();

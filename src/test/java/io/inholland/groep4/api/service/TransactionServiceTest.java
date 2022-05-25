@@ -132,4 +132,34 @@ public class TransactionServiceTest {
         assertEquals(response.getSender(), transaction.getSender());
         assertEquals(response.getRejectionFlag(), "Error: Savings accounts can only send transactions to accounts that belong to the same user!");
     }
+
+    @Test
+    public void creatingANewTransactionOfAnAmountOfZeroShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(6L);
+        testEmployeeAccount2 = userAccountService.getAccountById(7L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(0.00);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Zero or negative amounts are not allowed!");
+    }
+
+    @Test
+    public void creatingANewTransactionOfANegativeAmountShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(6L);
+        testEmployeeAccount2 = userAccountService.getAccountById(7L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(-9.95);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Zero or negative amounts are not allowed!");
+    }
 }

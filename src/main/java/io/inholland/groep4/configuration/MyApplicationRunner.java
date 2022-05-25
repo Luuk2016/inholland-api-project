@@ -133,6 +133,26 @@ public class MyApplicationRunner implements ApplicationRunner {
         testEmployeeAccount4.setIBAN("USER_ACCOUNT_6_IBAN");
         userAccountService.add(testEmployeeAccount4, false);
 
+        // Create a new account
+        UserAccount testEmployeeAccount5 = new UserAccount();
+        testEmployeeAccount5.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        testEmployeeAccount5.setOwner(testEmployee1);
+        testEmployeeAccount5.setAccountBalance(500.00);
+        testEmployeeAccount5.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testEmployeeAccount5.setLowerLimit(100.00);
+        testEmployeeAccount5.setIBAN("USER_ACCOUNT_7_IBAN");
+        userAccountService.add(testEmployeeAccount5, false);
+
+        // Create a new account
+        UserAccount testEmployeeAccount6 = new UserAccount();
+        testEmployeeAccount6.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        testEmployeeAccount6.setOwner(testEmployee2);
+        testEmployeeAccount6.setAccountBalance(500.00);
+        testEmployeeAccount6.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testEmployeeAccount6.setLowerLimit(100.00);
+        testEmployeeAccount6.setIBAN("USER_ACCOUNT_8_IBAN");
+        userAccountService.add(testEmployeeAccount6, false);
+
         Transaction transaction = new Transaction();
         transaction.setSender(testEmployeeAccount1.getIBAN());
         transaction.setReceiver(testEmployeeAccount2.getIBAN());

@@ -102,4 +102,34 @@ public class TransactionServiceTest {
         assertEquals(response.getSender(), transaction.getSender());
         assertEquals(response.getRejectionFlag(), "Error: The receiver IBAN does not exist or the account has been closed!");
     }
+
+    @Test
+    public void creatingANewTransactionFromSavingsToRemoteCurrentAccountShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(6L);
+        testEmployeeAccount2 = userAccountService.getAccountById(12L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(9.95);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Error: Transactions are not allowed to be made to savings accounts that don't belong to the same user!");
+    }
+
+    @Test
+    public void creatingANewTransactionFromCurrentToRemoteSavingsAccountShouldGiveObjectWithRejectionFlag() {
+        testEmployeeAccount1 = userAccountService.getAccountById(13L);
+        testEmployeeAccount2 = userAccountService.getAccountById(7L);
+
+        transaction.setSender(testEmployeeAccount1.getIBAN());
+        transaction.setReceiver(testEmployeeAccount2.getIBAN());
+        transaction.setAmount(9.95);
+        transaction.setDescription("TEST-TRANSACTION");
+        Transaction response = transactionService.add(transaction);
+
+        assertEquals(response.getSender(), transaction.getSender());
+        assertEquals(response.getRejectionFlag(), "Error: Savings accounts can only send transactions to accounts that belong to the same user!");
+    }
 }

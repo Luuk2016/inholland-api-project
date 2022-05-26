@@ -1,4 +1,4 @@
-package io.inholland.groep4.api.IT.steps;
+package io.inholland.groep4.api.cucumber.features.steps;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

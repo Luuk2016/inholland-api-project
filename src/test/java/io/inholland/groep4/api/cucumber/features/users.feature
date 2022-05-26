@@ -17,13 +17,13 @@ Feature: Users
     When I call the user endpoint with userid 2
     Then the result is a status of 403
 
-  Scenario: Getting users with invalid token
-    Given I have an invalid token
+  Scenario: Getting users with an invalid token
+    Given I have an "invalid" token
     When I call the user endpoint
     Then the result is a status of 403
 
   Scenario: Getting users with an expired token
-    Given I have an expired token
+    Given I have an "expired" token
     When I call the user endpoint
     Then the result is a status of 403
 
@@ -40,7 +40,7 @@ Feature: Users
     Then the result is a status of 201
     And I validate the user object has an id greater than 10
 
-  Scenario: Posting user with employee role should fail
+  Scenario: Posting invalid user with employee role should fail
     Given I have a valid token for role "employee"
     And I have an invalid user object with username "johndoe"
     When I make a post request to the user endpoint

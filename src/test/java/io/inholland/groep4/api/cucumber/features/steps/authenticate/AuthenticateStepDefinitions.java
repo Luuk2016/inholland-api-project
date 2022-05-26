@@ -1,8 +1,8 @@
-package io.inholland.groep4.api.IT.steps.authenticate;
+package io.inholland.groep4.api.cucumber.features.steps.authenticate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java8.En;
-import io.inholland.groep4.api.IT.steps.BaseStepDefinitions;
+import io.inholland.groep4.api.cucumber.features.steps.BaseStepDefinitions;
 import io.inholland.groep4.api.model.DTO.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;

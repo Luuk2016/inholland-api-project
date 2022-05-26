@@ -1,4 +1,4 @@
-package io.inholland.groep4.api.IT.steps;
+package io.inholland.groep4.api.cucumber.features.steps;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import io.inholland.groep4.Application;

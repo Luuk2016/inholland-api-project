@@ -29,7 +29,7 @@ public class AccountsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
-    public void getAccountAsEmployeeShouldReturnMultipleAccounts() throws Exception {
+    public void getAccountSuccessfullyAsEmployeeShouldGiveMultipleAccounts() throws Exception {
         this.mockMvc.perform(get("/accounts"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -42,7 +42,7 @@ public class AccountsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
-    public void getAccountAsUser() throws Exception {
+    public void getAccountSuccessfullyAsUserShouldGiveObject() throws Exception {
         this.mockMvc.perform(get("/accounts"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -52,19 +52,9 @@ public class AccountsApiControllerTest {
 
     }
 
-    // @Test
-    // @WithMockUser(username = "test-user1", password = "password", roles = "USER")
-    // public void getAccountAsUserNotFound() throws Exception {
-    //     this.mockMvc.perform(get("/accounts"))
-    //             .andDo(print())
-    //             .andExpect(status().isNotFound())
-    //             .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(0))))
-    //             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-    // }
-
     @Test
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
-    public void getSpecificAccountAsUserWithoutPrivilegeShouldReturnBadrequest() throws Exception {
+    public void getSpecificAccountAsUserWithoutPrivilegeShouldGiveBadrequest() throws Exception {
         this.mockMvc.perform(get("/accounts/9"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -83,7 +73,7 @@ public class AccountsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
-    public void getSpecificAccountShouldReturnOk() throws Exception {
+    public void getSpecificAccountShouldGiveOk() throws Exception {
         this.mockMvc.perform(get("/accounts/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -95,7 +85,7 @@ public class AccountsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
-    public void createAccountSuccessfullyShouldReturnObject() throws Exception {
+    public void createAccountSuccessfullyShouldGiveObject() throws Exception {
         User user = new User();
         user.setUsername("peter");
         user.setPassword("test");
@@ -115,9 +105,6 @@ public class AccountsApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))))
-                // .andExpect(jsonPath("$.id", is(userAccount.getId())))
-                // .andExpect(jsonPath("$.IBAN", is(userAccount.getIBAN())))
                 .andExpect(jsonPath("$.accountStatus", is("active")))
                 .andExpect(jsonPath("$.accountBalance", is(0.00)))
                 .andExpect(jsonPath("$.lowerLimit", is(100.00)));
@@ -153,7 +140,6 @@ public class AccountsApiControllerTest {
         this.mockMvc.perform(put("/accounts/99").content(asJsonString(account)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
-
     }
 
     public static String asJsonString(final Object obj) {

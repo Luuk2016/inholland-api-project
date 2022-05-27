@@ -95,34 +95,26 @@ public class AccountsApiController implements AccountsApi {
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccountDTO body) {
-        try {
-            // Create a new account
-            UserAccount userAccount = new UserAccount();
+        // Create a new account
+        UserAccount userAccount = new UserAccount();
 
-            // Set the properties
-            userAccount.setAccountType(body.getAccountType());
-            userAccount.setOwner(body.getOwner());
-            userAccount.setLowerLimit(body.getLowerLimit());
-            userAccount.setAccountStatus(body.getAccountStatus());
-            userAccount.setAccountBalance(0.00);
+        // Set the properties
+        userAccount.setAccountType(body.getAccountType());
+        userAccount.setOwner(body.getOwner());
+        userAccount.setLowerLimit(body.getLowerLimit());
+        userAccount.setAccountStatus(body.getAccountStatus());
+        userAccount.setAccountBalance(0.00);
 
-            // Store the new account
-            UserAccount result = userAccountService.add(userAccount, true);
+        // Store the new account
+        UserAccount result = userAccountService.add(userAccount, true);
 
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required = true, schema = @Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccount body) {
-        try {
-            body.setId(id);
-            UserAccount result = userAccountService.save(body);
-            return ResponseEntity.status(200).body(result);
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        body.setId(id);
+        UserAccount result = userAccountService.save(body);
+        return ResponseEntity.status(200).body(result);
     }
 }

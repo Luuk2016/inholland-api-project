@@ -11,10 +11,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,10 +29,48 @@ public class AccountsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
-    public void getAccountShouldReturnOk() throws Exception {
+    public void getAccountAsEmployee() throws Exception {
         this.mockMvc.perform(get("/accounts"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @WithMockUser(username = "test-user1", password = "password", roles = "USER")
+    public void getAccountAsUser() throws Exception {
+        this.mockMvc.perform(get("/accounts"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+    @Test
+    @WithMockUser(username = "test-user1", password = "password", roles = "USER")
+    public void getAccountAsUserNotFound() throws Exception {
+        this.mockMvc.perform(get("/accounts"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(0))))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @WithMockUser(username = "test-user1", password = "password", roles = "USER")
+    public void getSpecificTransactionAsUserWithoutPrivilegeShouldReturnForbidden() throws Exception {
+        this.mockMvc.perform(get("/accounts/9"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Account does not belong to owner\""));
+    }
+
+    @Test
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
+    public void gettingNotExistingAccountShouldGiveNotFound() throws Exception {
+        mockMvc.perform(get("/accounts/10"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Id not found\""));
     }
 
     @Test
@@ -36,7 +78,8 @@ public class AccountsApiControllerTest {
     public void getSpecificAccountShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/accounts/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -62,7 +105,46 @@ public class AccountsApiControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
+    public void updateAccountSuccesfullyShouldGiveOk() throws Exception {
+        UserAccount account = new UserAccount();
+        account.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        account.setIBAN("NL01INHO0000001");
+        User user = new User();
+        account.setOwner(user);
+        account.setAccountBalance(2.0);
+        account.setLowerLimit(1.0);
+        account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+
+
+        this.mockMvc.perform(put("/accounts/1").content(asJsonString(account)).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.accountBalance", is("100")));
+    }
+
+    @Test
+    @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
+    public void updateAccountThatDoesntExistShouldGiveError() throws Exception {
+        UserAccount account = new UserAccount();
+        account.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        account.setIBAN("NL01INHO0000001");
+        User user = new User();
+        account.setOwner(user);
+        account.setAccountBalance(2.0);
+        account.setLowerLimit(1.0);
+        account.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+
+        this.mockMvc.perform(put("/accounts/99").content(asJsonString(account)).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Account not found\""));
     }
 
     public static String asJsonString(final Object obj) {

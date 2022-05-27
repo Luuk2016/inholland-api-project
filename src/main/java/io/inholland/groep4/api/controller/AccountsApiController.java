@@ -68,13 +68,7 @@ public class AccountsApiController implements AccountsApi {
                 // Get the user accounts
                 accounts = userAccountService.getAccountsByUser(user);
             }
-
-            // Check if any accounts were found
-            if (accounts != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(accounts);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(accounts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -90,12 +84,7 @@ public class AccountsApiController implements AccountsApi {
             if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
                 UserAccount account = userAccountService.getAccountById(id);
 
-                // Check if the account was found
-                if (account != null) {
-                    return ResponseEntity.status(HttpStatus.OK).body(account);
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-                }
+                return ResponseEntity.status(HttpStatus.OK).body(account);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }

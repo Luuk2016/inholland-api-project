@@ -52,6 +52,7 @@ public class TransactionService {
                 sender.setAccountBalance(sender.getAccountBalance() - transaction.getAmount());
                 receiver.setAccountBalance(receiver.getAccountBalance() + transaction.getAmount());
                 transaction.setRejectionFlag("");
+                transaction.setOwner(sender.getOwner());
 
                 transactionRepository.save(transaction);
             } else {

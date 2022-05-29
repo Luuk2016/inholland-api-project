@@ -32,7 +32,7 @@ public class TransactionServiceTest {
     Transaction transaction = new Transaction();
 
     @Test
-    public void gettingAllTransactionsShouldGiveListOfTransactions() {
+    public void getAllTransactionsShouldReturnListOfTransactions() {
         transactions = transactionService.getAllTransactions();
 
         assertThat(transactions).isNotEmpty();
@@ -46,7 +46,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionSuccessfullyShouldGiveObject() {
+    public void createTransactionSuccessfullyShouldReturnObject() {
         testEmployeeAccount1 = userAccountService.getAccountById(6L);
         testEmployeeAccount2 = userAccountService.getAccountById(7L);
 
@@ -63,7 +63,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionWithInsufficientFundsShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionWithInsufficientFundsShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(6L);
         testEmployeeAccount2 = userAccountService.getAccountById(7L);
 
@@ -78,7 +78,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionWithInactiveSenderAccountShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionWithInactiveSenderAccountShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(10L);
         testEmployeeAccount2 = userAccountService.getAccountById(7L);
 
@@ -93,7 +93,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionWithInactiveReceiverAccountShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionWithInactiveReceiverAccountShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(6L);
         testEmployeeAccount2 = userAccountService.getAccountById(11L);
 
@@ -108,7 +108,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionFromSavingsToRemoteCurrentAccountShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionFromSavingsToRemoteCurrentAccountShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(6L);
         testEmployeeAccount2 = userAccountService.getAccountById(12L);
 
@@ -123,7 +123,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionFromCurrentToRemoteSavingsAccountShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionFromCurrentToRemoteSavingsAccountShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(13L);
         testEmployeeAccount2 = userAccountService.getAccountById(7L);
 
@@ -138,7 +138,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionOfAnAmountOfZeroShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionOfAnAmountOfZeroShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(6L);
         testEmployeeAccount2 = userAccountService.getAccountById(7L);
 
@@ -153,7 +153,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void creatingANewTransactionOfANegativeAmountShouldGiveObjectWithRejectionFlag() {
+    public void createTransactionOfANegativeAmountShouldReturnObjectWithRejectionFlag() {
         testEmployeeAccount1 = userAccountService.getAccountById(6L);
         testEmployeeAccount2 = userAccountService.getAccountById(7L);
 
@@ -168,7 +168,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void gettingAllTransactionsAsUserShouldGiveListOfTransactions() {
+    public void getAllTransactionsAsUserShouldReturnListOfTransactions() {
         User testUser = userService.getSpecificUser(4L);
 
         transactions = transactionService.getAllUserTransactions(testUser);
@@ -184,7 +184,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void gettingSpecificTransactionsShouldGiveObject() {
+    public void getSpecificTransactionsShouldReturnObject() {
         transaction = transactionService.getAllTransactions().get(0);
         Transaction response = transactionService.getTransactionById(transaction.getId());
 

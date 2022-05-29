@@ -68,8 +68,17 @@ public class TransactionsApiControllerTest {
 
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
-    public void getSpecificTransactionShouldReturnOk() throws Exception {
-        this.mockMvc.perform(get("/transactions/10"))
+    public void getSpecificTransactionAsEmployeeShouldReturnOk() throws Exception {
+        this.mockMvc.perform(get("/transactions/14"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @WithMockUser(username = "test-user1", password = "password", roles = "USER")
+    public void getSpecificTransactionAsUserShouldReturnOk() throws Exception {
+        this.mockMvc.perform(get("/transactions/15"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));

@@ -1,6 +1,7 @@
 package io.inholland.groep4.api.service;
 
 import io.inholland.groep4.api.model.Transaction;
+import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TransactionServiceTest {
     @Autowired
     private UserAccountService userAccountService;
 
+    @Autowired
+    private UserService userService;
+
     List<Transaction> transactions;
 
     // Fetch two test employee accounts
@@ -38,7 +42,7 @@ public class TransactionServiceTest {
         assertThat(transactions.get(0).getReceiver()).isEqualTo("USER_ACCOUNT_2_IBAN");
         assertThat(transactions.get(0).getRejectionFlag()).isEqualTo("");
         assertThat(transactions.get(0).getSender()).isEqualTo("USER_ACCOUNT_1_IBAN");
-        assertThat(transactions.get(0).getOwner()).isEqualTo(null);
+        assertThat(transactions.get(0).getOwner().getId()).isEqualTo(2);
     }
 
     @Test
@@ -164,6 +168,22 @@ public class TransactionServiceTest {
     }
 
     @Test
+    public void gettingAllTransactionsAsUserShouldGiveListOfTransactions() {
+        User testUser = userService.getSpecificUser(4L);
+
+        transactions = transactionService.getAllUserTransactions(testUser);
+
+        assertThat(transactions).isNotEmpty();
+        assertThat(transactions.get(0).getAmount()).isEqualTo(9.95);
+        assertThat(transactions.get(0).getDateTime()).isEqualTo(null);
+        assertThat(transactions.get(0).getDescription()).isEqualTo("TEST-TRANSACTION");
+        assertThat(transactions.get(0).getReceiver()).isEqualTo("USER_ACCOUNT_4_IBAN");
+        assertThat(transactions.get(0).getRejectionFlag()).isEqualTo("");
+        assertThat(transactions.get(0).getSender()).isEqualTo("USER_ACCOUNT_3_IBAN");
+        assertThat(transactions.get(0).getOwner().getId()).isEqualTo(4L);
+    }
+
+    @Test
     public void gettingSpecificTransactionsShouldGiveObject() {
         transaction = transactionService.getAllTransactions().get(0);
         Transaction response = transactionService.getTransactionById(transaction.getId());
@@ -174,6 +194,14 @@ public class TransactionServiceTest {
         assertThat(transaction.getReceiver()).isEqualTo(response.getReceiver());
         assertThat(transaction.getRejectionFlag()).isEqualTo(response.getRejectionFlag());
         assertThat(transaction.getSender()).isEqualTo(response.getSender());
-        assertThat(transaction.getOwner()).isEqualTo(response.getOwner());
+        assertThat(transaction.getOwner().getId()).isEqualTo(response.getOwner().getId());
+    }
+
+    @Test
+    public void successfulCheckIfTransactionBelongsToUserShouldReturnTrue() {
+        User testUser = userService.getSpecificUser(2L);
+        transaction = transactionService.getAllTransactions().get(0);
+
+        assertTrue(transactionService.checkIfTransactionBelongsToOwner(testUser, transaction.getId()));
     }
 }

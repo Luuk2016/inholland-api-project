@@ -159,5 +159,12 @@ public class MyApplicationRunner implements ApplicationRunner {
         transaction.setAmount(9.95);
         transaction.setDescription("TEST-TRANSACTION");
         transactionService.add(transaction);
+
+        Transaction transaction2 = new Transaction();
+        transaction2.setSender(testUserAccount1.getIBAN());
+        transaction2.setReceiver(testUserAccount2.getIBAN());
+        transaction2.setAmount(9.95);
+        transaction2.setDescription("TEST-TRANSACTION");
+        transactionService.add(transaction2);
     }
 }

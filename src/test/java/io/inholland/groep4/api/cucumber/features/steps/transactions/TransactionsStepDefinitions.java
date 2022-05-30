@@ -49,6 +49,19 @@ public class TransactionsStepDefinitions extends BaseStepDefinitions implements 
             }
         });
 
+        Given("^the user has an \"([^\"]*)\" token$", (String type) -> {
+            switch (type) {
+                case "invalid":
+                    token = INVALID_TOKEN;
+                    break;
+                case "expired":
+                    token = EXPIRED_TOKEN;
+                    break;
+                default:
+                    throw new IllegalArgumentException("No such type");
+            }
+        });
+
         When("^the user calls the transactions endpoint$", () -> {
             httpHeaders.clear();
             httpHeaders.add("Authorization", "Bearer " + token);

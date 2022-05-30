@@ -48,5 +48,22 @@ public class TransactionsStepDefinitions extends BaseStepDefinitions implements 
                     throw new IllegalArgumentException("No such role");
             }
         });
+
+        When("^the user calls the transactions endpoint$", () -> {
+            httpHeaders.clear();
+            httpHeaders.add("Authorization", "Bearer " + token);
+            request = new HttpEntity<>(null, httpHeaders);
+            response = restTemplate.exchange(getBaseUrl() + "/transactions", HttpMethod.GET, new HttpEntity<>(null, httpHeaders), String.class);
+            status = response.getStatusCodeValue();
+        });
+
+        Then("^the system returns a status of (\\d+)$", (Integer statusCode) -> {
+            assertEquals(status, response.getStatusCodeValue());
+        });
+
+        Then("^the system returns a list of (\\d+) transactions$", (Integer size) -> {
+            int actual = JsonPath.read(response.getBody(), "$.size()");
+            assertEquals(size, actual);
+        });
     }
 }

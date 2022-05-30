@@ -6,6 +6,7 @@ import io.inholland.groep4.api.model.UserAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -195,6 +196,15 @@ public class TransactionServiceTest {
         assertThat(transaction.getRejectionFlag()).isEqualTo(response.getRejectionFlag());
         assertThat(transaction.getSender()).isEqualTo(response.getSender());
         assertThat(transaction.getOwner().getId()).isEqualTo(response.getOwner().getId());
+    }
+
+    @Test
+    public void getSpecificNonexistentTransactionsShouldReturnNotFound() {
+        Exception exception = assertThrows(ResponseStatusException.class, () -> {
+            transactionService.getTransactionById(999L);
+        });
+
+        assertTrue(exception.getMessage().contains("No transactions found"));
     }
 
     @Test

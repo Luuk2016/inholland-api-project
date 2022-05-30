@@ -70,7 +70,7 @@ public class TransactionsStepDefinitions extends BaseStepDefinitions implements 
             status = response.getStatusCodeValue();
         });
 
-        When("^the user calls the transactions endpoint of the account belonging to ID (\\d+)$", (Integer id) -> {
+        When("^the user calls the transactions endpoint for ID (\\d+)$", (Integer id) -> {
             httpHeaders.clear();
             httpHeaders.add("Authorization", "Bearer " + token);
             request = new HttpEntity<>(null, httpHeaders);

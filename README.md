@@ -16,9 +16,9 @@ Username: test-user2
 Password: password
 
 Employee account 1:  
-Username: test-employee1  
+Username: test-employee1    
 Password: password
 
 Employee account 2:  
-Username: test-employee2 
+Username: test-employee2     
 Password: password

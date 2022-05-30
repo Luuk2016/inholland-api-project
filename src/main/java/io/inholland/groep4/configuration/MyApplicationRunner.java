@@ -113,11 +113,58 @@ public class MyApplicationRunner implements ApplicationRunner {
         testUserAccount2.setIBAN("USER_ACCOUNT_4_IBAN");
         userAccountService.add(testUserAccount2, false);
 
+        // Create a new account
+        UserAccount testEmployeeAccount3 = new UserAccount();
+        testEmployeeAccount3.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        testEmployeeAccount3.setOwner(testEmployee1);
+        testEmployeeAccount3.setAccountBalance(500.00);
+        testEmployeeAccount3.setAccountStatus(UserAccount.AccountStatusEnum.INACTIVE);
+        testEmployeeAccount3.setLowerLimit(100.00);
+        testEmployeeAccount3.setIBAN("USER_ACCOUNT_5_IBAN");
+        userAccountService.add(testEmployeeAccount3, false);
+
+        // Create a new account
+        UserAccount testEmployeeAccount4 = new UserAccount();
+        testEmployeeAccount4.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        testEmployeeAccount4.setOwner(testEmployee2);
+        testEmployeeAccount4.setAccountBalance(500.00);
+        testEmployeeAccount4.setAccountStatus(UserAccount.AccountStatusEnum.INACTIVE);
+        testEmployeeAccount4.setLowerLimit(100.00);
+        testEmployeeAccount4.setIBAN("USER_ACCOUNT_6_IBAN");
+        userAccountService.add(testEmployeeAccount4, false);
+
+        // Create a new account
+        UserAccount testEmployeeAccount5 = new UserAccount();
+        testEmployeeAccount5.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        testEmployeeAccount5.setOwner(testEmployee1);
+        testEmployeeAccount5.setAccountBalance(500.00);
+        testEmployeeAccount5.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testEmployeeAccount5.setLowerLimit(100.00);
+        testEmployeeAccount5.setIBAN("USER_ACCOUNT_7_IBAN");
+        userAccountService.add(testEmployeeAccount5, false);
+
+        // Create a new account
+        UserAccount testEmployeeAccount6 = new UserAccount();
+        testEmployeeAccount6.setAccountType(UserAccount.AccountTypeEnum.SAVINGS);
+        testEmployeeAccount6.setOwner(testEmployee2);
+        testEmployeeAccount6.setAccountBalance(500.00);
+        testEmployeeAccount6.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        testEmployeeAccount6.setLowerLimit(100.00);
+        testEmployeeAccount6.setIBAN("USER_ACCOUNT_8_IBAN");
+        userAccountService.add(testEmployeeAccount6, false);
+
         Transaction transaction = new Transaction();
         transaction.setSender(testEmployeeAccount1.getIBAN());
         transaction.setReceiver(testEmployeeAccount2.getIBAN());
         transaction.setAmount(9.95);
         transaction.setDescription("TEST-TRANSACTION");
         transactionService.add(transaction);
+
+        Transaction transaction2 = new Transaction();
+        transaction2.setSender(testUserAccount1.getIBAN());
+        transaction2.setReceiver(testUserAccount2.getIBAN());
+        transaction2.setAmount(9.95);
+        transaction2.setDescription("TEST-TRANSACTION");
+        transactionService.add(transaction2);
     }
 }

@@ -243,6 +243,7 @@ public class Transaction {
         sb.append("    reciever: ").append(toIndentedString(receiver)).append("\n");
         sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
+        sb.append("    owner: ").append(toIndentedString(owner.getId())).append("\n");
         sb.append("}");
         return sb.toString();
     }

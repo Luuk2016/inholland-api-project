@@ -1,6 +1,5 @@
 package io.inholland.groep4.api.model.DTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

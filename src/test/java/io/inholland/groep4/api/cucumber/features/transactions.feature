@@ -21,3 +21,8 @@ Feature: an authenticated user can query for the transactions they made
     Given the user has an "invalid" token
     When the user calls the transactions endpoint
     Then the system returns a status of 403
+
+  Scenario: Getting transactions that a user isn't authorised to see
+    Given the user has a valid token for role "user"
+    When the user calls the transactions endpoint of the account belonging to ID 10
+    Then the system returns a status of 403

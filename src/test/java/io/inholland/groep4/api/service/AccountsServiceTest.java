@@ -25,14 +25,15 @@ public class AccountsServiceTest {
     public JwtTokenProvider jwtTokenProvider;
 
     @Test
-    public void gettingAllAccountsShouldGiveListOAccounts() {
+    public void gettingAllAccountsShouldGiveListOfAccounts() {
         List<UserAccount> accounts = userAccountService.getAllAccounts();
 
         assertThat(accounts).isNotEmpty();
         assertThat(accounts.get(0).getAccountBalance()).isEqualTo(500.0);
     }
+
     @Test
-    public void gettingAccountsByIdShouldGiveAccount() {
+    public void findingAUserSuccessfullyByIdShouldGiveUser() {
         Long idToFind = 1L;
         UserAccount account = userAccountService.getAccountById(idToFind);
 
@@ -41,7 +42,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void GettingAccountWithWrongIDShouldThrowException(){
+    public void findingAccountInvalidIDShouldGiveException(){
         Long idToFind = 100L;
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
@@ -52,7 +53,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void gettingAccountByUserShouldGiveUserAccount(){
+    public void findingAccountSuccessfullyByUsernameShouldGiveAccount(){
         String usernameToFind = "test-employee1";
         User username = userService.findByUsername(usernameToFind);
         List<UserAccount> userAccounts = userAccountService.getAccountsByUser(username);
@@ -62,7 +63,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void gettingIBAN(){
+    public void generateNewIBAN(){
         String IBAN = userAccountService.getIBAN();
         assertThat(IBAN).isNotNull();
         assertThat(IBAN.length()).isEqualTo(18);
@@ -70,7 +71,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void AddUserAccount(){
+    public void creatingNewUserSuccessfullyShouldGiveObject(){
         User user = new User();
         user.setUsername("son");
         user.setPassword("goku");
@@ -94,7 +95,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void AddingUserAccountWithIncorrectIbanShouldGiveException()
+    public void addUserAccountWithInvalidIbanShouldGiveException()
     {
         User user = new User();
         user.setUsername("test");
@@ -120,7 +121,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void CheckIfAccountBelongToUser(){
+    public void checkIfAccountBelongToUser(){
         String usernameToFind = "test-user1";
         User username = userService.findByUsername(usernameToFind);
         Long idToFind = 8L;
@@ -130,7 +131,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void IfAccountDoesNotBelongToUserShouldThrowException(){
+    public void ifAccountDoesNotBelongToUserShouldGiveException(){
         String usernameToFind = "test-user1";
         User username = userService.findByUsername(usernameToFind);
         Long idToFind = 100L;
@@ -153,7 +154,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void generatingAlreadyExistedIBAN(){
+    public void generateAlreadyExistedIBAN(){
         String IBAN = userAccountService.getIBAN();
 
         Long idToFind = 1L;
@@ -168,7 +169,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void TryToSaveNotExistingAccountShouldThrowException(){
+    public void saveNonExistingAccountShouldGiveException(){
         UserAccount user = new UserAccount();
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {

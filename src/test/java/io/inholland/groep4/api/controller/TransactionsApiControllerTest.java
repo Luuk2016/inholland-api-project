@@ -3,7 +3,10 @@ package io.inholland.groep4.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.model.Transaction;
 import io.inholland.groep4.api.repository.TransactionRepository;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TransactionsApiControllerTest {
 
     @Autowired
@@ -28,6 +32,7 @@ public class TransactionsApiControllerTest {
     private TransactionRepository transactionRepository;
 
     @Test
+    @Order(1)
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getTransactionsAsEmployeeShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
@@ -37,6 +42,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(2)
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void getTransactionsAsUserShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions"))
@@ -46,6 +52,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(3)
     @WithMockUser(username = "test-employee3", password = "password", roles = "EMPLOYEE")
     public void getTransactionsAsNonexistentEmployeeShouldReturnNotFound() throws Exception {
         this.mockMvc.perform(get("/transactions/"))
@@ -56,6 +63,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(4)
     @WithMockUser(username = "test-user3", password = "password", roles = "USER")
     public void getTransactionsAsNonexistentUserShouldReturnNotFound() throws Exception {
         this.mockMvc.perform(get("/transactions/"))
@@ -66,6 +74,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(5)
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificTransactionAsEmployeeShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions/14"))
@@ -75,6 +84,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(6)
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void getSpecificTransactionAsUserShouldReturnOk() throws Exception {
         this.mockMvc.perform(get("/transactions/15"))
@@ -84,6 +94,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(7)
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getSpecificNonexistentTransactionShouldReturnNotFound() throws Exception {
         this.mockMvc.perform(get("/transactions/99"))
@@ -94,6 +105,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(8)
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void getSpecificTransactionAsUserWithoutPrivilegeShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(get("/transactions/10"))
@@ -104,6 +116,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(9)
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void createTransactionShouldReturnOk() throws Exception {
         // Create a new transaction
@@ -123,6 +136,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(10)
     @WithMockUser(username = "test-user1", password = "password", roles = "USER")
     public void createTransactionWithInvalidIBANShouldReturnForbidden() throws Exception {
         Transaction transaction = new Transaction();
@@ -140,6 +154,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Order(11)
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void getNonexistentTransactionsShouldReturnNotFound() throws Exception {
         this.transactionRepository.deleteAll();

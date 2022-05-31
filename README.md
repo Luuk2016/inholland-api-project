@@ -4,7 +4,7 @@ Gemaakt door: Davey Smit, Aaron Ng en Luuk Kenselaar
 ## Links
 - [Swagger API spec (hosted at Swagger)](https://app.swaggerhub.com/apis/groep4API/bank-api/1.1.6-oas3)
 - [Swagger API spec (hosted at Heroku)](https://inholland-api-project-groep4.herokuapp.com/swagger-ui/#/)
-- [Hosted binary](https://inholland-api-project-groep4.herokuapp.com/api/)
+- [Hosted binary](https://inholland-api-project-groep4.herokuapp.com/)
 
 ## Login details
 User account 1:  

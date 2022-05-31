@@ -2,8 +2,8 @@
 Gemaakt door: Davey Smit, Aaron Ng en Luuk Kenselaar
 
 ## Links
-- [API (localhost)](http://localhost:8080)
-- [H2 console (localhost)](http://localhost:8080/h2-console)
+- [API (hosted locally)](http://localhost:8080)
+- [H2 console (hosted locally)](http://localhost:8080/h2-console)
 - [Swagger API spec (hosted locally)](http://localhost:8080/swagger-ui/#)
 - [Swagger API spec (hosted at Swagger)](https://app.swaggerhub.com/apis/groep4API/bank-api/1.1.6-oas3)
 - [Swagger API spec (hosted at Heroku)](https://inholland-api-project-groep4.herokuapp.com/swagger-ui/#/)

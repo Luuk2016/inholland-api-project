@@ -118,6 +118,7 @@ public class AccountsServiceTest {
         userAccount.setIBAN("falseIBAN");
 
         boolean ExistByIBAN = false;
+        
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
             userAccountService.add(userAccount, ExistByIBAN);
         });

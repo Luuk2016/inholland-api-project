@@ -1,4 +1,5 @@
 package io.inholland.groep4.api.service;
+
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.security.JwtTokenProvider;
@@ -8,9 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class AccountsServiceTest {
@@ -31,6 +35,7 @@ public class AccountsServiceTest {
         assertThat(accounts).isNotEmpty();
         assertThat(accounts.get(0).getAccountBalance()).isEqualTo(500.0);
     }
+
     @Test
     public void gettingAccountsByIdShouldGiveAccount() {
         Long idToFind = 1L;
@@ -41,7 +46,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void GettingAccountWithWrongIDShouldThrowException(){
+    public void gettingAccountWithWrongIDShouldThrowException() {
         Long idToFind = 100L;
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
@@ -52,7 +57,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void gettingAccountByUserShouldGiveUserAccount(){
+    public void gettingAccountByUserShouldGiveUserAccount() {
         String usernameToFind = "test-employee1";
         User username = userService.findByUsername(usernameToFind);
         List<UserAccount> userAccounts = userAccountService.getAccountsByUser(username);
@@ -62,7 +67,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void gettingIBAN(){
+    public void gettingIBANShouldGiveValidIBAN() {
         String IBAN = userAccountService.getIBAN();
         assertThat(IBAN).isNotNull();
         assertThat(IBAN.length()).isEqualTo(18);
@@ -70,7 +75,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void AddUserAccount(){
+    public void addUserAccountShouldCreateValidAccount() {
         User user = new User();
         user.setUsername("son");
         user.setPassword("goku");
@@ -94,8 +99,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void AddingUserAccountWithIncorrectIbanShouldGiveException()
-    {
+    public void addingUserAccountWithIncorrectIbanShouldGiveException() {
         User user = new User();
         user.setUsername("test");
         user.setPassword("testest");
@@ -120,7 +124,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void CheckIfAccountBelongToUser(){
+    public void checkIfAccountBelongToUser() {
         String usernameToFind = "test-user1";
         User username = userService.findByUsername(usernameToFind);
         Long idToFind = 8L;
@@ -130,7 +134,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void IfAccountDoesNotBelongToUserShouldThrowException(){
+    public void ifAccountDoesNotBelongToUserShouldThrowException() {
         String usernameToFind = "test-user1";
         User username = userService.findByUsername(usernameToFind);
         Long idToFind = 100L;
@@ -143,8 +147,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void savingUserAccount()
-    {
+    public void savingUserAccount() {
         Long idToFind = 1L;
         UserAccount account = userAccountService.getAccountById(idToFind);
         UserAccount userAccount = userAccountService.save(account);
@@ -153,22 +156,21 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void generatingAlreadyExistedIBAN(){
+    public void generatingAlreadyExistedIBAN() {
         String IBAN = userAccountService.getIBAN();
 
         Long idToFind = 1L;
         UserAccount account = userAccountService.getAccountById(idToFind);
         UserAccount userAccount = userAccountService.save(account);
 
-        if(IBAN.equals(userAccount.getIBAN()))
-        {
+        if (IBAN.equals(userAccount.getIBAN())) {
             IBAN = new Iban.Builder().countryCode(CountryCode.NL).bankCode("INHO").buildRandom().toString();
         }
         assertThat(userAccount.getIBAN()).isNotEqualTo(IBAN);
     }
 
     @Test
-    public void TryToSaveNotExistingAccountShouldThrowException(){
+    public void saveNonExistingAccountShouldGiveException() {
         UserAccount user = new UserAccount();
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {

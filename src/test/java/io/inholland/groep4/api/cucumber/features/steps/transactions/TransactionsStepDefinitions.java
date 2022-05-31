@@ -5,6 +5,7 @@ import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java8.En;
 import io.inholland.groep4.api.cucumber.features.steps.BaseStepDefinitions;
 import io.inholland.groep4.api.model.DTO.TransactionDTO;
+import io.inholland.groep4.api.model.DTO.UserAccountDTO;
 import io.inholland.groep4.api.model.DTO.UserDTO;
 import io.inholland.groep4.api.model.Transaction;
 import org.json.JSONObject;
@@ -94,6 +95,10 @@ public class TransactionsStepDefinitions extends BaseStepDefinitions implements 
             transactionDTO.setReceiver("USER_ACCOUNT_4_IBAN");
             transactionDTO.setAmount(49.95);
             transactionDTO.setDescription("Test description");
+        });
+
+        And("^the user has an invalid new transaction$", () -> {
+            transactionDTO = new TransactionDTO();
         });
 
         Then("^the system returns a status of (\\d+)$", (Integer statusCode) -> {

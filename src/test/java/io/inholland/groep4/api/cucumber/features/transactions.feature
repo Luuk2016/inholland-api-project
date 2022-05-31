@@ -42,3 +42,9 @@ Feature: an authenticated user can query for the transactions they made
     And the user has a valid new transaction
     When the user makes a post request to the transactions endpoint
     Then the system returns a status of 200
+    
+  Scenario: Creating an invalid new transaction
+    Given the user has a valid token for role "user"
+    And the user has an invalid new transaction
+    When the user makes a post request to the transactions endpoint
+    Then the system returns a status of 403

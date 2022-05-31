@@ -86,17 +86,44 @@ public class AccountsServiceTest {
         user.setEmail("songoku@example.com");
         user.setBirthdate("01/01/1975");
 
+        userService.add(user, false);
+
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
         userAccount.setOwner(user);
         userAccount.setAccountBalance(0.00);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
-        String getIBAN = userAccountService.getIBAN();
-        userAccount.setIBAN(getIBAN);
 
         boolean ExistByIBAN = true;
         UserAccount newUser = userAccountService.add(userAccount, ExistByIBAN);
+    }
+
+    @Test
+    public void AddingUserAccountWithIncorrectIbanShouldGiveException()
+    {
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("testest");
+        user.setFirstName("test");
+        user.setLastName("testtest");
+        user.setEmail("testest@example.com");
+        user.setBirthdate("01/01/1975");
+
+        UserAccount userAccount = new UserAccount();
+        userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
+        userAccount.setOwner(user);
+        userAccount.setAccountBalance(0.00);
+        userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
+        userAccount.setLowerLimit(100.00);
+        userAccount.setIBAN("falseIBAN");
+
+        boolean ExistByIBAN = false;
+        Exception exception = assertThrows(ResponseStatusException.class, () -> {
+            userAccountService.add(userAccount, ExistByIBAN);
+        });
+
+        assertTrue(exception.getMessage().contains("Incorrect iban given"));
     }
 
     @Test
@@ -119,7 +146,7 @@ public class AccountsServiceTest {
             userAccountService.checkIfAccountBelongsToOwner(username, idToFind);
         });
 
-        assertFalse(exception.getMessage().contains("Account not found"));
+        assertTrue(exception.getMessage().contains("Account does not belong to owner"));
     }
 
     @Test

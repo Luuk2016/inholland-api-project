@@ -1,6 +1,4 @@
 package io.inholland.groep4.api.service;
-
-import io.inholland.groep4.api.model.Role;
 import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import io.inholland.groep4.api.security.JwtTokenProvider;
@@ -10,12 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.BOOLEAN;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -39,7 +33,7 @@ public class AccountsServiceTest {
     }
     @Test
     public void gettingAccountsByIdShouldGiveAccount() {
-        Long idToFind = 1l;
+        Long idToFind = 1L;
         UserAccount account = userAccountService.getAccountById(idToFind);
 
         assertThat(account).isNotNull();
@@ -48,7 +42,7 @@ public class AccountsServiceTest {
 
     @Test
     public void GettingAccountWithWrongIDShouldThrowException(){
-        Long idToFind = 100l;
+        Long idToFind = 100L;
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
             userAccountService.getAccountById(idToFind);
@@ -70,10 +64,9 @@ public class AccountsServiceTest {
     @Test
     public void gettingIBAN(){
         String IBAN = userAccountService.getIBAN();
-
         assertThat(IBAN).isNotNull();
         assertThat(IBAN.length()).isEqualTo(18);
-        assertThat(IBAN.contains("NL"));
+        assertThat(IBAN).contains("NL");
     }
 
     @Test
@@ -94,8 +87,10 @@ public class AccountsServiceTest {
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
 
-        boolean ExistByIBAN = true;
-        UserAccount newUser = userAccountService.add(userAccount, ExistByIBAN);
+        UserAccount newUser = userAccountService.add(userAccount, true);
+
+        assertThat(newUser).isNotNull();
+        assertThat(newUser.getLowerLimit()).isEqualTo(100.00);
     }
 
     @Test
@@ -117,10 +112,8 @@ public class AccountsServiceTest {
         userAccount.setLowerLimit(100.00);
         userAccount.setIBAN("falseIBAN");
 
-        boolean ExistByIBAN = false;
-        
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
-            userAccountService.add(userAccount, ExistByIBAN);
+            userAccountService.add(userAccount, false);
         });
 
         assertTrue(exception.getMessage().contains("Incorrect iban given"));
@@ -130,7 +123,7 @@ public class AccountsServiceTest {
     public void CheckIfAccountBelongToUser(){
         String usernameToFind = "test-user1";
         User username = userService.findByUsername(usernameToFind);
-        Long idToFind = 8l;
+        Long idToFind = 8L;
 
         boolean account = userAccountService.checkIfAccountBelongsToOwner(username, idToFind);
         assertThat(account).isEqualTo(true);
@@ -140,7 +133,7 @@ public class AccountsServiceTest {
     public void IfAccountDoesNotBelongToUserShouldThrowException(){
         String usernameToFind = "test-user1";
         User username = userService.findByUsername(usernameToFind);
-        Long idToFind = 100l;
+        Long idToFind = 100L;
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
             userAccountService.checkIfAccountBelongsToOwner(username, idToFind);
@@ -152,7 +145,7 @@ public class AccountsServiceTest {
     @Test
     public void savingUserAccount()
     {
-        Long idToFind = 1l;
+        Long idToFind = 1L;
         UserAccount account = userAccountService.getAccountById(idToFind);
         UserAccount userAccount = userAccountService.save(account);
 
@@ -163,7 +156,7 @@ public class AccountsServiceTest {
     public void generatingAlreadyExistedIBAN(){
         String IBAN = userAccountService.getIBAN();
 
-        Long idToFind = 1l;
+        Long idToFind = 1L;
         UserAccount account = userAccountService.getAccountById(idToFind);
         UserAccount userAccount = userAccountService.save(account);
 

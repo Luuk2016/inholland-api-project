@@ -20,7 +20,7 @@ public class UserAccountService {
 
     public UserAccount add(UserAccount userAccount, boolean randomIBAN) {
         try {
-            // Check if a random iban should me generated
+            // Check if a random iban should be generated
             if (randomIBAN) {
                 userAccount.setIBAN(getIBAN());
             }
@@ -45,9 +45,6 @@ public class UserAccountService {
     }
 
     public List<UserAccount> getAllAccounts() {
-        if (userAccountRepository.findAll().size() == 0) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No accounts found");
-        }
         return userAccountRepository.findAll();
     }
 

@@ -91,7 +91,6 @@ public class AccountsServiceTest {
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
         userAccount.setOwner(user);
-        userAccount.setAccountBalance(0.00);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
 

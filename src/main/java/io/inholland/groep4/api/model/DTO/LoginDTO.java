@@ -31,7 +31,7 @@ public class LoginDTO {
      *
      * @return username
      **/
-    @Schema(example = "john", required = true, description = "")
+    @Schema(example = "test-user1", required = true, description = "")
     @NotNull
     public String getUsername() {
         return username;
@@ -51,7 +51,7 @@ public class LoginDTO {
      *
      * @return password
      **/
-    @Schema(example = "test", required = true, description = "")
+    @Schema(example = "password", required = true, description = "")
     @NotNull
     public String getPassword() {
         return password;

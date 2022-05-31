@@ -86,10 +86,11 @@ public class AccountsServiceTest {
         user.setEmail("songoku@example.com");
         user.setBirthdate("01/01/1975");
 
+        userService.add(user, false);
+
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
         userAccount.setOwner(user);
-        userAccount.setAccountBalance(0.00);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
         String getIBAN = userAccountService.getIBAN();

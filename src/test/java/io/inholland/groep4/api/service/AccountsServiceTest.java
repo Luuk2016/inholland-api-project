@@ -31,7 +31,7 @@ public class AccountsServiceTest {
     public JwtTokenProvider jwtTokenProvider;
 
     @Test
-    public void gettingAllAccountsShouldGiveListOfUsers() {
+    public void gettingAllAccountsShouldGiveListOAccounts() {
         List<UserAccount> accounts = userAccountService.getAllAccounts();
 
         assertThat(accounts).isNotEmpty();
@@ -59,22 +59,32 @@ public class AccountsServiceTest {
 
     @Test
     public void gettingAccountByUserShouldGiveUserAccount(){
-        String usernameToFind = "test-user1";
+        String usernameToFind = "test-employee1";
         User username = userService.findByUsername(usernameToFind);
-        List<UserAccount> userAccount = userAccountService.getAccountsByUser(username);
+        List<UserAccount> userAccounts = userAccountService.getAccountsByUser(username);
 
-        assertThat(userAccount).isNotEmpty();
-        assertThat(username.getUsername()).isEqualTo("test-user1");
+        assertThat(userAccounts).isNotEmpty();
+        assertThat(userAccounts.get(0).getId()).isEqualTo(6);
     }
+
     @Test
-    public void AddIncorrectNewIBAN(){
+    public void gettingIBAN(){
+        String IBAN = userAccountService.getIBAN();
+
+        assertThat(IBAN).isNotNull();
+        assertThat(IBAN.length()).isEqualTo(18);
+        assertThat(IBAN.contains("NL"));
+    }
+
+    @Test
+    public void AddUserAccount(){
         User user = new User();
-        user.setUsername("peter");
-        user.setPassword("test");
-        user.setFirstName("Peter");
-        user.setLastName("Griffin");
-        user.setEmail("peter@example.com");
-        user.setBirthdate("01/01/1970");
+        user.setUsername("son");
+        user.setPassword("goku");
+        user.setFirstName("son");
+        user.setLastName("goku");
+        user.setEmail("songoku@example.com");
+        user.setBirthdate("01/01/1975");
 
         UserAccount userAccount = new UserAccount();
         userAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
@@ -82,13 +92,11 @@ public class AccountsServiceTest {
         userAccount.setAccountBalance(0.00);
         userAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
         userAccount.setLowerLimit(100.00);
-        userAccount.setIBAN("NL01INHO0000000001");
+        String getIBAN = userAccountService.getIBAN();
+        userAccount.setIBAN(getIBAN);
 
-        String IBAN = userAccountService.getIBAN();
-        boolean ExistByIBAN = userAccountService.existByIBAN(IBAN);
+        boolean ExistByIBAN = true;
         UserAccount newUser = userAccountService.add(userAccount, ExistByIBAN);
-
-        assertThat(newUser).isNotNull();
     }
 
     @Test
@@ -122,13 +130,6 @@ public class AccountsServiceTest {
         UserAccount userAccount = userAccountService.save(account);
 
         assertThat(userAccount.getAccountBalance()).isEqualTo(500.0);
-    }
-
-    @Test
-    public void gettingIBAN(){
-        String IBAN = userAccountService.getIBAN();
-
-        assertThat(IBAN).isNotNull();
     }
 
     @Test

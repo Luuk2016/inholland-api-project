@@ -36,3 +36,9 @@ Feature: an authenticated user can query for the transactions they made
     Given the user has a valid token for role "employee"
     When the user calls the transactions endpoint for ID 99
     Then the system returns a status of 404
+
+  Scenario: Creating a new transaction
+    Given the user has a valid token for role "user"
+    And the user has a valid new transaction
+    When the user makes a post request to the transactions endpoint
+    Then the system returns a status of 200

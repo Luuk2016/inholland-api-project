@@ -4,13 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java8.En;
 import io.inholland.groep4.api.cucumber.features.steps.BaseStepDefinitions;
+import io.inholland.groep4.api.model.DTO.TransactionDTO;
 import io.inholland.groep4.api.model.DTO.UserDTO;
+import io.inholland.groep4.api.model.Transaction;
 import org.json.JSONObject;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,7 +30,7 @@ public class TransactionsStepDefinitions extends BaseStepDefinitions implements 
     private HttpEntity<String> request;
 
     private Integer status;
-    private UserDTO userDTO;
+    private TransactionDTO transactionDTO;
 
     private String token;
 
@@ -76,6 +75,25 @@ public class TransactionsStepDefinitions extends BaseStepDefinitions implements 
             request = new HttpEntity<>(null, httpHeaders);
             response = restTemplate.exchange(getBaseUrl() + "/transactions/" + id, HttpMethod.GET, new HttpEntity<>(null, httpHeaders), String.class);
             status = response.getStatusCodeValue();
+        });
+
+        When("^the user makes a post request to the transactions endpoint$", () -> {
+            httpHeaders.clear();
+            httpHeaders.add("Authorization", "Bearer " + token);
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            request = new HttpEntity<>(mapper.writeValueAsString(transactionDTO), httpHeaders);
+
+            response = restTemplate.postForEntity(getBaseUrl() + "/transactions", request, String.class);
+            status = response.getStatusCodeValue();
+        });
+
+        And("^the user has a valid new transaction$", () -> {
+            transactionDTO = new TransactionDTO();
+
+            transactionDTO.setSender("USER_ACCOUNT_3_IBAN");
+            transactionDTO.setReceiver("USER_ACCOUNT_4_IBAN");
+            transactionDTO.setAmount(49.95);
+            transactionDTO.setDescription("Test description");
         });
 
         Then("^the system returns a status of (\\d+)$", (Integer statusCode) -> {

@@ -65,7 +65,7 @@ public class AccountsApiControllerTest {
     @Test
     @WithMockUser(username = "test-employee1", password = "password", roles = "EMPLOYEE")
     public void gettingNotExistingAccountShouldGiveBadrequest() throws Exception {
-        mockMvc.perform(get("/accounts/10"))
+        mockMvc.perform(get("/accounts/999"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("422 UNPROCESSABLE_ENTITY \"Id not found\""));

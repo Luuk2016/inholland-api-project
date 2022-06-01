@@ -4,7 +4,7 @@ Feature: Accounts
     Given I have a valid "employee" token
     When I call the accounts endpoint
     Then the response is a 200 statuscode
-    Then the result is a list of 5 accounts
+    Then the result is a list of 9 accounts
 
   Scenario: Getting your own account
     Given I have a valid "user" token

@@ -67,6 +67,7 @@ public class UserService {
 
     public User save(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         } else {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Username not found");
@@ -74,9 +75,6 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        if (userRepository.findAll().size() == 0) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No users found");
-        }
         return userRepository.findAll();
     }
 

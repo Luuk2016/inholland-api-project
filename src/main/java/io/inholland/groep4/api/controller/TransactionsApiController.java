@@ -63,6 +63,12 @@ public class TransactionsApiController implements TransactionsApi {
 
             // Check the role of the user
             if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                // Get the security information
+                Principal principal = request.getUserPrincipal();
+
+                // Get the current user
+                User user = userService.findByUsername(principal.getName());
+
                 // User is an employee, getting all transactions
                 transactions = transactionService.getAllTransactions();
             } else {
@@ -76,12 +82,7 @@ public class TransactionsApiController implements TransactionsApi {
                 transactions = transactionService.getAllUserTransactions(user);
             }
 
-            // Check if the transactions were found
-            if (transactions != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(transactions);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(transactions);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -94,18 +95,14 @@ public class TransactionsApiController implements TransactionsApi {
             User user = userService.findByUsername(principal.getName());
 
             // Check if the user is an employee or transaction owner
-            if (request.isUserInRole("ROLE_EMPLOYEE") || transactionService.checkIfTransactionBelongsToOwner(user, id)) {
-                Transaction transaction = transactionService.getTransactionById(id);
-
-                // Check if the transaction was found
-                if (transaction != null) {
-                    return ResponseEntity.status(HttpStatus.OK).body(transaction);
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-                }
+            if (request.isUserInRole("ROLE_EMPLOYEE")) {
+                return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionById(id));
             } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                if (transactionService.checkIfTransactionBelongsToOwner(user, id)){
+                    return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionById(id));
+                }
             }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -122,7 +119,7 @@ public class TransactionsApiController implements TransactionsApi {
 
             //check if the user owns an account by the given IBAN, if not, check if the user is an employee, if not set a flag stating the reason for rejecting this transaction
             for (UserAccount account : user.getAccounts()) {
-                if ((account.getIBAN().equals(body.getSender())) | (user.getRoles().contains(Role.ROLE_EMPLOYEE))) {
+                if ((account.getIBAN().equals(body.getSender())) || (user.getRoles().contains(Role.ROLE_EMPLOYEE))) {
                     transaction.setDescription(body.getDescription());
                     transaction.setAmount(body.getAmount());
                     transaction.setSender(body.getSender());

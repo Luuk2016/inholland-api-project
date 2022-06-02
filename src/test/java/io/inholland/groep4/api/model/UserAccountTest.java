@@ -58,17 +58,5 @@ public class UserAccountTest {
         Double limit = new Random().nextDouble();
         assertThrows(IllegalArgumentException.class, () -> testUserAccount.setLowerLimit(-limit));
     }
-
-    @Test
-    public void createUserAccountShouldNotBeNull() {
-        UserAccount createdUserAccount = new UserAccount();
-        createdUserAccount.setId(15L);
-        createdUserAccount.setIBAN("NL01INHO0000000001");
-        createdUserAccount.setAccountType(UserAccount.AccountTypeEnum.CURRENT);
-        createdUserAccount.setAccountBalance(500.00);
-        createdUserAccount.setLowerLimit(100.00);
-        createdUserAccount.setAccountStatus(UserAccount.AccountStatusEnum.ACTIVE);
-        assertNotNull(createdUserAccount);
-    }
 }
 

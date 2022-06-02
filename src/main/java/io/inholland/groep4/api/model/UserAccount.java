@@ -221,6 +221,9 @@ public class UserAccount {
     }
 
     public void setLowerLimit(Double lowerLimit) {
+        if (lowerLimit < 0 ) {
+            throw new IllegalArgumentException("Lower limit cannot be negative!");
+        }
         this.lowerLimit = lowerLimit;
     }
 

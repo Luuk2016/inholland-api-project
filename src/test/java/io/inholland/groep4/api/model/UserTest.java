@@ -3,7 +3,6 @@ package io.inholland.groep4.api.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.threeten.bp.OffsetDateTime;
 
 import java.util.Arrays;
 import java.util.Collections;

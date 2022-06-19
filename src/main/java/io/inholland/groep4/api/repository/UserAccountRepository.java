@@ -5,6 +5,7 @@ import io.inholland.groep4.api.model.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
     UserAccount getUserAccountById(Long id);
@@ -13,7 +14,7 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
 
     boolean existsByIBAN(String IBAN);
 
-    List<UserAccount> getUserAccountsByOwner(User user);
+    Optional<List<UserAccount> > getUserAccountsByOwner(User user);
 
     boolean existsByOwnerAndId(User owner, Long id);
 }

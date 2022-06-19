@@ -1,8 +1,6 @@
 package io.inholland.groep4.api.controller;
-
 import io.inholland.groep4.api.AccountsApi;
 import io.inholland.groep4.api.model.DTO.UserAccountDTO;
-import io.inholland.groep4.api.model.User;
 import io.inholland.groep4.api.model.UserAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inholland.groep4.api.service.UserAccountService;
@@ -19,12 +17,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-31T22:24:07.069Z[GMT]")
 @RestController
@@ -50,71 +47,29 @@ public class AccountsApiController implements AccountsApi {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<?> getAccounts() {
-        try {
-            // Create a empty list for accounts
-            List<UserAccount> accounts = new ArrayList<>();
+        Optional<List<UserAccount>> account = userAccountService.getAllAccounts();
 
-            // Check the role of the user
-            if (request.isUserInRole("ROLE_EMPLOYEE")) {
-                // User is an employee, getting all accounts
-                accounts = userAccountService.getAllAccounts();
-            } else {
-                // Get the security information
-                Principal principal = request.getUserPrincipal();
-
-                // Get the current user
-                User user = userService.findByUsername(principal.getName());
-
-                // Get the user accounts
-                accounts = userAccountService.getAccountsByUser(user);
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(accounts);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        return new ResponseEntity<Optional<List<UserAccount>>>(account, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','USER')")
     public ResponseEntity<?> getSpecificAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required = true, schema = @Schema()) @PathVariable("id") Long id) {
-        try {
-            Principal principal = request.getUserPrincipal();
-            User user = userService.findByUsername(principal.getName());
+        UserAccount account = userAccountService.getAccountById(id);
 
-            // Check if the user is an employee or account owner
-            if (request.isUserInRole("ROLE_EMPLOYEE") || userAccountService.checkIfAccountBelongsToOwner(user, id)) {
-                UserAccount account = userAccountService.getAccountById(id);
-
-                return ResponseEntity.status(HttpStatus.OK).body(account);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        return new ResponseEntity<UserAccount>(account, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<?> postAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccountDTO body) {
-        // Create a new account
-        UserAccount userAccount = new UserAccount();
-
-        // Set the properties
-        userAccount.setAccountType(body.getAccountType());
-        userAccount.setOwner(body.getOwner());
-        userAccount.setLowerLimit(body.getLowerLimit());
-        userAccount.setAccountStatus(body.getAccountStatus());
-        userAccount.setAccountBalance(0.00);
-
-        // Store the new account
-        UserAccount result = userAccountService.add(userAccount, true);
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        UserAccount account = userAccountService.setAccount(body);
+        userAccountService.add(account, true);
+        return new ResponseEntity<UserAccountDTO>(body, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<UserAccount> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The account ID", required = true, schema = @Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserAccount body) {
         body.setId(id);
         UserAccount result = userAccountService.save(body);
-        return ResponseEntity.status(200).body(result);
+        return new ResponseEntity<UserAccount>(body, HttpStatus.OK);
     }
 }

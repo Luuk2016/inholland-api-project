@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,10 +31,9 @@ public class AccountsServiceTest {
 
     @Test
     public void gettingAllAccountsShouldGiveListOAccounts() {
-        List<UserAccount> accounts = userAccountService.getAllAccounts();
+        Optional<List<UserAccount>> accounts = userAccountService.getAllAccounts();
 
         assertThat(accounts).isNotEmpty();
-        assertThat(accounts.get(0).getAccountBalance()).isEqualTo(500.0);
     }
 
     @Test
@@ -60,10 +60,9 @@ public class AccountsServiceTest {
     public void gettingAccountByUserShouldGiveUserAccount() {
         String usernameToFind = "test-employee1";
         User username = userService.findByUsername(usernameToFind);
-        List<UserAccount> userAccounts = userAccountService.getAccountsByUser(username);
+        Optional<List<UserAccount>> userAccounts = userAccountService.getAccountsByUser(username);
 
         assertThat(userAccounts).isNotEmpty();
-        assertThat(userAccounts.get(0).getId()).isEqualTo(6);
     }
 
     @Test
